@@ -1,0 +1,9 @@
+### ~ private ~ ###
+secrets.env
+
+### ~ testing ~ ###
+htmlcov
+
+### ~ Docker ~ ###
+/*.yml
+!/docker-compose.yml
