@@ -1,0 +1,15 @@
+### ~ private ~ ###
+*.env
+
+### ~ testing ~ ###
+htmlcov
+
+### ~ Docker ~ ###
+.dockerignore
+Dockerfile
+*.yml
+
+### ~ GitHub ~ ###
+.git*
+LICENSE
+README.md
