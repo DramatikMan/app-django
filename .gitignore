@@ -1,5 +1,6 @@
 ### ~ private ~ ###
 secrets.env
+db.sqlite3
 
 ### ~ testing ~ ###
 htmlcov
