@@ -7,4 +7,4 @@ RUN ./pipenv_install.sh
 
 FROM base AS development
 COPY . .
-CMD ./django_setup.sh
+CMD ["sleep", "infinity"]
