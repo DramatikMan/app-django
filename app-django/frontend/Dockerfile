@@ -7,4 +7,4 @@ RUN ./npm_install.sh
 
 FROM base AS development
 COPY . .
-CMD npm run dev
+CMD sed -i 's/production/development/g' webpack.config.js && npm run dev
