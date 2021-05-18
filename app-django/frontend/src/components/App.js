@@ -9,7 +9,7 @@ import {
 } from "react-router-dom"
 
 import HomePage from "./HomePage";
-import CreateRoomPage from "./CreateRoomPage";
+import RoomCreatePage from "./RoomCreatePage";
 import RoomJoinPage from "./RoomJoinPage";
 
 
@@ -17,11 +17,9 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path='/'>
-          <p>This is the home page</p>
-        </Route>
+        <Route exact path='/' component={HomePage} />
+        <Route exact path='/create' component={RoomCreatePage} />
         <Route exact path='/join' component={RoomJoinPage} />
-        <Route exact path='/create' component={CreateRoomPage} />
       </Switch>
     </Router>
   );
