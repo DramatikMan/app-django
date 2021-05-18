@@ -1,7 +1,18 @@
 import React from "react";
 import { render } from "react-dom";
+import HomePage from "./HomePage";
+import CreateRoomPage from "./CreateRoomPage";
+import RoomJoinPage from "./RoomJoinPage";
+
 
 function App() {
-  return <h1>Hello from React</h1>;
+  return (
+    <div>
+      <HomePage />
+      <CreateRoomPage />
+      <RoomJoinPage />
+    </div>
+  );
 }
+
 render(<App />, document.getElementById('app'));
