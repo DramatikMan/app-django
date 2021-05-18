@@ -1,0 +1,7 @@
+### ~ Python ~ ###
+**/*.py
+migrations
+
+### ~ Docker ~ ###
+.dockerignore
+Dockerfile
