@@ -3,5 +3,5 @@
 migrations
 
 ### ~ Docker ~ ###
-.dockerignore
-Dockerfile
+**/.dockerignore
+**/Dockerfile
