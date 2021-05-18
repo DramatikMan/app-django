@@ -4,6 +4,9 @@
 ### ~ testing ~ ###
 htmlcov
 
+### ~ front-end ~ ###
+**/*.scss
+
 ### ~ Docker ~ ###
 **/.dockerignore
 **/Dockerfile
