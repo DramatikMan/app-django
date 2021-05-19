@@ -11,6 +11,7 @@ import {
 import HomePage from "./HomePage";
 import RoomCreatePage from "./RoomCreatePage";
 import RoomJoinPage from "./RoomJoinPage";
+import Room from "./Room";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/create" component={RoomCreatePage} />
         <Route exact path="/join" component={RoomJoinPage} />
+        <Route exact path="/room/:roomCode" component={Room} />
       </Switch>
     </Router>
   );
