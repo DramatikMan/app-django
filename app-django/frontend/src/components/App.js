@@ -17,12 +17,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route exact path='/create' component={RoomCreatePage} />
-        <Route exact path='/join' component={RoomJoinPage} />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/create" component={RoomCreatePage} />
+        <Route exact path="/join" component={RoomJoinPage} />
       </Switch>
     </Router>
   );
 }
 
-render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById("app"));
