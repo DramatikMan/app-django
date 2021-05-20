@@ -1,3 +1,5 @@
+import sys
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework import generics, status
@@ -88,7 +90,8 @@ class CreateRoomView(APIView):
                     votes_to_skip=votes_to_skip
                 )
             )
-            self.request.session['room_code'] = RoomSerializer(room).data.code
+            self.request.session['room_code'] = \
+                RoomSerializer(room).data['code']
 
             if created:
                 return Response(
