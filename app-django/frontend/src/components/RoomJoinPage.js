@@ -19,12 +19,10 @@ export default function RoomJoinPage() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({code: roomCode})
         };
-        fetch("/api/join-room", requestOptions).then((response) => {
+        fetch("/api/join-room", requestOptions).then(response => {
             if (response.ok) { history.push(`/room/${roomCode}`) }
             else { setError("Room not found.") }
-        }).catch((error) => {
-            console.log(error);
-        });
+        }).catch(error => console.log(error));
     };
 
     return (
@@ -48,7 +46,7 @@ export default function RoomJoinPage() {
                     placeholder="Enter a Room Code"
                     helperText={error}
                     variant="outlined"
-                    onChange={(e) => setRoomCode(e.target.value)}
+                    onChange={e => setRoomCode(e.target.value)}
                 />
             </Grid>
             <Grid item xs={12}>
