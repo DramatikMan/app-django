@@ -68,9 +68,7 @@ export default class RoomCreatePage extends Component {
                 <Grid item xs={12} align="center">
                     <FormControl component="fieldset">
                         <FormHelperText>
-                            <div align="center">
-                                Guest Control of Playback State
-                            </div>
+                            Guest Control of Playback State
                         </FormHelperText>
                         <RadioGroup
                             row
@@ -105,9 +103,7 @@ export default class RoomCreatePage extends Component {
                             }}
                         />
                         <FormHelperText>
-                            <div align="center">
-                                Votes required to skip song
-                            </div>
+                            Votes required to skip song
                         </FormHelperText>
                     </FormControl>
                 </Grid>
