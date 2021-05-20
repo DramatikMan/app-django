@@ -1,9 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 
 
 export default function HomePage() {
+    const history = useHistory();
+
+    async function redirectIfUserInRoom() {
+        let response = await fetch("/api/user-in-room");
+        let responseData = await response.json();
+        if (responseData.code) {
+            history.push(`/room/${responseData.code}`);
+        }
+    }
+
+    useEffect(() => { redirectIfUserInRoom(); }, []);
+
     return (
         <Grid
         container
