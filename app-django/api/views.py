@@ -23,9 +23,9 @@ class GetRoom(APIView):
             room_obj = Room.objects.filter(code=code)
 
             if room_obj.exists():
-                data = RoomSerializer(room[0]).data
+                data = RoomSerializer(room_obj[0]).data
                 data['is_host'] = \
-                    self.request.session.session_key == room[0].host
+                    self.request.session.session_key == room_obj[0].host
                 return Response(data, status=status.HTTP_200_OK)
 
             return Response(
