@@ -5,12 +5,28 @@ import {
     Typography,
     TextField
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { render } from "react-dom";
+import { Link, useHistory } from "react-router-dom";
 
 
 export default function RoomJoinPage() {
-    const [roomCode, setRoomCode] = useState();
-    const [error, setError] = useState(false);
+    const [roomCode, setRoomCode] = useState(0);
+    const [error, setError] = useState(0);
+    const history = useHistory();
+
+    function enterRoomPressed() {
+        const requestOptions = {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({code: roomCode})
+        };
+        fetch("/api/join-room", requestOptions).then((response) => {
+            if (response.ok) { history.push(`/room/${roomCode}`) }
+            else { setError("Room not found.") }
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
 
     return (
         <Grid
@@ -28,7 +44,7 @@ export default function RoomJoinPage() {
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    error={error}
+                    error={Boolean(error)}
                     label="Code"
                     placeholder="Enter a Room Code"
                     value={roomCode}
@@ -41,7 +57,7 @@ export default function RoomJoinPage() {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => console.log(roomCode)}
+                    onClick={enterRoomPressed}
                 >
                     Enter Room
                 </Button>
