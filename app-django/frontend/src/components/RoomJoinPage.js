@@ -5,13 +5,12 @@ import {
     Typography,
     TextField
 } from "@material-ui/core";
-import { render } from "react-dom";
 import { Link, useHistory } from "react-router-dom";
 
 
 export default function RoomJoinPage() {
-    const [roomCode, setRoomCode] = useState(0);
-    const [error, setError] = useState(0);
+    const [roomCode, setRoomCode] = useState();
+    const [error, setError] = useState(false);
     const history = useHistory();
 
     function enterRoomPressed() {
@@ -47,7 +46,6 @@ export default function RoomJoinPage() {
                     error={Boolean(error)}
                     label="Code"
                     placeholder="Enter a Room Code"
-                    value={roomCode}
                     helperText={error}
                     variant="outlined"
                     onChange={(e) => setRoomCode(e.target.value)}
