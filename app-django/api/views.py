@@ -120,12 +120,12 @@ class UserInRoom(APIView):
 
 
 class LeaveRoom(APIView):
-    def patch(self, request, format=None):
+    def put(self, request, format=None):
         if 'room_code' in self.request.session:
             self.request.session.pop('room_code')
 
             host_id = self.request.session.session_key
-            room_obj = Room.object.filter(host=host_id)
+            room_obj = Room.objects.filter(host=host_id)
             if room_obj.exists():
                 room = room_obj[0]
                 room.delete()
