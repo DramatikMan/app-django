@@ -50,7 +50,7 @@ class JoinRoom(APIView):
             if len(room_obj) > 0:
                 room = room_obj[0]
                 self.request.session['room_code'] = code
-                return Reponse(
+                return Response(
                     {'message': 'Room joined!'},
                     status=status.HTTP_200_OK
                 )
