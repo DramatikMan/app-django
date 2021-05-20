@@ -52,7 +52,14 @@ export default class RoomCreatePage extends Component {
 
     render() {
         return (
-            <Grid container spacing={1}>
+            <Grid
+                container
+                spacing={1}
+                direction="column"
+                alignItems="center"
+                justify="center"
+                style={{ minHeight: "90vh" }}
+            >
                 <Grid item xs={12} align="center">
                     <Typography component="h4" variant="h4">
                         Create a Room
