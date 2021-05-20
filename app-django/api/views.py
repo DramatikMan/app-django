@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework import generics, status
 from rest_framework.views import APIView
-from rest_framework.response import response
+from rest_framework.response import Response
 
 from .models import Room
 from .serializers import RoomSerializer, RoomCreateSerializer
