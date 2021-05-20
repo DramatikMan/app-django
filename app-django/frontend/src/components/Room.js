@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 
 export default function Room(props) {
@@ -8,16 +8,26 @@ export default function Room(props) {
     const [votesToSkip, setVotesToSkip] = useState(2);
     const [guestCanPause, setGuestCanPause] = useState(false);
     const [isHost, setIsHost] = useState(false);
+    const history = useHistory();
 
     async function getRoomDetails() {
-        let response = await fetch("/api/get-room" + "?code=" + roomCode);
-        let responseData = await response.json();
+        const response = await fetch("/api/get-room" + "?code=" + roomCode);
+        const responseData = await response.json();
         setVotesToSkip(responseData.votes_to_skip);
         setGuestCanPause(responseData.guest_can_pause);
         setIsHost(responseData.is_host);
     }
 
     useEffect(() => { getRoomDetails(); }, []);
+
+    async function leaveButtonPressed() {
+        const requestOptions = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" }
+        };
+        await fetch("/api/leave-room", requestOptions);
+        history.push("/");
+    }
 
     return (
         <Grid
@@ -52,8 +62,7 @@ export default function Room(props) {
                 <Button
                     variant="contained"
                     color="secondary"
-                    to="/"
-                    component={Link}
+                    onClick={leaveButtonPressed}
                 >
                     Leave Room
                 </Button>
