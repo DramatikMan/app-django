@@ -12,6 +12,7 @@ export default function Room(props) {
 
     async function getRoomDetails() {
         const response = await fetch("/api/get-room" + "?code=" + roomCode);
+        if (!response.ok) { history.push("/"); }
         const responseData = await response.json();
         setVotesToSkip(responseData.votes_to_skip);
         setGuestCanPause(responseData.guest_can_pause);
