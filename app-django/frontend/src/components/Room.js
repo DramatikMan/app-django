@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
-import RoomCreatePage from "./RoomCreatePage"
+import RoomSettingsPage from "./RoomSettingsPage"
 
 
 export default function Room(props) {
@@ -33,32 +33,12 @@ export default function Room(props) {
 
     const renderSettings = () => {
         return (
-            <Grid
-                container 
-                spacing={1}
-                direction="column"
-                alignItems="center"
-                justify="center"
-                style={{ minHeight: "90vh" }}
-            >
-                <Grid item xs={12}>
-                    <RoomCreatePage
-                        update={true}
-                        roomCode={roomCode}
-                        votesToSkip={votesToSkip}
-                        guestCanPause={guestCanPause}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => setShowSettings(false)}
-                    >
-                        Close Settings
-                    </Button>
-                </Grid>
-            </Grid>
+           <RoomSettingsPage
+                update={true}
+                roomCode={roomCode}
+                votesToSkip={votesToSkip}
+                guestCanPause={guestCanPause}
+            />
         )
     }
     
