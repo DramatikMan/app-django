@@ -9,7 +9,7 @@ import {
 } from "react-router-dom"
 
 import HomePage from "./HomePage";
-import RoomCreatePage from "./RoomCreatePage";
+import RoomSettingsPage from "./RoomCreatePage";
 import RoomJoinPage from "./RoomJoinPage";
 import Room from "./Room";
 
@@ -19,7 +19,7 @@ const App = () => {
     <Router>
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/create" component={RoomCreatePage} />
+        <Route exact path="/create" component={RoomSettingsPage} />
         <Route exact path="/join" component={RoomJoinPage} />
         <Route exact path="/room/:roomCode" component={Room} />
       </Switch>
