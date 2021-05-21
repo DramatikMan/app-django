@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 
 export default function Room(props) {
@@ -9,6 +9,7 @@ export default function Room(props) {
     const [guestCanPause, setGuestCanPause] = useState(false);
     const [isHost, setIsHost] = useState(false);
     const history = useHistory();
+    const [showSettings, setShowSettings] = useState(false);
 
     async function getRoomDetails() {
         const response = await fetch("/api/get-room" + "?code=" + roomCode);
@@ -28,6 +29,20 @@ export default function Room(props) {
         };
         await fetch("/api/leave-room", requestOptions);
         history.push("/");
+    }
+
+    const renderSettingsButton = () => {
+        return (
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={setShowSettings(true)}
+                >
+                    Settings
+                </Button>
+            </Grid>
+        )
     }
 
     return (
@@ -59,6 +74,7 @@ export default function Room(props) {
                     Host: {isHost.toString()}
                 </Typography>
             </Grid>
+            {isHost ? renderSettingsButton : null}
             <Grid item xs={12}>
                 <Button
                     variant="contained"
