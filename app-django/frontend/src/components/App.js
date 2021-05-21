@@ -14,7 +14,7 @@ import RoomJoinPage from "./RoomJoinPage";
 import Room from "./Room";
 
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Switch>

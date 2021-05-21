@@ -13,7 +13,7 @@ export default function RoomJoinPage() {
     const [error, setError] = useState(false);
     const history = useHistory();
 
-    function enterRoomPressed() {
+    const enterRoomPressed = () => {
         const requestOptions = {
             method: "POST",
             headers: {"Content-Type": "application/json"},
