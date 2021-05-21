@@ -23,6 +23,7 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "*",
     "@material-ui/core": "*",
+    "@material-ui/lab": "*",
     "@material-ui/icons": "*",
     "react-router-dom": "*"
   }

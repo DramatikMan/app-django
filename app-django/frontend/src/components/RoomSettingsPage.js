@@ -9,8 +9,9 @@ import {
     FormControlLabel,
     Radio,
     RadioGroup,
-    Alert
+    Collapse
 } from "@material-ui/core";
+import { Alert } from '@material-ui/lab'
 import { Link, useHistory } from "react-router-dom";
 
 
@@ -53,15 +54,21 @@ export default function RoomSettingsPage(props) {
             });
     }
 
-    // const showAlert = (text, severity) => {
-    //     return (
-    //         <Grid item xs={12}>
-    //             <Alert variant="filled" severity={severity}>
-    //                 {text}
-    //             </Alert>
-    //         </Grid>
-    //     )
-    // }
+    const showAlert = (text, severity) => {
+        return (
+            <Grid item xs={12}>
+                <Collapse in={Boolean(alert)}>
+                    <Alert
+                        variant="filled"
+                        severity={severity}
+                        onClose={ () => setAlert() }
+                    >
+                        {text}
+                    </Alert>
+                </Collapse>
+            </Grid>
+        )
+    }
 
     return (
         <Grid
@@ -72,7 +79,7 @@ export default function RoomSettingsPage(props) {
             justify="center"
             style={{ minHeight: "90vh" }}
         >
-            {/* { alert ? showAlert(alert.text, alert.severity) : null } */}
+            { alert ? showAlert(alert.text, alert.severity) : null }
             <Grid item xs={12}>
                 <Typography component="h4" variant="h4">
                     { isUpdate ? "Update Room" : "Create a Room" }
