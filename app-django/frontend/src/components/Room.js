@@ -34,7 +34,7 @@ export default function Room(props) {
     const renderSettings = () => {
         return (
             <Grid
-                container
+                container 
                 spacing={1}
                 direction="column"
                 alignItems="center"
@@ -53,7 +53,7 @@ export default function Room(props) {
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={null}
+                        onClick={() => setShowSettings(false)}
                     >
                         Close Settings
                     </Button>
