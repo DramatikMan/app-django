@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework import generics, status
@@ -11,6 +13,15 @@ from .serializers import (
     UpdateRoomSerializer
 )
 
+
+def session_required(func):
+    ''' Check if session key exists in session, create session otherwise '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+        func(*args, **kwargs)
+        return wrapper
 
 
 class RoomView(generics.ListAPIView):
@@ -45,10 +56,8 @@ class GetRoom(APIView):
 
 
 class JoinRoom(APIView):
+    @session_required
     def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-
         code = request.data.get('code')
         if code:
             queryset = Room.objects.filter(code=code)
@@ -75,10 +84,8 @@ class JoinRoom(APIView):
 class CreateRoomView(APIView):
     serializer_class = RoomCreateSerializer
 
+    @session_required
     def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
@@ -114,14 +121,9 @@ class CreateRoomView(APIView):
 
 
 class UserInRoom(APIView):
+    @session_required
     def get(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-
-        data = {
-            'code': self.request.session.get('room_code')
-        }
-
+        data = {'code': self.request.session.get('room_code')}
         return JsonResponse(data, status=status.HTTP_200_OK)
 
 
@@ -143,6 +145,7 @@ class LeaveRoom(APIView):
 class UpdateView(APIView):
     serializer_class = UpdateRoomSerializer
 
+    @session_required
     def patch(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
