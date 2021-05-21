@@ -33,12 +33,14 @@ export default function Room(props) {
 
     const renderSettings = () => {
         return (
-           <RoomSettingsPage
-                update={true}
-                roomCode={roomCode}
-                votesToSkip={votesToSkip}
-                guestCanPause={guestCanPause}
-            />
+            <div>
+                <RoomSettingsPage
+                    update={true}
+                    roomCode={roomCode}
+                    votesToSkip={votesToSkip}
+                    guestCanPause={guestCanPause}
+                />
+            </div>
         )
     }
     
@@ -50,7 +52,7 @@ export default function Room(props) {
                     color="primary"
                     onClick={() => setShowSettings(true)}
                 >
-                    Settings
+                    settings
                 </Button>
             </Grid>
         )
@@ -95,7 +97,7 @@ export default function Room(props) {
                     color="secondary"
                     onClick={leaveButtonPressed}
                 >
-                    Leave Room
+                    leave room
                 </Button>
             </Grid>
         </Grid>

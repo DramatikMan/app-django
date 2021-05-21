@@ -14,9 +14,10 @@ import { Link, useHistory } from "react-router-dom";
 
 
 export default function RoomSettingsPage(props) {
-    const update = props.match.params.update;
-    const [votesToSkip, setVotesToSkip] = useState(2);
-    const [guestCanPause, setGuestCanPause] = useState(false);
+    const isUpdate = props.update ? props.update : false;
+    const roomCode = props.roomCode ? props.roomCode : null;
+    const [guestCanPause, setGuestCanPause] = useState(props.guestCanPause ? props.guestCanPause : false);
+    const [votesToSkip, setVotesToSkip] = useState(props.votesToSkip ? props.votesToSkip : 2);
     const history = useHistory();
 
     async function createRoomPressed() {
@@ -33,6 +34,20 @@ export default function RoomSettingsPage(props) {
             .then(data => history.push("/room/" + data.code));
     }
 
+    async function updateRoomPressed() {
+        const requestOptions = {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                code: roomCode,
+                votes_to_skip: votesToSkip,
+                guest_can_pause: guestCanPause
+            }),
+        };
+        fetch("/api/update-room", requestOptions)
+            .then(response => response.json());
+    }
+
     return (
         <Grid
             container
@@ -42,65 +57,74 @@ export default function RoomSettingsPage(props) {
             justify="center"
             style={{ minHeight: "90vh" }}
         >
-            <Grid item xs={12} align="center">
+            <Grid item xs={12}>
                 <Typography component="h4" variant="h4">
-                    Create a Room
+                    { isUpdate ? "Update Room" : "Create a Room" }
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid item xs={12}>
                 <FormControl component="fieldset">
                     <FormHelperText>
-                        Guest Control of Playback State
+                        <div align="center">
+                            Guest control of playback state
+                        </div>
                     </FormHelperText>
                     <RadioGroup
                         row
-                        defaultValue="true"
-                        onChange={e => setGuestCanPause(e.target.value)}
+                        defaultValue={String(guestCanPause)}
+                        onChange={ e => setGuestCanPause(e.target.value) }
                     >
                         <FormControlLabel
                             value="true"
-                            control={<Radio color="primary" />}
+                            control={ <Radio color="primary" /> }
                             label="Play/Pause"
                             labelPlacement="bottom"
                         />
                         <FormControlLabel
                             value="false"
-                            control={<Radio color="secondary" />}
+                            control={ <Radio color="secondary" /> }
                             label="No Control"
                             labelPlacement="bottom"
                         />
                     </RadioGroup>
                 </FormControl>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid item xs={12}>
                 <FormControl>
                     <TextField
                         required={true}
                         type="number"
-                        defaultValue={2}
-                        onChange={e => setVotesToSkip(e.target.value)}
+                        defaultValue={votesToSkip}
+                        onChange={ e => setVotesToSkip(e.target.value) }
                         inputProps={{
                             min: 1,
-                            style: {textAlign: "center"}
+                            style: { textAlign: "center" }
                         }}
                     />
                     <FormHelperText>
-                        Votes required to skip song
+                        <div align="center">
+                            Votes required to skip a song
+                        </div>
                     </FormHelperText>
                 </FormControl>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid item xs={12}>
                 <Button
                     color="primary"
                     variant="contained"
-                    onClick={createRoomPressed}
+                    onClick={ isUpdate ? updateRoomPressed : createRoomPressed }
                 >
-                    Create a Room
+                    { isUpdate ? "update room" : "create a room" }
                 </Button>
             </Grid>
-            <Grid item xs={12} align="center">
-                <Button color="secondary" variant="contained" to="/" component={Link}>
-                    Back
+            <Grid item xs={12}>
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    to="/" 
+                    component={Link}
+                >
+                    back
                 </Button>
             </Grid>
         </Grid>
