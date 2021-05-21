@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+
+import RoomCreatePage from "./RoomCreatePage"
 
 
 export default function Room(props) {
@@ -8,6 +10,7 @@ export default function Room(props) {
     const [votesToSkip, setVotesToSkip] = useState(2);
     const [guestCanPause, setGuestCanPause] = useState(false);
     const [isHost, setIsHost] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
     const history = useHistory();
 
     async function getRoomDetails() {
@@ -19,8 +22,6 @@ export default function Room(props) {
         setIsHost(responseData.is_host);
     }
 
-    useEffect(() => { getRoomDetails(); }, []);
-
     async function leaveButtonPressed() {
         const requestOptions = {
             method: "PUT",
@@ -30,14 +31,62 @@ export default function Room(props) {
         history.push("/");
     }
 
+    const renderSettings = () => {
+        return (
+            <Grid
+                container
+                spacing={1}
+                direction="column"
+                alignItems="center"
+                justify="center"
+                style={{ minHeight: "90vh" }}
+            >
+                <Grid item xs={12}>
+                    <RoomCreatePage
+                        update={true}
+                        roomCode={roomCode}
+                        votesToSkip={votesToSkip}
+                        guestCanPause={guestCanPause}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={null}
+                    >
+                        Close Settings
+                    </Button>
+                </Grid>
+            </Grid>
+        )
+    }
+    
+    const renderSettingsButton = () => {
+        return (
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setShowSettings(true)}
+                >
+                    Settings
+                </Button>
+            </Grid>
+        )
+    }
+
+    useEffect(() => { getRoomDetails() }, []);
+
+    if (showSettings) { return renderSettings() }
     return (
         <Grid
-        container
-        spacing={1}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "90vh" }}
+            container
+            spacing={1}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "90vh" }}
         >
             <Grid item xs={12}>
                 <Typography variant="h6" component="h6">
@@ -59,6 +108,7 @@ export default function Room(props) {
                     Host: {isHost.toString()}
                 </Typography>
             </Grid>
+            { isHost ? renderSettingsButton() : null }
             <Grid item xs={12}>
                 <Button
                     variant="contained"
