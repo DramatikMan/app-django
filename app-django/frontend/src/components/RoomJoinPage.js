@@ -29,12 +29,12 @@ export default function RoomJoinPage() {
 
     return (
         <Grid
-        container
-        spacing={1}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "90vh" }}
+            container
+            spacing={1}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "90vh" }}
         >
             <Grid item xs={12}>
                 <Typography variant="h4" component="h4">

@@ -18,12 +18,12 @@ export default function HomePage() {
 
     return (
         <Grid
-        container
-        spacing={3}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "90vh" }}
+            container
+            spacing={3}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "90vh" }}
         >
             <Grid item xs={12}>
                 <Typography variant="h3" compact="h3">
