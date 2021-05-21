@@ -33,14 +33,12 @@ export default function Room(props) {
 
     const renderSettings = () => {
         return (
-            <div>
-                <RoomSettingsPage
-                    update={true}
-                    roomCode={roomCode}
-                    votesToSkip={votesToSkip}
-                    guestCanPause={guestCanPause}
-                />
-            </div>
+            <RoomSettingsPage
+                update={true}
+                roomCode={roomCode}
+                votesToSkip={votesToSkip}
+                guestCanPause={guestCanPause}
+            />
         )
     }
     

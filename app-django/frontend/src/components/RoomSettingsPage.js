@@ -8,7 +8,8 @@ import {
     FormControl,
     FormControlLabel,
     Radio,
-    RadioGroup
+    RadioGroup,
+    Alert
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 
@@ -19,6 +20,7 @@ export default function RoomSettingsPage(props) {
     const [guestCanPause, setGuestCanPause] = useState(props.guestCanPause ? props.guestCanPause : false);
     const [votesToSkip, setVotesToSkip] = useState(props.votesToSkip ? props.votesToSkip : 2);
     const history = useHistory();
+    const [alert, setAlert] = useState();
 
     async function createRoomPressed() {
         const requestOptions = {
@@ -45,8 +47,21 @@ export default function RoomSettingsPage(props) {
             }),
         };
         fetch("/api/update-room", requestOptions)
-            .then(response => response.json());
+            .then(response => {
+                if (response.ok) {setAlert({text: "Room updated.", severity: "success"})}
+                else {setAlert({text: "Room update failed.", severity: "error"})}
+            });
     }
+
+    // const showAlert = (text, severity) => {
+    //     return (
+    //         <Grid item xs={12}>
+    //             <Alert variant="filled" severity={severity}>
+    //                 {text}
+    //             </Alert>
+    //         </Grid>
+    //     )
+    // }
 
     return (
         <Grid
@@ -57,6 +72,7 @@ export default function RoomSettingsPage(props) {
             justify="center"
             style={{ minHeight: "90vh" }}
         >
+            {/* { alert ? showAlert(alert.text, alert.severity) : null } */}
             <Grid item xs={12}>
                 <Typography component="h4" variant="h4">
                     { isUpdate ? "Update Room" : "Create a Room" }
@@ -65,13 +81,11 @@ export default function RoomSettingsPage(props) {
             <Grid item xs={12}>
                 <FormControl component="fieldset">
                     <FormHelperText>
-                        <div align="center">
-                            Guest control of playback state
-                        </div>
+                        Guest control of playback state
                     </FormHelperText>
                     <RadioGroup
                         row
-                        defaultValue={String(guestCanPause)}
+                        value={String(guestCanPause)}
                         onChange={ e => setGuestCanPause(e.target.value) }
                     >
                         <FormControlLabel
@@ -102,9 +116,7 @@ export default function RoomSettingsPage(props) {
                         }}
                     />
                     <FormHelperText>
-                        <div align="center">
-                            Votes required to skip a song
-                        </div>
+                        Votes required to skip a song
                     </FormHelperText>
                 </FormControl>
             </Grid>
