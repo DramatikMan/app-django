@@ -19,10 +19,12 @@ export default function RoomJoinPage() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({code: roomCode})
         };
-        fetch("/api/join-room", requestOptions).then(response => {
-            if (response.ok) { history.push(`/room/${roomCode}`) }
-            else { setError("Room not found.") }
-        }).catch(error => console.log(error));
+        fetch("/api/join-room", requestOptions)
+            .then(response => {
+                if (response.ok) { history.push(`/room/${roomCode}`) }
+                else { setError("Room not found.") }
+            })
+            .catch(error => console.log(error));
     };
 
     return (
