@@ -3,13 +3,11 @@ import { render } from "react-dom";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link,
-  Redirect
+  Route
 } from "react-router-dom"
 
 import HomePage from "./HomePage";
-import RoomSettingsPage from "./RoomCreatePage";
+import RoomSettingsPage from "./RoomSettingsPage";
 import RoomJoinPage from "./RoomJoinPage";
 import Room from "./Room";
 
