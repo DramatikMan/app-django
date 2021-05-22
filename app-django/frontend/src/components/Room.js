@@ -33,12 +33,29 @@ export default function Room(props) {
 
     const renderSettings = () => {
         return (
-            <RoomSettingsPage
-                update={true}
-                roomCode={roomCode}
-                votesToSkip={votesToSkip}
-                guestCanPause={guestCanPause}
-            />
+            <Grid
+                container
+                direction="column"
+                alignItems="center"
+                justify="center"
+                style={{ minHeight: "90vh" }}
+            >
+                <RoomSettingsPage
+                    update={true}
+                    roomCode={roomCode}
+                    votesToSkip={votesToSkip}
+                    guestCanPause={guestCanPause}
+                />
+                <Grid item xs={12} style={{ margin: "0.5vh" }}>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={ () => setShowSettings(false) }
+                    >
+                        close settings
+                    </Button>
+                </Grid>
+            </Grid>
         )
     }
     

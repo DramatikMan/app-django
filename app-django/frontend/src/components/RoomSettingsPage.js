@@ -54,18 +54,33 @@ export default function RoomSettingsPage(props) {
             });
     }
 
-    const showAlert = (text, severity) => {
+    const showAlert = () => {
         return (
             <Grid item xs={12}>
                 <Collapse in={Boolean(alert)}>
                     <Alert
                         variant="filled"
-                        severity={severity}
+                        severity={alert.severity}
                         onClose={ () => setAlert() }
                     >
-                        {text}
+                        {alert.text}
                     </Alert>
                 </Collapse>
+            </Grid>
+        )
+    }
+
+    const renderBackButton = () => {
+        return (
+            <Grid item xs={12}>
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    to="/" 
+                    component={Link}
+                >
+                    back
+                </Button>
             </Grid>
         )
     }
@@ -77,9 +92,9 @@ export default function RoomSettingsPage(props) {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{ minHeight: "90vh" }}
+            style={ isUpdate ? null : { minHeight: "90vh" } }
         >
-            { alert ? showAlert(alert.text, alert.severity) : null }
+            { alert ? showAlert() : null }
             <Grid item xs={12}>
                 <Typography component="h4" variant="h4">
                     { isUpdate ? "Update Room" : "Create a Room" }
@@ -87,7 +102,7 @@ export default function RoomSettingsPage(props) {
             </Grid>
             <Grid item xs={12}>
                 <FormControl component="fieldset">
-                    <FormHelperText>
+                    <FormHelperText style={{ textAlign: "center" }}>
                         Guest control of playback state
                     </FormHelperText>
                     <RadioGroup
@@ -122,7 +137,7 @@ export default function RoomSettingsPage(props) {
                             style: { textAlign: "center" }
                         }}
                     />
-                    <FormHelperText>
+                    <FormHelperText style={{ textAlign: "center" }}>
                         Votes required to skip a song
                     </FormHelperText>
                 </FormControl>
@@ -136,16 +151,7 @@ export default function RoomSettingsPage(props) {
                     { isUpdate ? "update room" : "create a room" }
                 </Button>
             </Grid>
-            <Grid item xs={12}>
-                <Button
-                    color="secondary"
-                    variant="contained"
-                    to="/" 
-                    component={Link}
-                >
-                    back
-                </Button>
-            </Grid>
+            { isUpdate ? null : renderBackButton() }
         </Grid>
     )
 }
