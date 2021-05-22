@@ -50,12 +50,11 @@ def spotify_callback(request, format=None):
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET
     )
-
     response = requests.post(TOKEN_URI, data=payload).json()
 
     if not request.session.exists(request.session.session_key):
         request.session.create()
-        
+
     update_or_create_spotify_token(request, response)
 
     return redirect('frontend:')
