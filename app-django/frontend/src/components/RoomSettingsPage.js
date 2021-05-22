@@ -20,8 +20,8 @@ export default function RoomSettingsPage(props) {
     const roomCode = props.roomCode ? props.roomCode : null;
     const [guestCanPause, setGuestCanPause] = useState(props.guestCanPause ? props.guestCanPause : false);
     const [votesToSkip, setVotesToSkip] = useState(props.votesToSkip ? props.votesToSkip : 2);
-    const history = useHistory();
     const [alert, setAlert] = useState();
+    const history = useHistory();
 
     async function createRoomPressed() {
         const requestOptions = {
@@ -71,18 +71,33 @@ export default function RoomSettingsPage(props) {
     }
 
     const renderBackButton = () => {
-        return (
-            <Grid item xs={12}>
-                <Button
-                    color="secondary"
-                    variant="contained"
-                    to="/" 
-                    component={Link}
-                >
-                    back
-                </Button>
-            </Grid>
-        )
+        if (isUpdate) {
+            return (
+                <Grid item xs={12}>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={() => props.updateCallback(false)}
+                    >
+                        close settings
+                    </Button>
+                </Grid>
+            )
+        }
+        else {
+            return (
+                <Grid item xs={12}>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        to="/" 
+                        component={Link}
+                    >
+                        back
+                    </Button>
+                </Grid>
+            )
+        }
     }
 
     return (
@@ -92,7 +107,7 @@ export default function RoomSettingsPage(props) {
             direction="column"
             alignItems="center"
             justify="center"
-            style={ isUpdate ? null : { minHeight: "90vh" } }
+            style={{ minHeight: "90vh" }}
         >
             { alert ? showAlert() : null }
             <Grid item xs={12}>
@@ -151,7 +166,7 @@ export default function RoomSettingsPage(props) {
                     { isUpdate ? "update room" : "create a room" }
                 </Button>
             </Grid>
-            { isUpdate ? null : renderBackButton() }
+            { renderBackButton() }
         </Grid>
     )
 }
