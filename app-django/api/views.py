@@ -24,7 +24,7 @@ from .serializers import (
 #         return wrapper
 
 
-class RoomView(generics.ListAPIView):
+class Rooms(generics.ListAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
@@ -84,7 +84,7 @@ class JoinRoom(APIView):
         )
 
 
-class CreateRoomView(APIView):
+class CreateRoom(APIView):
     serializer_class = RoomCreateSerializer
 
     def post(self, request, format=None):
