@@ -31,6 +31,11 @@ export default function Room(props) {
         history.push("/");
     }
 
+    const updateCallback = () => {
+        getRoomDetails();
+        setShowSettings(false);
+    }
+
     const renderSettings = () => {
         return (
             <RoomSettingsPage
@@ -38,7 +43,7 @@ export default function Room(props) {
                 roomCode={roomCode}
                 votesToSkip={votesToSkip}
                 guestCanPause={guestCanPause}
-                updateCallback={setShowSettings}
+                updateCallback={updateCallback}
             />
         )
     }

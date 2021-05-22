@@ -77,7 +77,7 @@ export default function RoomSettingsPage(props) {
                     <Button
                         color="secondary"
                         variant="contained"
-                        onClick={() => props.updateCallback(false)}
+                        onClick={() => props.updateCallback()}
                     >
                         close settings
                     </Button>
