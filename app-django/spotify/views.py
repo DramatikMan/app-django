@@ -1,15 +1,20 @@
 import os
 import requests
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from .models import SpotifyToken
+from .utils import update_or_create_spotify_token
 
-redirect_uri = os.environ['SPOTIFY_REDIRECT_URI']
-client_id = os.environ['SPOTIFY_CLIENT_ID']
-client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
+
+TOKEN_URI = 'https://accounts.spotify.com/api/token'
+REDIRECT_URI = os.environ['SPOTIFY_REDIRECT_URI']
+CLIENT_ID = os.environ['SPOTIFY_CLIENT_ID']
+CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
 
 
 class AuthURL(APIView):
@@ -22,8 +27,8 @@ class AuthURL(APIView):
         payload = dict(
             scope=' '.join(scopes),
             response_type='code',
-            redirect_uri=redirect_uri,
-            client_id=client_id
+            redirect_uri=REDIRECT_URI,
+            client_id=CLIENT_ID
         )
         url = requests.Request(
             'GET',
@@ -41,18 +46,44 @@ def spotify_callback(request, format=None):
     payload = dict(
         grant_type='authorization_code',
         code=code,
-        redirect_uri=redirect_uri,
-        client_id=client_id,
-        client_secret=client_secret
+        redirect_uri=REDIRECT_URI,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET
     )
 
-    response = requests.post(
-        'https://accounts.spotify.com/api/token',
-        data=payload
-    ).json()
+    response = requests.post(TOKEN_URI, data=payload).json()
 
-    access_token = response.get('access_token')
-    token_type = response.get('token_type')
-    refresh_token = response.get('refresh_token')
-    expires_in = response.get('expires_in')
-    error = response.get('error')
+    if not request.session.exists(request.session.session_key):
+        request.session.create()
+        
+    update_or_create_spotify_token(request, response)
+
+    return redirect('frontend:')
+
+
+class IsAuthenticated(APIView):
+    def get(self, request, format=None):
+        if not request.session.exists(request.session.session_key):
+            request.session.create()
+
+        queryset = SpotifyToken.objects.filter(user=request.session.session_key)
+       
+        if queryset.exists():
+            tokens = queryset[0]
+           
+            if tokens.expiry_dt <= timezone.now():
+                payload = dict(
+                    grant_type='refresh_token',
+                    refresh_token=tokens.refresh_token,
+                    client_id=CLIENT_ID,
+                    client_secret=CLIENT_SECRET
+                )
+                response = post(TOKEN_URI, data=payload).json()
+                update_or_create_spotify_token(request, response)
+
+            return Response({'status': True}, status=status.HTTP_200_OK)
+
+        return Response({'status': False}, status=status.HTTP_200_OK)
+                
+
+
