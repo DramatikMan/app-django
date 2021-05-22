@@ -65,7 +65,7 @@ export default function Room(props) {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => setShowSettings(true)}
+                    onClick={ () => setShowSettings(true) }
                 >
                     settings
                 </Button>
