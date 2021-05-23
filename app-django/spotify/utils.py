@@ -19,15 +19,16 @@ def get_spotify_token(session_key):
 
 
 def update_or_create_spotify_token(request, resp_json):
+    user = request.session.session_key
+
     access_token = resp_json.get('access_token')
     token_type = resp_json.get('token_type')
     refresh_token = resp_json.get('refresh_token') or \
-        SpotifyToken.objects.filter(
-            user=request.session.session_key)[0].refresh_token
+        get_spotify_token(user).refresh_token
     expires_in = resp_json.get('expires_in')
     
     SpotifyToken.objects.update_or_create(
-        user=request.session.session_key,
+        user=user,
         defaults=dict(
             access_token=access_token,
             token_type=token_type,
