@@ -11,7 +11,10 @@ export default function Room(props) {
     const [guestCanPause, setGuestCanPause] = useState(false);
     const [isHost, setIsHost] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+
     const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
+    const [song, setSong] = useState();
+
     const history = useHistory();
 
     async function authenticateSpotify() {
@@ -23,6 +26,17 @@ export default function Room(props) {
             window.location.href = responseData.url;
         }
         else { setSpotifyAuthenticated(true); }
+    }
+
+    async function getCurrentSong() {
+        const response = await fetch('/spotify/current-song');
+        if (!response.ok) {
+            return {};
+        }
+        else {
+            const responseData = await response.json();
+            setSong(responseData);
+        }
     }
 
     async function getRoomDetails() {
@@ -75,7 +89,10 @@ export default function Room(props) {
         )
     }
 
-    useEffect(() => { getRoomDetails() }, []);
+    useEffect(() => { 
+        getRoomDetails();
+        getCurrentSong(); 
+    }, []);
 
     if (showSettings) { return renderSettings() }
     return (
@@ -90,21 +107,6 @@ export default function Room(props) {
             <Grid item xs={12}>
                 <Typography variant="h6" component="h6">
                     Room Code: {roomCode}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="h6" component="h6">
-                    Votes: {votesToSkip}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="h6" component="h6">
-                    Guest Can Pause: {guestCanPause.toString()}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="h6" component="h6">
-                    Host: {isHost.toString()}
                 </Typography>
             </Grid>
             { isHost ? renderSettingsButton() : null }
