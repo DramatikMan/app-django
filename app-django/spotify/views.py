@@ -7,10 +7,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from api.models import Room
 from .models import SpotifyToken
 from .utils import (
     get_spotify_token,
-    update_or_create_spotify_token
+    update_or_create_spotify_token,
+    execute_spotify_api_request
 )
 
 
@@ -77,10 +79,26 @@ class IsAuthenticated(APIView):
                     client_id=CLIENT_ID,
                     client_secret=CLIENT_SECRET
                 )
-                response = post(TOKEN_URI, data=payload).json()
-                update_or_create_spotify_token(self.request, response)
+                response = requests.post(TOKEN_URI, data=payload)
+                update_or_create_spotify_token(self.request, response.json())
 
             return Response({'status': True}, status=status.HTTP_200_OK)
 
         return Response({'status': False}, status=status.HTTP_200_OK)
         
+
+class CurrentSong(APIView):
+    def get(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        queryset = Room.objects.filter(code=room_code)
+
+        if queryset.exists():
+            room = queryset[0]
+        else:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+        host = room.host
+        endpoint = 'player/currently-playing'
+        resp_json = execute_spotify_api_request(host, endpoint)
+
+        return Response(resp_json, status=status.HTTP_200_OK)
