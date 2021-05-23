@@ -11,4 +11,4 @@ djangorestframework = "*"
 [dev-packages]
 
 [scripts]
-devserver = "./app-django/manage.py runserver 0.0.0.0:8000"
+devserver = "./music_app/manage.py runserver 0.0.0.0:8000"
