@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development --watch",
-    "build": "webpack --mode production"
+    "dev": "webpack --mode development --watch"
   },
   "keywords": [],
   "author": "",
@@ -14,17 +13,15 @@
     "@babel/core": "*",
     "@babel/preset-env": "*",
     "@babel/preset-react": "*",
+    "@babel/plugin-transform-runtime": "*",
     "babel-loader": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
     "react": "*",
     "react-dom": "*",
-    "webpack": "*",
-    "webpack-cli": "*"
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-class-properties": "*",
+    "react-router-dom": "*",
     "@material-ui/core": "*",
     "@material-ui/lab": "*",
-    "@material-ui/icons": "*",
-    "react-router-dom": "*"
+    "@material-ui/icons": "*"
   }
 }
