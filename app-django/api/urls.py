@@ -12,7 +12,7 @@ from .views import (
 
 
 urlpatterns = [
-    path('home', Rooms.as_view()),
+    path('rooms', Rooms.as_view()),
     path('create-room', CreateRoom.as_view()),
     path('get-room', GetRoom.as_view()),
     path('join-room', JoinRoom.as_view()),
