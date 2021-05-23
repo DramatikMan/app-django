@@ -67,7 +67,7 @@ export default function RoomSettingsPage(props) {
                     </Alert>
                 </Collapse>
             </Grid>
-        )
+        );
     }
 
     const renderBackButton = () => {
@@ -82,7 +82,7 @@ export default function RoomSettingsPage(props) {
                         close settings
                     </Button>
                 </Grid>
-            )
+            );
         }
         else {
             return (
@@ -96,7 +96,7 @@ export default function RoomSettingsPage(props) {
                         back
                     </Button>
                 </Grid>
-            )
+            );
         }
     }
 
@@ -168,5 +168,5 @@ export default function RoomSettingsPage(props) {
             </Grid>
             { renderBackButton() }
         </Grid>
-    )
+    );
 }
