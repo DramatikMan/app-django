@@ -60,6 +60,7 @@ export default function MusicPlayer(props) {
                             { props.is_playing ? <PauseIcon /> : <PlayArrowIcon /> }
                         </IconButton>
                         <IconButton onClick={ () => skipSong() }>
+                            {props.votes}{ " / " }{props.votes_required}
                             <SkipNextIcon />
                         </IconButton>
                     </div>
