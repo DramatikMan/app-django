@@ -14,7 +14,8 @@ from .utils import (
     update_or_create_spotify_token,
     execute_spotify_api_request,
     pause_song,
-    play_song
+    play_song,
+    skip_song
 )
 
 
@@ -164,3 +165,16 @@ class PlaySong(APIView):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
         
         return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+
+class SkipSong(APIView):
+    def post(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+
+        if self.request.session.session_key == room.host:
+            skip_song(room.host)
+        else:
+            pass
+
+    return Reponse({}, status=status.HTTP_204_NO_CONTENT)
