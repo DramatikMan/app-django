@@ -18,11 +18,13 @@ def get_spotify_token(session_key):
         return None
 
 
-def update_or_create_spotify_token(request, response):
-    access_token = response.get('access_token')
-    token_type = response.get('token_type')
-    refresh_token = response.get('refresh_token')
-    expires_in = response.get('expires_in')
+def update_or_create_spotify_token(request, resp_json):
+    access_token = resp_json.get('access_token')
+    token_type = resp_json.get('token_type')
+    refresh_token = resp_json.get('refresh_token') or \
+        SpotifyToken.objects.filter(
+            user=request.session.session_key)[0].refresh_token
+    expires_in = resp_json.get('expires_in')
     
     SpotifyToken.objects.update_or_create(
         user=request.session.session_key,
@@ -39,7 +41,7 @@ def execute_spotify_api_request(session_key, endpoint, post=False,  put=False):
     tokens = get_spotify_token(session_key)
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer' + tokens.access_token
+        'Authorization': 'Bearer ' + tokens.access_token
     }
 
     if post:
