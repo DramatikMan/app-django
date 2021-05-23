@@ -6,7 +6,9 @@ import {
     IconButton,
     LinearProgress
 } from "@material-ui/core";
-import { PlayArrowIcon, SkipNextIcon, PauseIcon } from "@material-ui/icons";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import PauseIcon from "@material-ui/icons/Pause";
+import SkipNextIcon from "@material-ui/icons/SkipNext";
 
 
 export default function MusicPlayer(props) {

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
-import RoomSettingsPage from "./RoomSettingsPage"
+import RoomSettingsPage from "./RoomSettingsPage";
+import MusicPlayer from "./MusicPlayer";
 
 
 export default function Room(props) {
@@ -108,6 +109,7 @@ export default function Room(props) {
                     Room Code: {roomCode}
                 </Typography>
             </Grid>
+            <MusicPlayer {...song} />
             { isHost ? renderSettingsButton() : null }
             <Grid item xs={12}>
                 <Button
