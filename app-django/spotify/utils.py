@@ -55,3 +55,12 @@ def execute_spotify_api_request(session_key, endpoint, post=False,  put=False):
         return response.json()
     except:
         return {'Error': 'Unable to return JSON object.'}
+
+
+def pause_song(session_key):
+    return execute_spotify_api_request(session_key, "player/pause", put=True)
+
+
+def play_song(session_key):
+    return execute_spotify_api_request(session_key, "player/play", put=True)
+
