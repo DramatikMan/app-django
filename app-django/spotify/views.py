@@ -12,7 +12,9 @@ from .models import SpotifyToken
 from .utils import (
     get_spotify_token,
     update_or_create_spotify_token,
-    execute_spotify_api_request
+    execute_spotify_api_request,
+    pause_song,
+    play_song
 )
 
 
@@ -144,7 +146,7 @@ class PauseSong(APIView):
         room = Room.objects.filter(code=room_code)[0]
 
         if (self.request.session_key == room.host) or room.guest_can_pause:
-            # pause_song(room.host)
+            pause_song(room.host)
             return Respose({}, status=status.HTTP_204_NO_CONTENT)
         
         return Response({}, status=status.HTTP_403_FORBIDDEN)
@@ -156,7 +158,7 @@ class PlaySong(APIView):
         room = Room.objects.filter(code=room_code)[0]
 
         if (self.request.session_key == room.host) or room.guest_can_pause:
-            # play_song(room.host)
+            play_song(room.host)
             return Respose({}, status=status.HTTP_204_NO_CONTENT)
         
         return Response({}, status=status.HTTP_403_FORBIDDEN)
