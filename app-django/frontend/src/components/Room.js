@@ -30,9 +30,7 @@ export default function Room(props) {
 
     async function getCurrentSong() {
         const response = await fetch('/spotify/current-song');
-        if (!response.ok) {
-            return {};
-        }
+        if (!response.ok) { return {}; }
         else {
             const responseData = await response.json();
             setSong(responseData);
@@ -89,9 +87,10 @@ export default function Room(props) {
         );
     }
 
-    useEffect(() => { 
-        getRoomDetails();
-        getCurrentSong(); 
+    useEffect(() => { getRoomDetails(); }, []);
+    useEffect(() => {
+        const interval = setInterval(() => { getCurrentSong(); }, 1000);
+        return () => clearInterval(interval);
     }, []);
 
     if (showSettings) { return renderSettings(); }
