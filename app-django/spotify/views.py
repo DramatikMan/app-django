@@ -101,4 +101,38 @@ class CurrentSong(APIView):
         endpoint = 'player/currently-playing'
         resp_json = execute_spotify_api_request(host, endpoint)
 
-        return Response(resp_json, status=status.HTTP_200_OK)
+        if 'item' not in resp_json:
+            return Response(
+                {'Message': 'Could not get current song info.'},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        
+        is_playing = resp_json.get('is_playing')
+        progress = resp_json.get('progress_ms')
+
+        item = resp_json.get('item')
+        title = item.get('name')
+        song_id = item.get('id')
+        duration = item.get('duration_ms')
+        album_cover = item.get('album').get('images')[0].get('url')
+
+        artist_string = ''
+
+        for i, artist in enumerate(item.get('artists')):
+            if i > 0:
+                artist_string += ', '
+            artist_name = artist.get('name')
+            artist_string += artist_name
+
+        song = dict(
+            title=title,
+            artist=artist_string,
+            duration=duration,
+            progress=progress,
+            image_url=album_cover,
+            is_playing=is_playing,
+            votes=0,
+            id=song_id
+        )
+
+        return Response(song, status=status.HTTP_200_OK)
