@@ -72,7 +72,7 @@ export default function Room(props) {
                 guestCanPause={guestCanPause}
                 updateCallback={updateCallback}
             />
-        )
+        );
     }
     
     const renderSettingsButton = () => {
@@ -86,7 +86,7 @@ export default function Room(props) {
                     settings
                 </Button>
             </Grid>
-        )
+        );
     }
 
     useEffect(() => { 
@@ -94,7 +94,7 @@ export default function Room(props) {
         getCurrentSong(); 
     }, []);
 
-    if (showSettings) { return renderSettings() }
+    if (showSettings) { return renderSettings(); }
     return (
         <Grid
             container
@@ -120,5 +120,5 @@ export default function Room(props) {
                 </Button>
             </Grid>
         </Grid>
-    )
+    );
 }
