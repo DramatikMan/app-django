@@ -8,7 +8,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import SpotifyToken
-from .utils import update_or_create_spotify_token
+from .utils import (
+    get_spotify_token,
+    update_or_create_spotify_token
+)
 
 
 TOKEN_URI = 'https://accounts.spotify.com/api/token'
@@ -41,8 +44,6 @@ class AuthURL(APIView):
 
 def spotify_callback(request, format=None):
     code = request.GET.get('code')
-    error = request.GET.get('error')
-
     payload = dict(
         grant_type='authorization_code',
         code=code,
@@ -65,11 +66,10 @@ class IsAuthenticated(APIView):
         if not request.session.exists(request.session.session_key):
             request.session.create()
 
-        queryset = SpotifyToken.objects.filter(user=request.session.session_key)
-       
-        if queryset.exists():
-            tokens = queryset[0]
-           
+        tokens = get_spotify_token(self.request.session.session_key)
+        
+        if tokens:
+
             if tokens.expiry_dt <= timezone.now():
                 payload = dict(
                     grant_type='refresh_token',
@@ -78,11 +78,9 @@ class IsAuthenticated(APIView):
                     client_secret=CLIENT_SECRET
                 )
                 response = post(TOKEN_URI, data=payload).json()
-                update_or_create_spotify_token(request, response)
+                update_or_create_spotify_token(self.request, response)
 
             return Response({'status': True}, status=status.HTTP_200_OK)
 
         return Response({'status': False}, status=status.HTTP_200_OK)
-                
-
-
+        
