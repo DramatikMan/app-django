@@ -5,6 +5,15 @@ from django.utils import timezone
 from .models import SpotifyToken
 
 
+def get_spotify_token(session_key):
+    queryset = SpotifyToken.objects.filter(user=session_key)
+
+    if queryset.exists():
+        return queryset[0]
+    else:
+        return None
+
+
 def update_or_create_spotify_token(request, response):
     access_token = response.get('access_token')
     token_type = response.get('token_type')
