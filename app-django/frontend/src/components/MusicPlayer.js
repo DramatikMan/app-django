@@ -12,15 +12,15 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 
 
 export default function MusicPlayer(props) {
-    const songProgress = (props.time / props.duration) * 100;
+    const songProgress = (props.progress / props.duration) * 100;
 
     return (
         <Card>
             <Grid container alignItems="center">
-                <Grid item xs={4}>
+                <Grid item align="center" xs={4}>
                     <img src={props.image_url} heigth="100%" width="100%" />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item align="center" xs={8}>
                     <Typography component="h5" variant="h5">
                         {props.title}
                     </Typography>
