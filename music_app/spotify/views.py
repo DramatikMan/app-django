@@ -161,7 +161,7 @@ class PauseSong(APIView):
         if (self.request.session.session_key == room.host) \
         or room.guest_can_pause:
             pause_song(room.host)
-            return Respose({}, status=status.HTTP_204_NO_CONTENT)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
         
         return Response({}, status=status.HTTP_403_FORBIDDEN)
 
