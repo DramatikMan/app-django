@@ -1,11 +1,14 @@
 ### ~ private ~ ###
 *.env
+db.sqlite3
 
 ### ~ testing ~ ###
 htmlcov
 
 ### ~ front-end ~ ###
 **/*.scss
+**/*.json
+**/webpack.config.js
 
 ### ~ Docker ~ ###
 **/.dockerignore
