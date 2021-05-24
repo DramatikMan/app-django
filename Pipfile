@@ -7,6 +7,8 @@ name = "pypi"
 requests = "*"
 django = "*"
 djangorestframework = "*"
+whitenoise = "*"
+gunicorn = "*"
 
 [dev-packages]
 
