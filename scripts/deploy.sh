@@ -3,6 +3,11 @@ evs=(
     SPOTIFY_REDIRECT_URI
 	SPOTIFY_CLIENT_ID
     SPOTIFY_CLIENT_SECRET
+	POSTGRES_USER
+	POSTGRES_PASSWORD
+	POSTGRES_HOST
+	POSTGRES_PORT
+	POSTGRES_DB
 )
 for variable in "${evs[@]}"; do
 	if [[ -z ${!variable+x} ]] || [[ -z ${!variable} ]] ; then
