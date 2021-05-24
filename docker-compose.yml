@@ -11,9 +11,22 @@ services:
       env_file:
         - secrets.env
 
-      # environment:
-      #   # app mount path relative to host
-      #   SCRIPT_NAME: /music_app
+      environment:
+        # app mount path relative to host
+        SCRIPT_NAME: /music_app
 
       ports:
         - 8000:8000
+    
+    postgres:
+
+      image: postgres
+
+      env_file:
+        - secrets.env
+
+      volumes:
+        - psql_data:/var/lib/postgresql/data
+
+volumes:
+  psql_data:
