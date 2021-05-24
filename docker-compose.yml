@@ -1,0 +1,19 @@
+services:
+
+    server:
+
+      build:
+        args:
+          - build_env=production
+        context: .
+        target: production
+
+      env_file:
+        - secrets.env
+
+      # environment:
+      #   # app mount path relative to host
+      #   SCRIPT_NAME: /music_app
+
+      ports:
+        - 8000:8000
