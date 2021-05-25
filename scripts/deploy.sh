@@ -18,10 +18,10 @@ done
 if [[ $undef -gt 0 ]]; then exit 1; fi
 
 cd music_app
-
 sed -i "s/DEBUG = True/DEBUG = False/" music_app/settings.py
-pipenv run ./manage.py migrate
-pipenv run ./manage.py collectstatic
+
+pipenv run migrate
+pipenv run collectstatic
 
 echo $'
 workers=4

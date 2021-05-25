@@ -14,4 +14,6 @@ gunicorn = "*"
 [dev-packages]
 
 [scripts]
-devserver = "./music_app/manage.py runserver 0.0.0.0:8000"
+devserver = "python /project/music_app/manage.py runserver 0.0.0.0:8000"
+migrate = "python /project/music_app/manage.py migrate"
+collectstatic = "python /project/music_app/manage.py collectstatic"
