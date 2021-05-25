@@ -19,10 +19,10 @@ export default function Room(props) {
     const history = useHistory();
 
     async function authenticateSpotify() {
-        let response = await fetch("/spotify/is-authenticated");
+        let response = await fetch("/music_app/spotify/is-authenticated");
         let responseData = await response.json();
         if (responseData.status == false) {
-            let response = await fetch("/spotify/get-auth-url");
+            let response = await fetch("/music_app/spotify/get-auth-url");
             let responseData = await response.json();
             window.location.href = responseData.url;
         }
@@ -30,7 +30,7 @@ export default function Room(props) {
     }
 
     async function getCurrentSong() {
-        const response = await fetch('/spotify/current-song');
+        const response = await fetch("/music_app/spotify/current-song");
         if (!response.ok) { return {}; }
         else {
             const responseData = await response.json();
@@ -39,7 +39,7 @@ export default function Room(props) {
     }
 
     async function getRoomDetails() {
-        const response = await fetch("/api/get-room" + "?code=" + roomCode);
+        const response = await fetch("/music_app/api/get-room" + "?code=" + roomCode);
         if (!response.ok) { history.push("/"); }
         const responseData = await response.json();
         setVotesToSkip(responseData.votes_to_skip);
@@ -53,7 +53,7 @@ export default function Room(props) {
             method: "PUT",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/api/leave-room", requestOptions);
+        await fetch("/music_app/api/leave-room", requestOptions);
         history.push("/");
     }
 
