@@ -39,6 +39,9 @@ export default function HomePage() {
                     <Button color="primary" to="/join" component={Link}>
                         Join a Room
                     </Button>
+                    <Button color="default" to="/about" component={Link}>
+                        About
+                    </Button>
                     <Button color="secondary" to="/create" component={Link}>
                         Create a Room
                     </Button>
