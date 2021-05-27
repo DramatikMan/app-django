@@ -32,7 +32,7 @@ export default function RoomSettingsPage(props) {
                 guest_can_pause: guestCanPause
             }),
         };
-        fetch("/music_app/api/create-room", requestOptions)
+        fetch("/api/create-room", requestOptions)
             .then(response => response.json())
             .then(data => history.push("/room/" + data.code));
     }
@@ -47,7 +47,7 @@ export default function RoomSettingsPage(props) {
                 guest_can_pause: guestCanPause
             }),
         };
-        fetch("/music_app/api/update-room", requestOptions)
+        fetch("/api/update-room", requestOptions)
             .then(response => {
                 if (response.ok) {setAlert({text: "Room updated.", severity: "success"})}
                 else {setAlert({text: "Room update failed.", severity: "error"})}

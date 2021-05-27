@@ -14,7 +14,7 @@ import Room from "./Room";
 
 const App = () => {
   return (
-    <Router basename="/music_app">
+    <Router>
       <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/create" component={RoomSettingsPage} />

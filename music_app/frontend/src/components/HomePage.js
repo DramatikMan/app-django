@@ -7,7 +7,7 @@ export default function HomePage() {
     const history = useHistory();
 
     async function redirectIfUserInRoom() {
-        let response = await fetch("/music_app/api/user-in-room");
+        let response = await fetch("/api/user-in-room");
         let responseData = await response.json();
         if (responseData.code) {
             history.push(`/room/${responseData.code}`);
