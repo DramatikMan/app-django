@@ -19,7 +19,7 @@ export default function MusicPlayer(props) {
             method: "PUT",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/spotify/pause", requestOptions);
+        await fetch("/music_app/spotify/pause", requestOptions);
     }
 
     async function playSong() {
@@ -27,7 +27,7 @@ export default function MusicPlayer(props) {
             method: "PUT",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/spotify/play", requestOptions);
+        await fetch("/music_app/spotify/play", requestOptions);
     }
 
     async function skipSong() {
@@ -35,7 +35,7 @@ export default function MusicPlayer(props) {
             method: "POST",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/spotify/skip", requestOptions);
+        await fetch("/music_app/spotify/skip", requestOptions);
     }
 
     return (

@@ -15,7 +15,7 @@ import About from "./About";
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/music_app">
       <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/create" component={RoomSettingsPage} />
