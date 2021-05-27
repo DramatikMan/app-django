@@ -10,6 +10,7 @@ import HomePage from "./HomePage";
 import RoomSettingsPage from "./RoomSettingsPage";
 import RoomJoinPage from "./RoomJoinPage";
 import Room from "./Room";
+import About from "./About";
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Route exact path="/create" component={RoomSettingsPage} />
           <Route exact path="/join" component={RoomJoinPage} />
           <Route exact path="/room/:roomCode" component={Room} />
+          <Route exact path="/about" component={About} />
       </Switch>
     </Router>
   );
