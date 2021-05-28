@@ -1,5 +1,4 @@
 {
-  "homepage": ".",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development --watch"
