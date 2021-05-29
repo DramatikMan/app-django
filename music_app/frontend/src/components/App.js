@@ -1,5 +1,4 @@
 import React from "react";
-import { render } from "react-dom";
 import {
   BrowserRouter as Router,
   Switch,
@@ -28,4 +27,4 @@ const App = () => {
   );
 }
 
-render(<App />, document.getElementById("app"));
+export default App;
