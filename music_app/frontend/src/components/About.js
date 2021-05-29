@@ -17,7 +17,7 @@ export default function About() {
         >
             <Grid item xs={12} align="center">
                 <Typography variant="body1">
-                    This app allows you to host or join rooms and contol the host's Spotify playback.
+                    This app allows you to host or join rooms to control the host's Spotify playback.
                 </Typography>
                 <Typography variant="body1">
                     The host needs to start playing something from their Spotify account for this to work.
