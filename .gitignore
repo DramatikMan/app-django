@@ -5,6 +5,9 @@ db.sqlite3
 ### ~ testing ~ ###
 htmlcov
 
+### ~ bundling ~ ###
+main.js*
+
 ### ~ Docker ~ ###
 /*.yml
 !/docker-compose.yml
