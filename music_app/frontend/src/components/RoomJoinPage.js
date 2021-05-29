@@ -9,6 +9,7 @@ import { Link, useHistory } from "react-router-dom";
 
 
 export default function RoomJoinPage() {
+    const basename = document.getElementById("basename").content;
     const [roomCode, setRoomCode] = useState();
     const [error, setError] = useState(false);
     const history = useHistory();
@@ -19,7 +20,7 @@ export default function RoomJoinPage() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({code: roomCode})
         };
-        fetch("/music_app/api/join-room", requestOptions)
+        fetch(basename + "/api/join-room", requestOptions)
             .then(response => {
                 if (response.ok) { history.push(`/room/${roomCode}`) }
                 else { setError("Room not found.") }

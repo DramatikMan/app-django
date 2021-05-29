@@ -16,6 +16,7 @@ import { Link, useHistory } from "react-router-dom";
 
 
 export default function RoomSettingsPage(props) {
+    const basename = document.getElementById("basename").content;
     const isUpdate = props.update ? props.update : false;
     const roomCode = props.roomCode ? props.roomCode : null;
     const [guestCanPause, setGuestCanPause] = useState(props.guestCanPause ? props.guestCanPause : false);
@@ -32,7 +33,7 @@ export default function RoomSettingsPage(props) {
                 guest_can_pause: guestCanPause
             }),
         };
-        fetch("/music_app/api/create-room", requestOptions)
+        fetch(basename + "/api/create-room", requestOptions)
             .then(response => response.json())
             .then(data => history.push("/room/" + data.code));
     }
@@ -47,7 +48,7 @@ export default function RoomSettingsPage(props) {
                 guest_can_pause: guestCanPause
             }),
         };
-        fetch("/music_app/api/update-room", requestOptions)
+        fetch(basename + "/api/update-room", requestOptions)
             .then(response => {
                 if (response.ok) {setAlert({text: "Room updated.", severity: "success"})}
                 else {setAlert({text: "Room update failed.", severity: "error"})}

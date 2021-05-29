@@ -4,10 +4,11 @@ import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 
 
 export default function HomePage() {
+    const basename = document.getElementById("basename").content;
     const history = useHistory();
 
     async function redirectIfUserInRoom() {
-        let response = await fetch("/music_app/api/user-in-room");
+        let response = await fetch(basename + "/api/user-in-room");
         let responseData = await response.json();
         if (responseData.code) {
             history.push(`/room/${responseData.code}`);

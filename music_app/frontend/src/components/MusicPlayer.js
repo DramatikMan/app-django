@@ -12,6 +12,7 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 
 
 export default function MusicPlayer(props) {
+    const basename = document.getElementById("basename").content;
     const songProgress = (props.progress / props.duration) * 100;
 
     async function pauseSong() {
@@ -19,7 +20,7 @@ export default function MusicPlayer(props) {
             method: "PUT",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/music_app/spotify/pause", requestOptions);
+        await fetch(basename + "/spotify/pause", requestOptions);
     }
 
     async function playSong() {
@@ -27,7 +28,7 @@ export default function MusicPlayer(props) {
             method: "PUT",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/music_app/spotify/play", requestOptions);
+        await fetch(basename + "/spotify/play", requestOptions);
     }
 
     async function skipSong() {
@@ -35,7 +36,7 @@ export default function MusicPlayer(props) {
             method: "POST",
             headers: { "Content-Type": "application/json" }
         };
-        await fetch("/music_app/spotify/skip", requestOptions);
+        await fetch(basename + "/spotify/skip", requestOptions);
     }
 
     return (

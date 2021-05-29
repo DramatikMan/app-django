@@ -13,9 +13,10 @@ import Room from "./Room";
 import About from "./About";
 
 
+const basename = document.getElementById("basename").content;
 const App = () => {
   return (
-    <Router basename="/music_app">
+    <Router basename={basename}>
       <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/create" component={RoomSettingsPage} />
