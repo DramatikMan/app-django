@@ -7,8 +7,6 @@ htmlcov
 
 ### ~ front-end ~ ###
 **/*.scss
-**/*.json
-**/webpack.config.js
 
 ### ~ Docker ~ ###
 **/.dockerignore
