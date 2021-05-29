@@ -1,7 +1,8 @@
 {
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch",
+    "prod": "webpack --mode production"
   },
   "devDependencies": {
     "@babel/core": "*",
@@ -10,7 +11,9 @@
     "@babel/plugin-transform-runtime": "*",
     "babel-loader": "*",
     "webpack": "*",
-    "webpack-cli": "*",
+    "webpack-cli": "*"
+  },
+  "dependencies": {
     "react": "*",
     "react-dom": "*",
     "react-router-dom": "*",
