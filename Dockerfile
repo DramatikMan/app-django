@@ -7,7 +7,13 @@ ARG build_env
 RUN scripts/pipenv_install.sh
 
 FROM base AS development
+COPY music_app music_app
 CMD pipenv run devserver
+
+FROM development AS testing
+COPY tests tests
+COPY pytest.ini .coveragerc ./
+CMD scripts/test.sh
 
 FROM node:slim AS builder
 WORKDIR /project
