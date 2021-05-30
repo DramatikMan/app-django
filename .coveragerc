@@ -1,0 +1,7 @@
+[run]
+omit =
+    */migrations/*
+    music_app/manage.py
+    music_app/music_app/asgi.py
+    music_app/music_app/wsgi.py
+    music_app/music_app/settings.py
