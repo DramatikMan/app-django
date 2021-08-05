@@ -1,8 +1,0 @@
-### ~ Python ~ ###
-migrations
-templates
-*.py
-
-### ~ Docker ~ ###
-.dockerignore
-Dockerfile
