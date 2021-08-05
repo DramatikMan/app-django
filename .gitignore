@@ -1,0 +1,3 @@
+### ~ Docker ~ ###
+/*.yml
+!/docker-compose.yml
