@@ -1,3 +1,9 @@
+### ~ private ~ ###
+*.env
+
+### ~ Python ~ ###
+.venv
+
 ### ~ Docker ~ ###
 /*.yml
 !/docker-compose.yml

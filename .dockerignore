@@ -1,8 +1,14 @@
+### ~ private ~ ###
+*.env
+
+### ~ Python ~ ###
+.venv
+
+### ~ Docker ~ ###
+*.yml
+**/.dockerignore
+**/Dockerfile
+
 ### ~ Git ~ ###
 .git*
 README.md
-
-### ~ Docker ~ ###
-**/.dockerignore
-**/Dockerfile
-*.yml
