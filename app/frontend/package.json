@@ -1,0 +1,21 @@
+{
+    "name": "index.js",
+    "scripts": {
+        "dev": "webpack --mode development --watch",
+        "prod": "webpack --mode production"
+    },
+    "devDependencies": {
+        "@babel/core": "*",
+        "@babel/plugin-transform-runtime": "*",
+        "@babel/preset-react": "*",
+        "babel-loader": "*",
+        "webpack": "*",
+        "webpack-cli": "*",
+        "typescript": "*",
+        "@types/react-dom": "*"
+    },
+    "dependencies": {
+        "react": "*",
+        "react-dom": "*"
+    }
+}

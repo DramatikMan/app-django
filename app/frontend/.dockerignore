@@ -1,0 +1,8 @@
+### ~ frontend ~ ###
+**/node_modules
+**/main.js*
+**/dist
+
+### ~ Docker ~ ###
+**/.dockerignore
+**/Dockerfile

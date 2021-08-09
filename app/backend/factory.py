@@ -7,6 +7,7 @@ import aiohttp_jinja2
 
 routes = web.RouteTableDef()
 template_path = Path().resolve() / 'app' / 'frontend' / 'templates'
+static_path = Path().resolve() / 'app' / 'frontend' / 'static'
 loader = jinja2.FileSystemLoader(template_path.resolve())
 
 
@@ -21,5 +22,6 @@ async def hello(request: web.Request) -> dict[str, str]:
 def create_app() -> web.Application:
     app = web.Application()
     app.add_routes(routes)
+    app.add_routes([web.static('/static', static_path)])
     aiohttp_jinja2.setup(app, loader=loader)
     return app
