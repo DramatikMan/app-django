@@ -18,8 +18,8 @@ const HomePage: FC = (): JSX.Element => {
         >
           <Button
             color='default'
+            component={Link}
             to='/about'
-            component={Link}  
           >
             About
           </Button>

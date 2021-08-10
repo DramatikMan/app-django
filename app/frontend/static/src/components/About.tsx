@@ -27,8 +27,8 @@ const About: FC = (): JSX.Element => {
         <Button
           color='secondary'
           variant='contained'
-          to='/' 
           component={Link}
+          to='/' 
         >
           Back
         </Button>
