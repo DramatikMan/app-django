@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "react": "*",
-        "react-dom": "*"
+        "react-dom": "*",
+        "@material-ui/core": "*"
     }
 }
