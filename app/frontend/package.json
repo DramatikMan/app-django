@@ -12,11 +12,13 @@
         "webpack": "*",
         "webpack-cli": "*",
         "typescript": "*",
-        "@types/react-dom": "*"
+        "@types/react-dom": "*",
+        "@types/react-router-dom": "*"
     },
     "dependencies": {
         "react": "*",
         "react-dom": "*",
+        "react-router-dom": "*",
         "@material-ui/core": "*"
     }
 }
