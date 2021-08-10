@@ -1,15 +1,8 @@
-import { FC } from 'react';
 import * as ReactDOM from 'react-dom';
+import { CssBaseline } from '@material-ui/core';
 import { createTheme, ThemeProvider, Theme } from '@material-ui/core/styles';
 
-
-const App: FC = (): JSX.Element => {
-  return (
-    <span>
-      Hello from React.
-    </span>
-  );
-}
+import App from './components/App';
 
 
 const darkTheme: Theme = createTheme({
@@ -21,6 +14,7 @@ const darkTheme: Theme = createTheme({
 
 ReactDOM.render(
   <ThemeProvider theme={darkTheme}>
+    <CssBaseline />
     <App />
   </ThemeProvider>,
   document.getElementById('app')
