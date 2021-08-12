@@ -13,12 +13,15 @@
         "webpack-cli": "*",
         "typescript": "*",
         "@types/react-dom": "*",
-        "@types/react-router-dom": "*"
+        "@types/react-router-dom": "*",
+        "@types/react-redux": "*"
     },
     "dependencies": {
+        "redux": "*",
         "react": "*",
         "react-dom": "*",
         "react-router-dom": "*",
+        "react-redux": "*",
         "@material-ui/core": "*"
     }
 }
