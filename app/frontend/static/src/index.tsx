@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import App from './components/App';
-import reducer from './reducer';
+import reducer from './reducers';
 
 
 const darkTheme: Theme = createTheme({ palette: { type: 'dark' } });
