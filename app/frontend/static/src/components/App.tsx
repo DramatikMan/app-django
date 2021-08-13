@@ -14,7 +14,7 @@ const App: FC = (): JSX.Element => {
       </Switch>
     </Router>
   );
-}
+};
 
 
 export default App;
