@@ -1,6 +1,6 @@
 export interface StateInterface {
-    RoomSettingsPage: {
-        guestCanPause: boolean
-        votesToSkip: number
-    }
+  RoomSettingsPage: {
+    guestCanPause: boolean
+    votesToSkip: number
+  }
 };
