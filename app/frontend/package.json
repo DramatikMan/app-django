@@ -14,7 +14,8 @@
         "typescript": "*",
         "@types/react-dom": "*",
         "@types/react-router-dom": "*",
-        "@types/react-redux": "*"
+        "@types/react-redux": "*",
+        "redux-devtools-extension": "*"
     },
     "dependencies": {
         "redux": "*",
