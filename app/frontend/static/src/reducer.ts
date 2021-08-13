@@ -1,7 +1,15 @@
-const initialState = {};
+import { StateInterface } from './interfaces';
 
 
-const reducer = (state = initialState) => state;
+const initialState: StateInterface = {
+    RoomSettingsPage: {
+        guestCanPause: false,
+        votesToSkip: 2
+    }
+};
+
+
+const reducer = (state: StateInterface = initialState) => state;
 
 
 export default reducer;
