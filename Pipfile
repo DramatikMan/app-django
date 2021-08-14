@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 aiohttp = {version = "*", extras = ["speedups"]}
 aiohttp_jinja2 = "*"
+aiohttp_session = "*"
+cryptography = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 alembic = "*"
