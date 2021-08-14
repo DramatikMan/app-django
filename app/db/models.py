@@ -16,7 +16,7 @@ class Base:
 
 class Room(Base):
     code = sa.Column(sa.String(length=8), primary_key=True)
-    host = sa.Column(sa.String(lenght=50), unique=True)
+    host = sa.Column(sa.String(length=50), unique=True)
     guest_can_pause = sa.Column(sa.Boolean, nullable=False, default=False)
     votes_to_skip = sa.Column(sa.Integer, nullable=False, default=2)
     created_at = sa.Column(sa.DateTime, nullable=False)
