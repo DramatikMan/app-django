@@ -13,7 +13,10 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import StateInterface from '../types/state';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
-import { setGuestCanPause } from '../actionCreators/RoomSettingsPage';
+import {
+  setGuestCanPause,
+  setVotesToSkip
+} from '../actionCreators/RoomSettingsPage';
 
 
 const RoomSettingsPage: FC = (): JSX.Element => {
@@ -48,9 +51,7 @@ const RoomSettingsPage: FC = (): JSX.Element => {
           </FormHelperText>
           <RadioGroup row
             value={String(guestCanPause)}
-            onChange={
-              e => dispatch(setGuestCanPause(e.target.value === 'true'))
-            }
+            onChange={ e => dispatch(setGuestCanPause(e.target.value)) }
           >
             <FormControlLabel
               value='true'
@@ -73,6 +74,7 @@ const RoomSettingsPage: FC = (): JSX.Element => {
             required={true}
             defaultValue={votesToSkip}
             inputProps={{ style: { textAlign: 'center' } }}
+            onChange={ e => dispatch(setVotesToSkip(e.target.value))}
           />
           <FormHelperText style={{ textAlign: 'center' }}>
             Votes required to skip a song
