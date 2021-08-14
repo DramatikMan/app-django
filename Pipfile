@@ -8,6 +8,7 @@ aiohttp = {version = "*", extras = ["speedups"]}
 aiohttp_jinja2 = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
+alembic = "*"
 
 [dev-packages]
 aiohttp-devtools = "*"
@@ -15,4 +16,5 @@ mypy = "*"
 flake8 = "*"
 
 [scripts]
-devserver = "adev runserver app/backend/factory.py --app-factory create_app"
+devserver = "adev runserver app/factory.py --app-factory create_app"
+alembic = "alembic -c /project/app/db/migrations/alembic.ini"
