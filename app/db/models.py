@@ -4,6 +4,7 @@ from typing import Callable, ClassVar
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from sqlalchemy.orm import as_declarative, declared_attr
+from sqlalchemy.orm.query import Query
 
 from .config import Session
 
@@ -24,7 +25,8 @@ class Room(Base):
         with Session() as session:
             while True:
                 code = ''.join(choices(ascii_uppercase + digits, k=6))
-                q = session.query(Room).filter(Room.code == code)
+                q: Query = session.query(Room).filter(Room.code == code)
+                print(type(q))
 
                 if q.one_or_none() is None:
                     break
