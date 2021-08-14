@@ -1,6 +1,7 @@
 FROM python:slim AS base
 SHELL ["/bin/bash", "-c"]
 WORKDIR /project
+ENV PYTHONPATH "${PYTHONPATH}:/project"
 COPY Pipfile .
 COPY scripts scripts
 ARG build_env
