@@ -16,7 +16,8 @@ import { SET_GUEST_CAN_PAUSE } from '../types/actions';
 
 
 const RoomSettingsPage: FC = (): JSX.Element => {
-  const dispatch: Dispatch<any> = useDispatch()
+  const dispatch: Dispatch<any> = useDispatch();
+  
   const guestCanPause: boolean = useSelector(
     (state: StateInterface): boolean =>
     state.RoomSettingsPage.guestCanPause
@@ -25,6 +26,14 @@ const RoomSettingsPage: FC = (): JSX.Element => {
     (state: StateInterface): number =>
     state.RoomSettingsPage.votesToSkip
   );
+
+  const setGuestCanPause = (value: string): void => {
+    const action: SET_GUEST_CAN_PAUSE = {
+      type: 'SET_GUEST_CAN_PAUSE',
+      payload: value === 'true'
+    };
+    dispatch(action);
+  };
 
   return (
     <Grid container
@@ -42,19 +51,11 @@ const RoomSettingsPage: FC = (): JSX.Element => {
       <Grid item xs={12}>
         <FormControl>
           <FormHelperText style={{ textAlign: 'center' }}>
-            Guest control of playback state, { String(guestCanPause) }
+            Guest control of playback state
           </FormHelperText>
           <RadioGroup row
             value={String(guestCanPause)}
-            onChange={
-              e => {
-                const action: SET_GUEST_CAN_PAUSE = {
-                  type: 'SET_GUEST_CAN_PAUSE',
-                  payload: e.target.value === 'true'
-                };
-                dispatch(action);
-              }
-            }
+            onChange={e => setGuestCanPause(e.target.value)}
           >
             <FormControlLabel
               value='true'
