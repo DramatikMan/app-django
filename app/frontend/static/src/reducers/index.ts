@@ -1,6 +1,6 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import RoomSettingsPage from "./RoomSettingsPage";
+import RoomSettingsPage from './RoomSettingsPage';
 
 
 export default combineReducers({

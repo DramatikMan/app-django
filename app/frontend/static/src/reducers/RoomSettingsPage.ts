@@ -1,5 +1,5 @@
-import { RoomSettingsInterface as StateInterface } from '../types/state';
-import { SET_GUEST_CAN_PAUSE } from '../types/actions';
+import StateInterface from '../types/state/RoomSettingsPage';
+import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 
 
 const initialState: StateInterface= {
@@ -9,7 +9,7 @@ const initialState: StateInterface= {
 
 const reducer = (
   state: StateInterface = initialState,
-  action: SET_GUEST_CAN_PAUSE
+  action: RoomSettingsPageActions
 ): StateInterface => {
   switch (action.type) {
     case 'SET_GUEST_CAN_PAUSE':
@@ -17,8 +17,13 @@ const reducer = (
         ...state,
         guestCanPause: action.payload
       };
+    case 'SET_VOTES_TO_SKIP':
+      return {
+        ...state,
+        votesToSkip: action.payload
+      };
     default:
-      return {...state};
+      return state;
   }
 };
 
