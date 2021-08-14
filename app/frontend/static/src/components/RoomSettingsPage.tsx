@@ -11,12 +11,13 @@ import {
   Typography
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { GlobalStateInterface as StateInterface } from '../types/state';
-import { SET_GUEST_CAN_PAUSE } from '../types/actions';
+import StateInterface from '../types/state';
+import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
+import { setGuestCanPause } from '../actionCreators/RoomSettingsPage';
 
 
 const RoomSettingsPage: FC = (): JSX.Element => {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch: Dispatch<RoomSettingsPageActions> = useDispatch();
   
   const guestCanPause: boolean = useSelector(
     (state: StateInterface): boolean =>
@@ -26,14 +27,6 @@ const RoomSettingsPage: FC = (): JSX.Element => {
     (state: StateInterface): number =>
     state.RoomSettingsPage.votesToSkip
   );
-
-  const setGuestCanPause = (value: string): void => {
-    const action: SET_GUEST_CAN_PAUSE = {
-      type: 'SET_GUEST_CAN_PAUSE',
-      payload: value === 'true'
-    };
-    dispatch(action);
-  };
 
   return (
     <Grid container
@@ -55,7 +48,9 @@ const RoomSettingsPage: FC = (): JSX.Element => {
           </FormHelperText>
           <RadioGroup row
             value={String(guestCanPause)}
-            onChange={e => setGuestCanPause(e.target.value)}
+            onChange={
+              e => dispatch(setGuestCanPause(e.target.value === 'true'))
+            }
           >
             <FormControlLabel
               value='true'
