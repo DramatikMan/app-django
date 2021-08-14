@@ -15,10 +15,8 @@ loader = jinja2.FileSystemLoader(template_path.resolve())
 
 @routes.get('/')
 @aiohttp_jinja2.template('index.html')
-async def hello(request: web.Request) -> dict[str, str]:
-    name: str = request.match_info.get('name', 'Anonymous')
-    text = 'Hello, ' + name
-    return {'text': text}
+async def root(request: web.Request) -> dict[str, str]:
+    return {'status': 'OK'}
 
 
 def create_app() -> web.Application:
