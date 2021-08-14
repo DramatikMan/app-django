@@ -11,16 +11,21 @@ import {
   Typography
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { History } from 'history';
+
 import StateInterface from '../types/state';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 import {
   setGuestCanPause,
   setVotesToSkip
 } from '../actionCreators/RoomSettingsPage';
+import { createRoomPressed } from './utils';
 
 
 const RoomSettingsPage: FC = (): JSX.Element => {
   const dispatch: Dispatch<RoomSettingsPageActions> = useDispatch();
+  const history: History = useHistory();
   
   const guestCanPause: boolean = useSelector(
     (state: StateInterface): boolean =>
@@ -30,6 +35,7 @@ const RoomSettingsPage: FC = (): JSX.Element => {
     (state: StateInterface): number =>
     state.RoomSettingsPage.votesToSkip
   );
+
 
   return (
     <Grid container
@@ -82,8 +88,14 @@ const RoomSettingsPage: FC = (): JSX.Element => {
         </FormControl>
       </Grid>
       <Grid item xs={12}>
-        <Button color='primary' variant='contained'>
-          Placeholder
+        <Button
+          color='primary'
+          variant='contained'
+          onClick={
+            () => createRoomPressed(guestCanPause, votesToSkip, history)
+          }
+        >
+          Сreate a Room
         </Button>
       </Grid>
     </Grid>
