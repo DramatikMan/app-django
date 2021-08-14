@@ -1,7 +1,11 @@
+from random import choices
+from string import ascii_uppercase, digits
 from typing import Callable, ClassVar
 
-import sqlalchemy as sa
+from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from sqlalchemy.orm import as_declarative, declared_attr
+
+from .config import Session
 
 
 @as_declarative()
@@ -15,9 +19,21 @@ class Base:
 
 
 class Room(Base):
-    code = sa.Column(sa.String(length=8), primary_key=True)
-    host = sa.Column(sa.String(length=50), unique=True)
-    guest_can_pause = sa.Column(sa.Boolean, nullable=False, default=False)
-    votes_to_skip = sa.Column(sa.Integer, nullable=False, default=2)
-    created_at = sa.Column(sa.DateTime, nullable=False)
-    current_song = sa.Column(sa.String(length=50))
+    @staticmethod
+    def unique_code() -> str:
+        with Session() as session:
+            while True:
+                code = ''.join(choices(ascii_uppercase + digits, k=6))
+                q = session.query(Room).filter(Room.code == code)
+
+                if q.one_or_none() is None:
+                    break
+
+        return code
+
+    code = Column(String(length=8), primary_key=True, default=unique_code)
+    host = Column(String(length=50), unique=True)
+    guest_can_pause = Column(Boolean, nullable=False, default=False)
+    votes_to_skip = Column(Integer, nullable=False, default=2)
+    created_at = Column(DateTime, nullable=False)
+    current_song = Column(String(length=50))
