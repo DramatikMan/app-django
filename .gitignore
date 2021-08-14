@@ -3,6 +3,7 @@
 
 ### ~ Python ~ ###
 .venv
+app/db/migrations/versions
 
 ### ~ frontend ~ ###
 node_modules
