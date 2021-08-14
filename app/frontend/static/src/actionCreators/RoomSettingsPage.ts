@@ -4,17 +4,17 @@ import {
 } from '../types/actions/RoomSettingsPage';
 
 
-export const setGuestCanPause = (value: boolean): SET_GUEST_CAN_PAUSE => {
+export const setGuestCanPause = (value: string): SET_GUEST_CAN_PAUSE => {
   return {
     type: 'SET_GUEST_CAN_PAUSE',
-    payload: value
+    payload: value === 'true'
   }
 };
 
 
-export const setVotesToSkip = (value: number): SET_VOTES_TO_SKIP => {
+export const setVotesToSkip = (value: string): SET_VOTES_TO_SKIP => {
   return {
     type: 'SET_VOTES_TO_SKIP',
-    payload: value
+    payload: parseInt(value)
   }
 };
