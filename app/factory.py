@@ -11,6 +11,7 @@ from cryptography import fernet
 
 from .routers.frontend import routes
 from .routers.api import app as api
+from .middlewares import ensure_identity
 
 
 template_path = Path().resolve() / 'app' / 'frontend' / 'templates'
@@ -26,6 +27,7 @@ def create_app() -> web.Application:
     fernet_key: bytes = fernet.Fernet.generate_key()
     secret_key: bytes = base64.urlsafe_b64decode(fernet_key)
     setup(app, EncryptedCookieStorage(secret_key))
+    app.middlewares.append(ensure_identity)
 
     # routes
     app.add_routes(routes)
