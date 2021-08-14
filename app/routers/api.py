@@ -1,12 +1,13 @@
 from aiohttp import web
+from aiohttp.web_response import Response
 
 
 routes = web.RouteTableDef()
 
 
-@routes.post('/room')
-async def create_room(request: web.Request):
-    return {'text': 'hi'}
+@routes.get('/room')
+async def create_room(request: web.Request) -> Response:
+    return web.json_response({'status': 'OK'})
 
 
 app = web.Application()
