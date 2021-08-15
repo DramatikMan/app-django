@@ -1,15 +1,13 @@
 from datetime import datetime
 from typing import TypedDict
 
-from aiohttp import web
-from aiohttp.web_response import Response
-from aiohttp_session import get_session, Session
+from fastapi import APIRouter, Request
 
+from ..db.config import Session
 from ..db.models import Room
-from ..db.config import Session as DatabaseSession
 
 
-routes = web.RouteTableDef()
+router = APIRouter(prefix='/api')
 
 
 class RoomReqData(TypedDict):
@@ -17,21 +15,20 @@ class RoomReqData(TypedDict):
     votesToSkip: int
 
 
-@routes.get('/room')
-async def get_rooms(request: web.Request) -> Response:
-    return web.json_response({'status': 'OK'})
+@router.get('/room')
+async def get_rooms(request: Request) -> dict[str, str]:
+    return {'status': 'OK'}
 
 
-@routes.post('/room')
-async def create_room(request: web.Request) -> Response:
+@router.post('/room')
+async def create_room(request: Request) -> dict[str, str]:
     data: RoomReqData = await request.json()
     guest_can_pause: bool = data['guestCanPause']
     votes_to_skip: int = data['votesToSkip']
 
-    session: Session = await get_session(request)
-    host: str = session.identity
+    host: str = request.session['identity']
 
-    with DatabaseSession() as db_session:
+    with Session() as db_session:
         room: Room = db_session.merge(Room(
             host=host,
             guest_can_pause=guest_can_pause,
@@ -42,8 +39,4 @@ async def create_room(request: web.Request) -> Response:
 
         code: str = room.code
 
-    return web.json_response({'code': code})
-
-
-app = web.Application()
-app.add_routes(routes)
+    return {'code': code}

@@ -1,38 +1,48 @@
+import os
 import base64
 from pathlib import Path
+from random import choices
+import random
+from string import ascii_letters, digits
+from typing import Callable, Awaitable
 
-import jinja2
-import aiohttp_jinja2
-from aiohttp import web
-from aiohttp_session import setup
-from aiohttp_session.cookie_storage import EncryptedCookieStorage
+from fastapi import FastAPI, Request, Response
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 from cryptography import fernet
 
-from .routers.frontend import routes
-from .routers.api import app as api
-from .middlewares import ensure_identity
+from .routers.frontend import router as frontend
+from .routers.api import router as api
 
 
-template_path = Path().resolve() / 'app' / 'frontend' / 'templates'
-static_path = Path().resolve() / 'app' / 'frontend' / 'static'
-loader = jinja2.FileSystemLoader(template_path.resolve())
+path_static = Path(os.environ['PWD']) / 'app/frontend/static'
+
+fernet_key: bytes = fernet.Fernet.generate_key()
+secret_key: bytes = base64.urlsafe_b64decode(fernet_key)
 
 
-def create_app() -> web.Application:
-    app = web.Application()
+def create_app() -> FastAPI:
+    app = FastAPI()
+    app.mount('/static', StaticFiles(directory=path_static), name='static')
+    app.include_router(frontend)
+    app.include_router(api)
 
-    # aiohttp session
-    fernet_key: bytes = fernet.Fernet.generate_key()
-    secret_key: bytes = base64.urlsafe_b64decode(fernet_key)
-    setup(app, EncryptedCookieStorage(secret_key))
-    app.middlewares.append(ensure_identity)
 
-    # routes
-    app.add_routes(routes)
-    app.add_subapp('/api/', api)
-    app.add_routes([web.static('/static', static_path)])
+    @app.middleware('http')
+    async def ensure_identity(
+        request: Request,
+        handler: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
+        if 'identity' not in request.session:
+            request.session['identity'] = ''.join(choices(
+                ascii_letters + digits,
+                k=50
+            ))
 
-    # markup template loader
-    aiohttp_jinja2.setup(app, loader=loader)
+        resp: Response = await handler(request)
+        return resp
+
+
+    app = SessionMiddleware(app, secret_key=secret_key)
 
     return app

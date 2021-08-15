@@ -4,9 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-aiohttp = {version = "*", extras = ["speedups"]}
-aiohttp_jinja2 = "*"
-aiohttp_session = "*"
+fastapi = "*"
+jinja2 = "*"
+aiofiles = "*"
+itsdangerous = "*"
+uvicorn = {version = "*", extras = ["standard"]}
 cryptography = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
@@ -18,5 +20,6 @@ mypy = "*"
 flake8 = "*"
 
 [scripts]
-devserver = "adev runserver app/factory.py --app-factory create_app"
+devserver = "uvicorn --factory app.factory:create_app --host 0.0.0.0 --reload"
+server = "uvicorn --factory app.factory:create_app --host 0.0.0.0"
 alembic = "alembic -c /project/app/db/migrations/alembic.ini"
