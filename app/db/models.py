@@ -31,8 +31,13 @@ class Room(Base):
 
         return code
 
-    code = Column(String(length=8), primary_key=True, default=unique_code)
-    host = Column(String(length=50), nullable=False, unique=True)
+    host = Column(String(length=50), primary_key=True)
+    code = Column(
+        String(length=8),
+        nullable=False,
+        unique=True,
+        default=unique_code
+    )
     guest_can_pause = Column(Boolean, nullable=False, default=False)
     votes_to_skip = Column(Integer, nullable=False, default=2)
     updated_at = Column(DateTime, nullable=False)
