@@ -1,5 +1,4 @@
 import base64
-import logging
 from pathlib import Path
 
 import jinja2
@@ -21,7 +20,6 @@ loader = jinja2.FileSystemLoader(template_path.resolve())
 
 def create_app() -> web.Application:
     app = web.Application()
-    logging.basicConfig(level=logging.DEBUG)
 
     # aiohttp session
     fernet_key: bytes = fernet.Fernet.generate_key()
