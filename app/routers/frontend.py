@@ -15,3 +15,9 @@ async def root(request: web.Request) -> dict[str, str]:
 @aiohttp_jinja2.template('index.html')
 async def about(request: web.Request) -> dict[str, str]:
     return {'status': 'OK'}
+
+
+@routes.get('/create')
+@aiohttp_jinja2.template('index.html')
+async def create(request: web.Request) -> dict[str, str]:
+    return {'status': 'OK'}
