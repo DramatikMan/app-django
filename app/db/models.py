@@ -20,13 +20,11 @@ class Base:
 
 
 class Room(Base):
-    @staticmethod
-    def unique_code() -> str:
+    def unique_code(self) -> str:
         with Session() as session:
             while True:
                 code = ''.join(choices(ascii_uppercase + digits, k=6))
                 q: Query = session.query(Room).filter(Room.code == code)
-                print(type(q))
 
                 if q.one_or_none() is None:
                     break
