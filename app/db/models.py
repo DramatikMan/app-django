@@ -35,5 +35,5 @@ class Room(Base):
     host = Column(String(length=50), unique=True)
     guest_can_pause = Column(Boolean, nullable=False, default=False)
     votes_to_skip = Column(Integer, nullable=False, default=2)
-    created_at = Column(DateTime, nullable=False)
+    updated_at = Column(DateTime, nullable=False)
     current_song = Column(String(length=50))

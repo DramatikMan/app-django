@@ -36,7 +36,7 @@ async def create_room(request: web.Request) -> Response:
             host=host,
             guest_can_pause=guest_can_pause,
             votes_to_skip=votes_to_skip,
-            created_at=datetime.now()
+            updated_at=datetime.now()
         )
 
         db_session.add(room)
