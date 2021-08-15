@@ -16,7 +16,7 @@ export const createRoomPressed = async (
       votesToSkip: votesToSkip
     })
   };
-  const resp: Response = await fetch('/api/create-room', requestInit);
+  const resp: Response = await fetch('/api/room', requestInit);
 
   if (resp.ok) {
     const respData: postRoomRespDataInterface = await resp.json();
