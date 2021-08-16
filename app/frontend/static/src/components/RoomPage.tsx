@@ -1,13 +1,15 @@
-import { FC } from 'react';
+import { FC, Dispatch, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { History } from 'history';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import State from '../types/state';
-import { leaveRoomPressed } from './utils';
+import { leaveRoomPressed, getRoomData } from './utils';
+import { RoomPageActions } from '../types/actions/RoomPage';
 
 const RoomPage: FC = (): JSX.Element => {
+  const dispatch: Dispatch<RoomPageActions> = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
 
@@ -15,10 +17,22 @@ const RoomPage: FC = (): JSX.Element => {
     (state: State): boolean =>
     state.RoomPage.isHost
   );
-  const showSettings: boolean = useSelector(
-    (state: State): boolean =>
-    state.RoomPage.showSettings
-  );
+  // const showSettings: boolean = useSelector(
+  //   (state: State): boolean =>
+  //   state.RoomPage.showSettings
+  // );
+
+  useEffect(() => { getRoomData(roomCode, history, dispatch); }, []);
+
+  const renderSettingsButton = (): JSX.Element => {
+    return (
+      <Grid item xs={12}>
+        <Button variant='contained' color='primary'>
+          Settings
+        </Button>
+      </Grid>
+    );
+  };
 
   return (
     <Grid container
@@ -33,6 +47,7 @@ const RoomPage: FC = (): JSX.Element => {
           Room Code: {roomCode}
         </Typography>
       </Grid>
+      { isHost ? renderSettingsButton() : null }
       <Grid item xs={12}>
         <Button
           variant='contained'

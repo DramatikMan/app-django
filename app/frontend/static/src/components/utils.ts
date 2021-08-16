@@ -1,6 +1,12 @@
+import { Dispatch } from 'react';
 import { History } from 'history';
 
-import { postRoomResponseData } from '../types/respData';
+import {
+  postRoomResponseData,
+  getRoomResponseData
+} from '../types/respData';
+import { RoomPageActions } from '../types/actions/RoomPage';
+import { setIsHost } from '../actionCreators/RoomPage';
 
 
 export const createRoomPressed = async (
@@ -32,4 +38,16 @@ export const leaveRoomPressed = async (history: History): Promise<void> => {
   };
   await fetch('/api/room/leave', requestInit);
   history.push('/');
+};
+
+
+export const getRoomData = async (
+  roomCode: string,
+  history: History,
+  dispatch: Dispatch<RoomPageActions>
+): Promise<void> => {
+  const resp: Response = await fetch('/api/room/' + roomCode);
+  if (!resp.ok) history.push('/');
+  const respData: getRoomResponseData = await resp.json();
+  dispatch(setIsHost(respData.isHost));
 };
