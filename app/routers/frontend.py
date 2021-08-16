@@ -35,3 +35,11 @@ async def create(request: Request) -> _TemplateResponse:
         'index.html',
         {'request': request}
     )
+
+
+@router.get('/room/{room_code}', response_class=HTMLResponse)
+async def room(request: Request) -> _TemplateResponse:
+    return templates.TemplateResponse(
+        'index.html',
+        {'request': request}
+    )
