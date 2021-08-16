@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import TypedDict
 
 from fastapi import APIRouter, Request
+from sqlalchemy.orm.query import Query
 
 from ..db.config import Session
 from ..db.models import Room
@@ -28,16 +29,33 @@ async def create_room(request: Request) -> dict[str, str]:
 
     host: str = request.session['identity']
 
-    with Session() as db_session:
-        room: Room = db_session.merge(Room(
+    with Session() as session:
+        room: Room = session.merge(Room(
             host=host,
             guest_can_pause=guest_can_pause,
             votes_to_skip=votes_to_skip,
             updated_at=datetime.now()
         ))
-        db_session.commit()
+        session.commit()
+        code: str = room.code
 
-    code: str = room.code
     request.session['room_code'] = code
 
     return {'code': code}
+
+
+@router.get('/room/leave')
+async def leave_room(request: Request) -> dict[str, str]:
+    if 'room_code' in request.session:
+        request.session.pop('room_code')
+        host: str = request.session['identity']
+
+        with Session() as session:
+            q: Query = session.query(Room).filter(Room.host == host)
+
+            if q.one_or_none() is not None:
+                q.delete()
+
+            session.commit()
+
+    return {'detail': 'Left successfully.'}
