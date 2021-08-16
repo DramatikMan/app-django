@@ -2,7 +2,6 @@ import os
 import base64
 from pathlib import Path
 from random import choices
-import random
 from string import ascii_letters, digits
 from typing import Callable, Awaitable
 
@@ -27,7 +26,6 @@ def create_app() -> FastAPI:
     app.include_router(frontend)
     app.include_router(api)
 
-
     @app.middleware('http')
     async def ensure_identity(
         request: Request,
@@ -42,7 +40,6 @@ def create_app() -> FastAPI:
         resp: Response = await handler(request)
         return resp
 
-
-    app = SessionMiddleware(app, secret_key=secret_key)
+    app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
     return app

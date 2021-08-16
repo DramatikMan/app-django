@@ -41,4 +41,3 @@ async def create_room(request: Request) -> dict[str, str]:
     request.session['room_code'] = code
 
     return {'code': code}
-    
