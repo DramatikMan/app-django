@@ -11,7 +11,7 @@ from ..db.models import Room
 router = APIRouter(prefix='/api')
 
 
-class RoomReqData(TypedDict):
+class RoomRequestData(TypedDict):
     guestCanPause: bool
     votesToSkip: int
 
@@ -23,7 +23,7 @@ async def get_rooms(request: Request) -> dict[str, str]:
 
 @router.post('/room')
 async def create_room(request: Request) -> dict[str, str]:
-    data: RoomReqData = await request.json()
+    data: RoomRequestData = await request.json()
     guest_can_pause: bool = data['guestCanPause']
     votes_to_skip: int = data['votesToSkip']
 
