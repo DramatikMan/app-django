@@ -37,7 +37,7 @@ const RoomSettingsPage: FC = (): JSX.Element => {
   );
 
   return (
-    <Grid container xs={12}
+    <Grid container
       direction='column'
       alignItems='center'
       justifyContent='center'
