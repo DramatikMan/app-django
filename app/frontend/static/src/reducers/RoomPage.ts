@@ -2,8 +2,13 @@ import State from '../types/state/RoomPage';
 import { RoomPageActions } from '../types/actions/RoomPage';
 
 
+const initialState: State = {
+  isHost: false,
+  showSettings: false
+};
+
 const reducer = (
-  state: State = {},
+  state: State = initialState,
   action: RoomPageActions
 ): State => {
   switch (action.type) {

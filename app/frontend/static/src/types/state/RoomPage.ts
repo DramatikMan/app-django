@@ -1,5 +1,4 @@
 export default interface RoomPageState {
-  roomCode?: string;
-  isHost?: boolean;
-  showSettings?: boolean;
+  isHost: boolean;
+  showSettings: boolean;
 };

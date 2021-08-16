@@ -2,23 +2,23 @@ import { FC } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { History } from 'history';
 import { Grid, Typography, Button } from '@material-ui/core';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-// import State from '../types/state';
+import State from '../types/state';
 import { leaveRoomPressed } from './utils';
 
 const RoomPage: FC = (): JSX.Element => {
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
 
-  // const isHost: boolean = useSelector(
-  //   (state: State): boolean =>
-  //   state.RoomPage.isHost
-  // );
-  // const showSettings: boolean = useSelector(
-  //   (state: State): boolean =>
-  //   state.RoomPage.showSettings
-  // );
+  const isHost: boolean = useSelector(
+    (state: State): boolean =>
+    state.RoomPage.isHost
+  );
+  const showSettings: boolean = useSelector(
+    (state: State): boolean =>
+    state.RoomPage.showSettings
+  );
 
   return (
     <Grid container
