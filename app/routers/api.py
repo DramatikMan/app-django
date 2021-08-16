@@ -37,6 +37,8 @@ async def create_room(request: Request) -> dict[str, str]:
         ))
         db_session.commit()
 
-        code: str = room.code
+    code: str = room.code
+    request.session['room_code'] = code
 
     return {'code': code}
+    
