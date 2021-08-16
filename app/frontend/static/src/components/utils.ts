@@ -1,6 +1,6 @@
 import { History } from 'history';
 
-import { postRoomRespDataInterface } from '../types/respData';
+import { postRoomResponseData } from '../types/respData';
 
 
 export const createRoomPressed = async (
@@ -19,7 +19,7 @@ export const createRoomPressed = async (
   const resp: Response = await fetch('/api/room', requestInit);
 
   if (resp.ok) {
-    const respData: postRoomRespDataInterface = await resp.json();
+    const respData: postRoomResponseData = await resp.json();
     history.push('/room/' + respData.code);
   }
 };

@@ -1,4 +1,4 @@
-export default interface ActionInterface<T> {
+export default interface ReduxAction<T> {
   type: string
   payload: T
 };

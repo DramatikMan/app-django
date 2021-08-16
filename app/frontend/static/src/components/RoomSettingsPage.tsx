@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { History } from 'history';
 
-import StateInterface from '../types/state';
+import State from '../types/state';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 import {
   setGuestCanPause,
@@ -28,14 +28,13 @@ const RoomSettingsPage: FC = (): JSX.Element => {
   const history: History = useHistory();
   
   const guestCanPause: boolean = useSelector(
-    (state: StateInterface): boolean =>
+    (state: State): boolean =>
     state.RoomSettingsPage.guestCanPause
   );
   const votesToSkip: number = useSelector(
-    (state: StateInterface): number =>
+    (state: State): number =>
     state.RoomSettingsPage.votesToSkip
   );
-
 
   return (
     <Grid container

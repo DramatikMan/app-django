@@ -1,16 +1,16 @@
-import StateInterface from '../types/state/RoomSettingsPage';
+import State from '../types/state/RoomSettingsPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 
 
-const initialState: StateInterface= {
+const initialState: State= {
   guestCanPause: false,
   votesToSkip: 2
 };
 
 const reducer = (
-  state: StateInterface = initialState,
+  state: State = initialState,
   action: RoomSettingsPageActions
-): StateInterface => {
+): State => {
   switch (action.type) {
     case 'SET_GUEST_CAN_PAUSE':
       return {

@@ -1,6 +1,6 @@
-import RoomSettingsPageInterface from './RoomSettingsPage';
+import RoomSettingsPageState from './RoomSettingsPage';
 
 
-export default interface StateInterface {
-  RoomSettingsPage: RoomSettingsPageInterface
+export default interface GlobalState {
+  RoomSettingsPage: RoomSettingsPageState
 };

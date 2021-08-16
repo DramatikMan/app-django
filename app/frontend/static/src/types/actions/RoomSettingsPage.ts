@@ -1,14 +1,14 @@
-import ActionInterface from '.';
+import ReduxAction from '.';
 
 
 export interface SET_GUEST_CAN_PAUSE
-extends ActionInterface<boolean> {
+extends ReduxAction<boolean> {
   type: 'SET_GUEST_CAN_PAUSE'
 };
 
 
 export interface SET_VOTES_TO_SKIP
-extends ActionInterface<number> {
+extends ReduxAction<number> {
   type: 'SET_VOTES_TO_SKIP'
 };
 

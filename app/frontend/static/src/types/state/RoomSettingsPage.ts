@@ -1,4 +1,4 @@
-export default interface RoomSettingsPageInterface {
+export default interface RoomSettingsPageState {
   guestCanPause: boolean
   votesToSkip: number
 };

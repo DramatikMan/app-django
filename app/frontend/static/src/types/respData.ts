@@ -1,3 +1,3 @@
-export interface postRoomRespDataInterface {
+export interface postRoomResponseData {
     code: string
 };
