@@ -5,7 +5,7 @@ import { Grid, Typography, ButtonGroup, Button } from '@material-ui/core';
 
 const HomePage: FC = (): JSX.Element => {
   return (
-    <Grid container
+    <Grid container xs={12}
       direction='column'
       alignItems='center'
       justifyContent='center'
