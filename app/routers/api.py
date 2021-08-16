@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import TypedDict
+from typing import Any, Optional, TypedDict
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from sqlalchemy.orm.query import Query
 
 from ..db.config import Session
@@ -59,3 +59,19 @@ async def leave_room(request: Request) -> dict[str, str]:
             session.commit()
 
     return {'detail': 'Left successfully.'}
+
+
+@router.get('/room/{room_code}')
+async def get_room(request: Request, room_code: str) -> Any:
+    with Session() as session:
+        q: Query = session.query(Room).filter(Room.code == room_code)
+        room: Optional[Room] = q.one_or_none()
+
+        if room is not None:
+            return {
+                'guestCanPause': room.guest_can_pause,
+                'votesToSkip': room.votes_to_skip,
+                'isHost': room.host == request.session['identity']
+            }
+
+    raise HTTPException(status_code=404, detail='Room not found.')
