@@ -23,3 +23,13 @@ export const createRoomPressed = async (
     history.push('/room/' + respData.code);
   }
 };
+
+
+export const leaveRoomPressed = async (history: History): Promise<void> => {
+  const requestInit = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  };
+  await fetch('/api/room/leave', requestInit);
+  history.push('/');
+};

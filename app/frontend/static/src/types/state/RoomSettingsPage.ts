@@ -1,4 +1,4 @@
 export default interface RoomSettingsPageState {
-  guestCanPause: boolean
-  votesToSkip: number
+  guestCanPause: boolean;
+  votesToSkip: number;
 };

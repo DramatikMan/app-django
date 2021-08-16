@@ -1,3 +1,3 @@
 export interface postRoomResponseData {
-    code: string
+    code: string;
 };
