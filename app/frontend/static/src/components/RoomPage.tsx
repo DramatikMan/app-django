@@ -58,11 +58,7 @@ const RoomPage: FC = (): JSX.Element => {
       votesToSkip: votesToSkip,
       isUpdate: true
     }));
-    return (
-      <RoomSettingsPage
-        updateCallback={ () => updateCallback(roomCode, history, dispatch) }
-      />
-    );
+    return <RoomSettingsPage updateCallback={updateCallback} />;
   };
 
   return (
