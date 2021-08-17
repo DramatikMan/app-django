@@ -5,16 +5,28 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 
 import State from '../types/state';
-import { leaveRoomPressed, getRoomData } from './utils';
+import { leaveRoomPressed, getRoomData, updateCallback } from './utils';
 import { RoomPageActions } from '../types/actions/RoomPage';
 import { setShowSettings } from '../actionCreators/RoomPage';
 import RoomSettingsPage from './RoomSettingsPage';
+import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
+import { setState as setSettingsState } from '../actionCreators/RoomSettingsPage';
 
 const RoomPage: FC = (): JSX.Element => {
-  const dispatch: Dispatch<RoomPageActions> = useDispatch();
+  const dispatch: Dispatch<
+    RoomPageActions | RoomSettingsPageActions
+  > = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
 
+  const guestCanPause: boolean = useSelector(
+    (state: State): boolean =>
+    state.RoomPage.guestCanPause
+  );
+  const votesToSkip: number = useSelector(
+    (state: State): number =>
+    state.RoomPage.votesToSkip
+  );
   const isHost: boolean = useSelector(
     (state: State): boolean =>
     state.RoomPage.isHost
@@ -40,9 +52,18 @@ const RoomPage: FC = (): JSX.Element => {
     );
   };
 
-  if (showSettings) return (
-    <RoomSettingsPage />
-  );
+  if (showSettings) {
+    dispatch(setSettingsState({
+      guestCanPause: guestCanPause,
+      votesToSkip: votesToSkip,
+      isUpdate: true
+    }));
+    return (
+      <RoomSettingsPage
+        updateCallback={ () => updateCallback(roomCode, history, dispatch) }
+      />
+    );
+  };
 
   return (
     <Grid container

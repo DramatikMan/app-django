@@ -6,7 +6,7 @@ import {
   getRoomResponseData
 } from '../types';
 import { RoomPageActions } from '../types/actions/RoomPage';
-import { setProps } from '../actionCreators/RoomPage';
+import { setProps, setShowSettings } from '../actionCreators/RoomPage';
 
 
 export const createRoomPressed = async (
@@ -50,4 +50,31 @@ export const getRoomData = async (
   if (!resp.ok) history.push('/');
   const respData: getRoomResponseData = await resp.json();
   dispatch(setProps(respData));
+};
+
+
+export const updateRoomPressed = async (
+  guestCanPause: boolean,
+  votesToSkip: number,
+  roomCode: string
+): Promise<void> => {
+  const requestInit = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      guestCanPause: guestCanPause,
+      votesToSkip: votesToSkip
+    })
+  };
+  await fetch('/api/room/' + roomCode, requestInit);
+};
+
+
+export const updateCallback = (
+  roomCode: string,
+  history: History,
+  dispatch: Dispatch<RoomPageActions>
+): void => {
+  getRoomData(roomCode, history, dispatch);
+  dispatch(setShowSettings(false));
 };

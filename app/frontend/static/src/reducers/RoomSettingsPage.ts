@@ -4,7 +4,8 @@ import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 
 const initialState: State= {
   guestCanPause: false,
-  votesToSkip: 2
+  votesToSkip: 2,
+  isUpdate: false
 };
 
 const reducer = (
@@ -22,6 +23,8 @@ const reducer = (
         ...state,
         votesToSkip: action.payload
       };
+    case 'SET_STATE':
+      return action.payload;
     default:
       return state;
   }

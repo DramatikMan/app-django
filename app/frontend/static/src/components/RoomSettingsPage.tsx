@@ -11,21 +11,27 @@ import {
   Typography
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { History } from 'history';
 
 import State from '../types/state';
+import { RoomPageActions } from '../types/actions/RoomPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 import {
   setGuestCanPause,
   setVotesToSkip
 } from '../actionCreators/RoomSettingsPage';
-import { createRoomPressed } from './utils';
+import { createRoomPressed, updateRoomPressed } from './utils';
+import { RoomSettingsPageProps } from '../types';
 
 
-const RoomSettingsPage: FC = (): JSX.Element => {
-  const dispatch: Dispatch<RoomSettingsPageActions> = useDispatch();
+const RoomSettingsPage: FC<RoomSettingsPageProps>
+= (props: RoomSettingsPageProps): JSX.Element => {
+  const dispatch: Dispatch<
+    RoomPageActions | RoomSettingsPageActions
+  > = useDispatch();
   const history: History = useHistory();
+  const { roomCode } = useParams<{ roomCode: string }>();
   
   const guestCanPause: boolean = useSelector(
     (state: State): boolean =>
@@ -35,6 +41,40 @@ const RoomSettingsPage: FC = (): JSX.Element => {
     (state: State): number =>
     state.RoomSettingsPage.votesToSkip
   );
+  const isUpdate: boolean = useSelector(
+    (state: State): boolean =>
+    state.RoomSettingsPage.isUpdate
+  );
+
+  const renderBackButton = (): JSX.Element => {
+    if (isUpdate) {
+      return (
+        <Grid item xs={12}>
+          <Button
+            variant='contained'
+            color='secondary'
+            onClick={ () => props.updateCallback(roomCode, history, dispatch) }
+          >
+            Close settings
+          </Button>
+        </Grid>
+      );
+    }
+    else {
+      return (
+        <Grid item xs={12}>
+          <Button
+            variant='contained'
+            color='secondary'
+            component={Link}
+            to='/'
+          >
+            Back
+          </Button>
+        </Grid>
+      );
+    };
+  };
 
   return (
     <Grid container
@@ -46,7 +86,7 @@ const RoomSettingsPage: FC = (): JSX.Element => {
     >
       <Grid item xs={12}>
         <Typography variant='h4'>
-          Create a Room
+          { isUpdate ? 'Update Room': 'Create a Room'}
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -91,12 +131,15 @@ const RoomSettingsPage: FC = (): JSX.Element => {
           color='primary'
           variant='contained'
           onClick={
-            () => createRoomPressed(guestCanPause, votesToSkip, history)
+            isUpdate
+            ? () => updateRoomPressed(guestCanPause, votesToSkip, roomCode)
+            : () => createRoomPressed(guestCanPause, votesToSkip, history)
           }
         >
-          Сreate a Room
+          { isUpdate ? 'Update Room' : 'Сreate a Room' }
         </Button>
       </Grid>
+      {renderBackButton()}
     </Grid>
   );
 };
