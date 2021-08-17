@@ -3,6 +3,8 @@ import { RoomPageActions } from '../types/actions/RoomPage';
 
 
 const initialState: State = {
+  guestCanPause: false,
+  votesToSkip: 2,
   isHost: false,
   showSettings: false
 };
@@ -12,10 +14,12 @@ const reducer = (
   action: RoomPageActions
 ): State => {
   switch (action.type) {
-    case 'SET_IS_HOST':
+    case 'SET_PROPS': 
       return {
         ...state,
-        isHost: action.payload
+        guestCanPause: action.payload.guestCanPause,
+        votesToSkip: action.payload.votesToSkip,
+        isHost: action.payload.isHost
       };
     case 'SET_SHOW_SETTINGS':
       return {

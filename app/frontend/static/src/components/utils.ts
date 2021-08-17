@@ -4,9 +4,9 @@ import { History } from 'history';
 import {
   postRoomResponseData,
   getRoomResponseData
-} from '../types/respData';
+} from '../types';
 import { RoomPageActions } from '../types/actions/RoomPage';
-import { setIsHost } from '../actionCreators/RoomPage';
+import { setProps } from '../actionCreators/RoomPage';
 
 
 export const createRoomPressed = async (
@@ -49,5 +49,5 @@ export const getRoomData = async (
   const resp: Response = await fetch('/api/room/' + roomCode);
   if (!resp.ok) history.push('/');
   const respData: getRoomResponseData = await resp.json();
-  dispatch(setIsHost(respData.isHost));
+  dispatch(setProps(respData));
 };

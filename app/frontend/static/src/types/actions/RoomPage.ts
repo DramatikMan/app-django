@@ -1,9 +1,10 @@
 import ReduxAction from '.';
+import { getRoomResponseData } from '..';
 
 
-export interface SET_IS_HOST
-extends ReduxAction<boolean> {
-  type: 'SET_IS_HOST';
+export interface SET_PROPS
+extends ReduxAction<getRoomResponseData> {
+  type: 'SET_PROPS';
 };
 
 
@@ -13,4 +14,4 @@ extends ReduxAction<boolean> {
 };
 
 
-export type RoomPageActions = SET_IS_HOST | SET_SHOW_SETTINGS;
+export type RoomPageActions = SET_PROPS | SET_SHOW_SETTINGS;

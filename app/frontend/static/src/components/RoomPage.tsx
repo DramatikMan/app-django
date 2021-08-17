@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import State from '../types/state';
 import { leaveRoomPressed, getRoomData } from './utils';
 import { RoomPageActions } from '../types/actions/RoomPage';
+import { setShowSettings } from '../actionCreators/RoomPage';
+import RoomSettingsPage from './RoomSettingsPage';
 
 const RoomPage: FC = (): JSX.Element => {
   const dispatch: Dispatch<RoomPageActions> = useDispatch();
@@ -17,22 +19,30 @@ const RoomPage: FC = (): JSX.Element => {
     (state: State): boolean =>
     state.RoomPage.isHost
   );
-  // const showSettings: boolean = useSelector(
-  //   (state: State): boolean =>
-  //   state.RoomPage.showSettings
-  // );
+  const showSettings: boolean = useSelector(
+    (state: State): boolean =>
+    state.RoomPage.showSettings
+  );
 
   useEffect(() => { getRoomData(roomCode, history, dispatch); }, []);
 
   const renderSettingsButton = (): JSX.Element => {
     return (
       <Grid item xs={12}>
-        <Button variant='contained' color='primary'>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={ () => dispatch(setShowSettings(true)) }
+        >
           Settings
         </Button>
       </Grid>
     );
   };
+
+  if (showSettings) return (
+    <RoomSettingsPage />
+  );
 
   return (
     <Grid container

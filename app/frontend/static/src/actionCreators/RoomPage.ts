@@ -1,12 +1,13 @@
+import { getRoomResponseData } from '../types';
 import {
-  SET_IS_HOST,
+  SET_PROPS,
   SET_SHOW_SETTINGS
 } from '../types/actions/RoomPage';
-  
 
-export const setIsHost = (value: boolean): SET_IS_HOST => {
+
+export const setProps = (value: getRoomResponseData): SET_PROPS => {
   return {
-    type: 'SET_IS_HOST',
+    type: 'SET_PROPS',
     payload: value
   }
 };
