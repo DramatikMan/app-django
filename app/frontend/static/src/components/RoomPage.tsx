@@ -5,17 +5,19 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 
 import State from '../types/state';
-import { leaveRoomPressed, getRoomData, updateCallback } from './utils';
-import { RoomPageActions } from '../types/actions/RoomPage';
-import { setShowSettings } from '../actionCreators/RoomPage';
 import RoomSettingsPage from './RoomSettingsPage';
+import { RoomPageActions } from '../types/actions/RoomPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
+import { setShowSettings } from '../actionCreators/RoomPage';
 import { setState as setSettingsState } from '../actionCreators/RoomSettingsPage';
+import { leaveRoomPressed, getRoomData, updateCallback } from './utils';
+
+
+type Actions = RoomPageActions | RoomSettingsPageActions;
+
 
 const RoomPage: FC = (): JSX.Element => {
-  const dispatch: Dispatch<
-    RoomPageActions | RoomSettingsPageActions
-  > = useDispatch();
+  const dispatch: Dispatch<Actions> = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
 

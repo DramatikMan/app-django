@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { History } from 'history';
 
+import { RoomSettingsPageProps as Props } from '../types';
 import State from '../types/state';
 import { RoomPageActions } from '../types/actions/RoomPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
@@ -22,14 +23,13 @@ import {
   setVotesToSkip
 } from '../actionCreators/RoomSettingsPage';
 import { createRoomPressed, updateRoomPressed } from './utils';
-import { RoomSettingsPageProps } from '../types';
 
 
-const RoomSettingsPage: FC<RoomSettingsPageProps>
-= (props: RoomSettingsPageProps): JSX.Element => {
-  const dispatch: Dispatch<
-    RoomPageActions | RoomSettingsPageActions
-  > = useDispatch();
+type Actions = RoomPageActions | RoomSettingsPageActions;
+
+
+const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
+  const dispatch: Dispatch<Actions> = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
   
@@ -139,7 +139,7 @@ const RoomSettingsPage: FC<RoomSettingsPageProps>
           { isUpdate ? 'Update Room' : 'Сreate a Room' }
         </Button>
       </Grid>
-      {renderBackButton()}
+      { renderBackButton() }
     </Grid>
   );
 };

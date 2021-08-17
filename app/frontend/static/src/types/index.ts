@@ -2,6 +2,7 @@ import { Dispatch } from 'react';
 import { RoomPageActions } from './actions/RoomPage';
 import { History } from 'history';
 
+
 export interface postRoomResponseData {
     code: string;
   };
