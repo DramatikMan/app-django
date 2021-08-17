@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional, TypedDict
+from typing import Optional, TypedDict
 
 from fastapi import APIRouter, Request, HTTPException
 from sqlalchemy.orm.query import Query
@@ -14,6 +14,12 @@ router = APIRouter(prefix='/api')
 class RoomRequestData(TypedDict):
     guestCanPause: bool
     votesToSkip: int
+
+
+class RoomResponseData(TypedDict):
+    guestCanPause: bool
+    votesToSkip: int
+    isHost: bool
 
 
 @router.get('/room')
@@ -62,7 +68,7 @@ async def leave_room(request: Request) -> dict[str, str]:
 
 
 @router.get('/room/{room_code}')
-async def get_room(request: Request, room_code: str) -> Any:
+async def get_room(request: Request, room_code: str) -> RoomResponseData:
     with Session() as session:
         q: Query = session.query(Room).filter(Room.code == room_code)
         room: Optional[Room] = q.one_or_none()
@@ -75,3 +81,33 @@ async def get_room(request: Request, room_code: str) -> Any:
             }
 
     raise HTTPException(status_code=404, detail='Room not found.')
+
+
+@router.patch('/room/{room_code}')
+async def update_room(request: Request, room_code: str) -> RoomResponseData:
+    with Session() as session:
+        q: Query = session.query(Room).filter(Room.code == room_code)
+        room: Optional[Room] = q.one_or_none()
+
+        if room is None:
+            raise HTTPException(status_code=404, detail='Room not found.')
+
+        if room.host != request.session['identity']:
+            raise HTTPException(
+                status_code=403,
+                detail='You are not the host.'
+            )
+
+        data: RoomRequestData = await request.json()
+        q.update({
+            Room.guest_can_pause: data['guestCanPause'],
+            Room.votes_to_skip: data['votesToSkip']
+        })
+
+        session.commit()
+
+        return {
+            'guestCanPause': room.guest_can_pause,
+            'votesToSkip': room.votes_to_skip,
+            'isHost': room.host == request.session['identity']
+        }
