@@ -87,7 +87,12 @@ export const enterRoomPressed = async (
   history: History,
   dispatch: Dispatch<RoomJoinPageActions>
 ): Promise<void> => {
-  const resp: Response = await fetch('/api/room/' + roomCode);
+  const requestInit = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ roomCode: roomCode })
+  };
+  const resp: Response = await fetch('/api/room/join', requestInit);
   if (resp.ok) history.push('/room/' + roomCode);
   else dispatch(setHelperText('Room not found'));
 };
