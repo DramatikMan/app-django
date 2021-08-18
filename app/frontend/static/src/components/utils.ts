@@ -7,6 +7,8 @@ import {
 } from '../types';
 import { RoomPageActions } from '../types/actions/RoomPage';
 import { setProps, setShowSettings } from '../actionCreators/RoomPage';
+import { RoomJoinPageActions } from '../types/actions/RoomJoinPage';
+import { setHelperText } from '../actionCreators/RoomJoinPage';
 
 
 export const createRoomPressed = async (
@@ -77,4 +79,15 @@ export const updateCallback = (
 ): void => {
   getRoomData(roomCode, history, dispatch);
   dispatch(setShowSettings(false));
+};
+
+
+export const enterRoomPressed = async (
+  roomCode: string,
+  history: History,
+  dispatch: Dispatch<RoomJoinPageActions>
+): Promise<void> => {
+  const resp: Response = await fetch('/api/room/' + roomCode);
+  if (resp.ok) history.push('/room/' + roomCode);
+  else dispatch(setHelperText('Room not found'));
 };
