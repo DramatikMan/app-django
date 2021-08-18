@@ -11,7 +11,7 @@ from ..db.models import Room
 router = APIRouter(prefix='/api')
 
 
-class RoomRequestData(TypedDict):
+class GetRoomData(TypedDict):
     guestCanPause: bool
     votesToSkip: int
 
@@ -22,6 +22,18 @@ class RoomResponseData(TypedDict):
     isHost: bool
 
 
+class JoinRoomData(TypedDict):
+    roomCode: Optional[str]
+
+
+@router.get('/session')
+async def get_session(request: Request) -> dict[str, str]:
+    return {
+        'identity': request.session.get('identity', ''),
+        'room_code': request.session.get('room_code', '')
+    }
+
+
 @router.get('/room')
 async def get_rooms(request: Request) -> dict[str, str]:
     return {'status': 'OK'}
@@ -29,7 +41,7 @@ async def get_rooms(request: Request) -> dict[str, str]:
 
 @router.post('/room')
 async def create_room(request: Request) -> dict[str, str]:
-    data: RoomRequestData = await request.json()
+    data: GetRoomData = await request.json()
     guest_can_pause: bool = data['guestCanPause']
     votes_to_skip: int = data['votesToSkip']
 
@@ -98,7 +110,7 @@ async def update_room(request: Request, room_code: str) -> RoomResponseData:
                 detail='You are not the host.'
             )
 
-        data: RoomRequestData = await request.json()
+        data: GetRoomData = await request.json()
         q.update({
             Room.guest_can_pause: data['guestCanPause'],
             Room.votes_to_skip: data['votesToSkip']
@@ -111,3 +123,25 @@ async def update_room(request: Request, room_code: str) -> RoomResponseData:
             'votesToSkip': room.votes_to_skip,
             'isHost': room.host == request.session['identity']
         }
+
+
+@router.post('/room/join')
+async def join_room(request: Request) -> dict[str, str]:
+    data: JoinRoomData = await request.json()
+    code: Optional[str] = data.get('roomCode')
+
+    if code:
+        with Session() as session:
+            q: Query = session.query(Room).filter(Room.code == code)
+
+            if q.one_or_none() is not None:
+                request.session['room_code'] = code
+
+                return {'detail': 'Room joined.'}
+
+            raise HTTPException(status_code=404, detail='Room not found.')
+
+    raise HTTPException(
+        status_code=400,
+        detail='Room code not found in request body.'
+    )
