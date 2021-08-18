@@ -43,3 +43,11 @@ async def room(request: Request) -> _TemplateResponse:
         'index.html',
         {'request': request}
     )
+
+
+@router.get('/join', response_class=HTMLResponse)
+async def join(request: Request) -> _TemplateResponse:
+    return templates.TemplateResponse(
+        'index.html',
+        {'request': request}
+    )
