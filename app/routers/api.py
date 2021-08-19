@@ -11,7 +11,7 @@ from ..db.models import Room
 router = APIRouter(prefix='/api')
 
 
-class GetRoomData(TypedDict):
+class GetRoomRequestData(TypedDict):
     guestCanPause: bool
     votesToSkip: int
 
@@ -22,7 +22,7 @@ class RoomResponseData(TypedDict):
     isHost: bool
 
 
-class JoinRoomData(TypedDict):
+class JoinRoomRequestData(TypedDict):
     roomCode: Optional[str]
 
 
@@ -36,7 +36,7 @@ async def get_session(request: Request) -> dict[str, str]:
 
 @router.post('/room')
 async def create_room(request: Request) -> dict[str, str]:
-    data: GetRoomData = await request.json()
+    data: GetRoomRequestData = await request.json()
     guest_can_pause: bool = data['guestCanPause']
     votes_to_skip: int = data['votesToSkip']
 
@@ -81,11 +81,11 @@ async def get_room(request: Request, room_code: str) -> RoomResponseData:
         room: Optional[Room] = q.one_or_none()
 
         if room is not None:
-            return {
-                'guestCanPause': room.guest_can_pause,
-                'votesToSkip': room.votes_to_skip,
-                'isHost': room.host == request.session['identity']
-            }
+            return RoomResponseData(
+                guestCanPause=room.guest_can_pause,
+                votesToSkip=room.votes_to_skip,
+                isHost=(room.host == request.session['identity'])
+            )
 
     raise HTTPException(status_code=404, detail='Room not found.')
 
@@ -105,7 +105,7 @@ async def update_room(request: Request, room_code: str) -> RoomResponseData:
                 detail='You are not the host.'
             )
 
-        data: GetRoomData = await request.json()
+        data: GetRoomRequestData = await request.json()
         q.update({
             Room.guest_can_pause: data['guestCanPause'],
             Room.votes_to_skip: data['votesToSkip']
@@ -113,16 +113,16 @@ async def update_room(request: Request, room_code: str) -> RoomResponseData:
 
         session.commit()
 
-        return {
-            'guestCanPause': room.guest_can_pause,
-            'votesToSkip': room.votes_to_skip,
-            'isHost': room.host == request.session['identity']
-        }
+        return RoomResponseData(
+            guestCanPause=room.guest_can_pause,
+            votesToSkip=room.votes_to_skip,
+            isHost=(room.host == request.session['identity'])
+        )
 
 
 @router.post('/room/join')
 async def join_room(request: Request) -> dict[str, str]:
-    data: JoinRoomData = await request.json()
+    data: JoinRoomRequestData = await request.json()
     code: Optional[str] = data.get('roomCode')
 
     if code:
