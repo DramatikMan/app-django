@@ -16,6 +16,7 @@ export interface getRoomResponseData {
 
 
 export interface RoomSettingsPageProps {
+  isUpdate: boolean;
   updateCallback(
     roomCode: string,
     history: History,

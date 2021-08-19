@@ -53,10 +53,14 @@ const RoomPage: FC = (): JSX.Element => {
   if (showSettings) {
     dispatch(setSettingsState({
       guestCanPause: guestCanPause,
-      votesToSkip: votesToSkip,
-      isUpdate: true
+      votesToSkip: votesToSkip
     }));
-    return <RoomSettingsPage updateCallback={updateCallback} />;
+    return (
+      <RoomSettingsPage
+        isUpdate={true}
+        updateCallback={updateCallback}
+      />
+    );
   };
 
   return (

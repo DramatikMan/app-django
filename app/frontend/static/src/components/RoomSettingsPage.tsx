@@ -29,6 +29,8 @@ type Actions = RoomPageActions | RoomSettingsPageActions;
 
 
 const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
+  const isUpdate = props.isUpdate ? true : false;
+
   const dispatch: Dispatch<Actions> = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -38,9 +40,6 @@ const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
   );
   const votesToSkip: number = useSelector(
     (state: State): number => state.RoomSettingsPage.votesToSkip
-  );
-  const isUpdate: boolean = useSelector(
-    (state: State): boolean => state.RoomSettingsPage.isUpdate
   );
 
   const renderBackButton = (): JSX.Element => {
