@@ -1,3 +1,5 @@
+clear
+
 pipenv run mypy \
     /project/app \
     --ignore-missing-imports \
