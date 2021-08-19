@@ -34,11 +34,6 @@ async def get_session(request: Request) -> dict[str, str]:
     }
 
 
-@router.get('/room')
-async def get_rooms(request: Request) -> dict[str, str]:
-    return {'status': 'OK'}
-
-
 @router.post('/room')
 async def create_room(request: Request) -> dict[str, str]:
     data: GetRoomData = await request.json()
