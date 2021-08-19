@@ -1,9 +1,16 @@
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { Grid, Typography, ButtonGroup, Button } from '@material-ui/core';
+import { History } from 'history';
+
+import { checkUserInRoom } from './utils';
 
 
 const HomePage: FC = (): JSX.Element => {
+  const history: History = useHistory();
+  
+  useEffect(() => { checkUserInRoom(history); }, []);
+
   return (
     <Grid container
       direction='column'

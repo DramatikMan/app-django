@@ -96,3 +96,10 @@ export const enterRoomPressed = async (
   if (resp.ok) history.push('/room/' + roomCode);
   else dispatch(setHelperText('Room not found'));
 };
+
+
+export const checkUserInRoom = async (history: History): Promise<void> => {
+  const resp: Response = await fetch('/api/user-in-room');
+  const respData: { room_code: string | null } = await resp.json();
+  if (respData.room_code) history.push('/room/' + respData.room_code);
+};
