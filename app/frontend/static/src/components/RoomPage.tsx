@@ -22,20 +22,16 @@ const RoomPage: FC = (): JSX.Element => {
   const { roomCode } = useParams<{ roomCode: string }>();
 
   const guestCanPause: boolean = useSelector(
-    (state: State): boolean =>
-    state.RoomPage.guestCanPause
+    (state: State): boolean => state.RoomPage.guestCanPause
   );
   const votesToSkip: number = useSelector(
-    (state: State): number =>
-    state.RoomPage.votesToSkip
+    (state: State): number => state.RoomPage.votesToSkip
   );
   const isHost: boolean = useSelector(
-    (state: State): boolean =>
-    state.RoomPage.isHost
+    (state: State): boolean => state.RoomPage.isHost
   );
   const showSettings: boolean = useSelector(
-    (state: State): boolean =>
-    state.RoomPage.showSettings
+    (state: State): boolean =>state.RoomPage.showSettings
   );
 
   useEffect(() => { getRoomData(roomCode, history, dispatch); }, []);

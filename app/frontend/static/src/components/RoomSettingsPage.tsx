@@ -34,16 +34,13 @@ const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
   const { roomCode } = useParams<{ roomCode: string }>();
   
   const guestCanPause: boolean = useSelector(
-    (state: State): boolean =>
-    state.RoomSettingsPage.guestCanPause
+    (state: State): boolean => state.RoomSettingsPage.guestCanPause
   );
   const votesToSkip: number = useSelector(
-    (state: State): number =>
-    state.RoomSettingsPage.votesToSkip
+    (state: State): number => state.RoomSettingsPage.votesToSkip
   );
   const isUpdate: boolean = useSelector(
-    (state: State): boolean =>
-    state.RoomSettingsPage.isUpdate
+    (state: State): boolean => state.RoomSettingsPage.isUpdate
   );
 
   const renderBackButton = (): JSX.Element => {
