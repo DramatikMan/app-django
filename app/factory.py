@@ -38,6 +38,7 @@ def create_app() -> FastAPI:
             ))
 
         resp: Response = await handler(request)
+
         return resp
 
     app.add_middleware(SessionMiddleware, secret_key=secret_key)
