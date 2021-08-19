@@ -26,7 +26,7 @@ const RoomJoinPage: FC = (): JSX.Element => {
       direction='column'
       alignItems='center'
       justifyContent='center'
-      style={{ minHeight: '90vh' }}
+      style={{ minHeight: '90vh', width: '100%', margin: 0 }}
       spacing={1}
     >
       <Grid item xs={12}>
