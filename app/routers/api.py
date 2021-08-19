@@ -37,8 +37,12 @@ async def get_session(request: Request) -> dict[str, str]:
 @router.post('/room')
 async def create_room(request: Request) -> dict[str, str]:
     data: GetRoomRequestData = await request.json()
-    guest_can_pause: bool = data['guestCanPause']
-    votes_to_skip: int = data['votesToSkip']
+
+    try:
+        guest_can_pause: bool = data['guestCanPause']
+        votes_to_skip: int = data['votesToSkip']
+    except KeyError:
+        raise HTTPException(status_code=400, detail='Invalid data.')
 
     host: str = request.session['identity']
 
@@ -92,6 +96,14 @@ async def get_room(request: Request, room_code: str) -> RoomResponseData:
 
 @router.patch('/room/{room_code}')
 async def update_room(request: Request, room_code: str) -> RoomResponseData:
+    data: GetRoomRequestData = await request.json()
+
+    try:
+        guest_can_pause: bool = data['guestCanPause']
+        votes_to_skip: int = data['votesToSkip']
+    except KeyError:
+        raise HTTPException(status_code=400, detail='Invalid data.')
+
     with Session() as session:
         q: Query = session.query(Room).filter(Room.code == room_code)
         room: Optional[Room] = q.one_or_none()
@@ -105,10 +117,9 @@ async def update_room(request: Request, room_code: str) -> RoomResponseData:
                 detail='You are not the host.'
             )
 
-        data: GetRoomRequestData = await request.json()
         q.update({
-            Room.guest_can_pause: data['guestCanPause'],
-            Room.votes_to_skip: data['votesToSkip']
+            Room.guest_can_pause: guest_can_pause,
+            Room.votes_to_skip: votes_to_skip
         })
 
         session.commit()
