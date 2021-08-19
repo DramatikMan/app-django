@@ -151,3 +151,9 @@ async def join_room(request: Request) -> dict[str, str]:
         status_code=400,
         detail='Room code not found in request body.'
     )
+
+
+@router.get('/user-in-room')
+async def check_room_code(request: Request) -> dict[str, Optional[str]]:
+    room_code: Optional[str] = request.session.get('room_code')
+    return {'room_code': room_code}
