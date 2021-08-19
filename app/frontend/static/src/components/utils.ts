@@ -34,11 +34,7 @@ export const createRoomPressed = async (
 
 
 export const leaveRoomPressed = async (history: History): Promise<void> => {
-  const requestInit = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  };
-  await fetch('/api/room/leave', requestInit);
+  await fetch('/api/room/leave');
   history.push('/');
 };
 
