@@ -19,18 +19,19 @@ class Base:
         return cls.__name__.lower()
 
 
+def unique_code() -> str:
+    with Session() as session:
+        while True:
+            code = ''.join(choices(ascii_uppercase + digits, k=6))
+            q: Query = session.query(Room).filter(Room.code == code)
+
+            if q.one_or_none() is None:
+                break
+
+    return code
+
+
 class Room(Base):
-    def unique_code(self) -> str:
-        with Session() as session:
-            while True:
-                code = ''.join(choices(ascii_uppercase + digits, k=6))
-                q: Query = session.query(Room).filter(Room.code == code)
-
-                if q.one_or_none() is None:
-                    break
-
-        return code
-
     host = Column(String(length=50), primary_key=True)
     code = Column(
         String(length=8),
