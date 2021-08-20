@@ -12,6 +12,7 @@ from cryptography import fernet
 
 from .routers.frontend import router as frontend
 from .routers.api import router as api
+from .routers.spotify import router as spotify
 
 
 path_static = Path(os.environ['PWD']) / 'app/frontend/static'
@@ -22,9 +23,12 @@ secret_key: bytes = base64.urlsafe_b64decode(fernet_key)
 
 def create_app() -> FastAPI:
     app = FastAPI()
+
     app.mount('/static', StaticFiles(directory=path_static), name='static')
+
     app.include_router(frontend)
     app.include_router(api)
+    app.include_router(spotify)
 
     @app.middleware('http')
     async def ensure_identity(
