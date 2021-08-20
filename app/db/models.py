@@ -42,3 +42,12 @@ class Room(Base):
     votes_to_skip = Column(Integer, nullable=False, default=2)
     updated_at = Column(DateTime, nullable=False)
     current_song = Column(String(length=50))
+
+
+class SpotifyToken(Base):
+    user = Column(String(length=50), primary_key=True)
+    created_at = Column(DateTime, nullable=False)
+    access_token = Column(String(length=255), nullable=False)
+    token_type = Column(String(length=50), nullable=False)
+    expiry_dt = Column(DateTime, nullable=False)
+    refresh_token = Column(String(length=255))
