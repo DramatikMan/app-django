@@ -12,18 +12,18 @@ const About: FC = (): JSX.Element => {
       style={{ minHeight: '90vh', width: '100%', margin: 0 }}
       spacing={3}
     >
-      <Grid item>
-        <Typography variant='body1'>
+      <Grid item xs={12}>
+        <Typography variant='body1' align='center'>
           This app allows you to host or join rooms to control the host's Spotify playback.
         </Typography>
-        <Typography variant='body1'>
+        <Typography variant='body1' align='center'>
           The host needs to start playing something from their Spotify account for this to work.
         </Typography>
-        <Typography variant='body1'>
+        <Typography variant='body1' align='center'>
           Also the host's Spotify account has to have Premium. Their rules, not mine ¯\_(ツ)_/¯ .
         </Typography>
       </Grid>
-      <Grid item>
+      <Grid item xs={12}>
         <Button
           color='secondary'
           variant='contained'
