@@ -6,7 +6,8 @@ const initialState: State = {
   guestCanPause: false,
   votesToSkip: 2,
   isHost: false,
-  showSettings: false
+  showSettings: false,
+  spotifyAuthenticated: false
 };
 
 const reducer = (
@@ -25,6 +26,11 @@ const reducer = (
       return {
         ...state,
         showSettings: action.payload
+      };
+    case 'SET_SPOTIFY_AUTHENTICATED':
+      return {
+        ...state,
+        spotifyAuthenticated: action.payload
       };
     default:
       return state;

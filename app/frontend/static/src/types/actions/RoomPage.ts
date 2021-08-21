@@ -14,4 +14,14 @@ extends ReduxAction<boolean> {
 };
 
 
-export type RoomPageActions = SET_PROPS | SET_SHOW_SETTINGS;
+export interface SET_SPOTIFY_AUTHENTICATED
+extends ReduxAction<boolean> {
+  type: 'SET_SPOTIFY_AUTHENTICATED'
+};
+
+
+export type RoomPageActions =
+  SET_PROPS
+| SET_SHOW_SETTINGS
+| SET_SPOTIFY_AUTHENTICATED
+;

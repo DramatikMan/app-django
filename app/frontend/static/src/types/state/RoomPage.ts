@@ -3,4 +3,5 @@ export default interface RoomPageState {
   votesToSkip: number;
   isHost: boolean;
   showSettings: boolean;
+  spotifyAuthenticated: boolean;
 };
