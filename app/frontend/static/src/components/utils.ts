@@ -6,7 +6,7 @@ import {
   getRoomResponseData
 } from '../types';
 import { RoomPageActions } from '../types/actions/RoomPage';
-import { setProps, setShowSettings } from '../actionCreators/RoomPage';
+import { setProps, setShowSettings, setSpotifyAuthenticated } from '../actionCreators/RoomPage';
 import { RoomJoinPageActions } from '../types/actions/RoomJoinPage';
 import { setHelperText } from '../actionCreators/RoomJoinPage';
 
@@ -48,6 +48,7 @@ export const getRoomData = async (
   if (!resp.ok) history.push('/');
   const respData: getRoomResponseData = await resp.json();
   dispatch(setProps(respData));
+  if (respData.isHost) { await authenticateSpotify(dispatch); };
 };
 
 
@@ -98,4 +99,19 @@ export const checkUserInRoom = async (history: History): Promise<void> => {
   const resp: Response = await fetch('/api/user-in-room');
   const respData: { room_code: string | null } = await resp.json();
   if (respData.room_code) history.push('/room/' + respData.room_code);
+};
+
+
+export const authenticateSpotify = async (
+  dispatch: Dispatch<RoomPageActions>
+): Promise<void> => {
+  const resp: Response = await fetch('/spotify/auth/status');
+  const respData: { status: boolean } = await resp.json();
+
+  if (respData.status === false) {
+    const resp: Response = await fetch('/spotify/auth/url');
+    const respData: { url: string } = await resp.json();
+    window.location.href = respData.url;
+  }
+  else dispatch(setSpotifyAuthenticated(true));
 };
