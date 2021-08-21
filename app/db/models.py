@@ -3,7 +3,7 @@ from string import ascii_uppercase, digits
 from typing import Callable, ClassVar
 from datetime import datetime
 
-from sqlalchemy import Column, String, Integer, Boolean, DateTime
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import as_declarative, declared_attr
 from sqlalchemy.orm.query import Query
 
@@ -53,3 +53,14 @@ class SpotifyTokens(Base):
     token_type = Column(String(length=50), nullable=False)
     expiry_dt = Column(DateTime, nullable=False)
     refresh_token = Column(String(length=255))
+
+
+class Vote(Base):
+    user = Column(String(length=50), primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    song_id = Column(String(length=50), nullable=False)
+    room_code = Column(
+        String(length=8),
+        ForeignKey('room.code'),
+        nullable=False
+    )
