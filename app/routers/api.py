@@ -50,8 +50,7 @@ async def create_room(request: Request) -> dict[str, str]:
         room: Room = session.merge(Room(
             host=host,
             guest_can_pause=guest_can_pause,
-            votes_to_skip=votes_to_skip,
-            updated_at=datetime.now()
+            votes_to_skip=votes_to_skip
         ))
         session.commit()
         code: str = room.code
@@ -119,7 +118,8 @@ async def update_room(request: Request, room_code: str) -> RoomResponseData:
 
         q.update({
             Room.guest_can_pause: guest_can_pause,
-            Room.votes_to_skip: votes_to_skip
+            Room.votes_to_skip: votes_to_skip,
+            Room.updated_at: datetime.now()
         })
 
         session.commit()

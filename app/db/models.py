@@ -1,6 +1,7 @@
 from random import choices
 from string import ascii_uppercase, digits
 from typing import Callable, ClassVar
+from datetime import datetime
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from sqlalchemy.orm import as_declarative, declared_attr
@@ -41,13 +42,13 @@ class Room(Base):
     )
     guest_can_pause = Column(Boolean, nullable=False, default=False)
     votes_to_skip = Column(Integer, nullable=False, default=2)
-    updated_at = Column(DateTime, nullable=False)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now)
     current_song = Column(String(length=50))
 
 
 class SpotifyTokens(Base):
     user = Column(String(length=50), primary_key=True)
-    created_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
     access_token = Column(String(length=255), nullable=False)
     token_type = Column(String(length=50), nullable=False)
     expiry_dt = Column(DateTime, nullable=False)
