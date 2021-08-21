@@ -1,12 +1,19 @@
 import os
 from datetime import datetime
-from typing import Literal, Optional, TypedDict
+from typing import Optional
 
 import requests
 from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
 
 from ..db.models import SpotifyTokens
 from ..db.utils import get_tokens, update_or_create_tokens
+from ..types import (
+    SpotifyAuthResponseData,
+    SpotifyAuthURLParams,
+    SpotifyCallbackRequestData,
+    SpotifyRefreshRequestData
+)
 
 
 router = APIRouter(prefix='/spotify')
@@ -19,20 +26,6 @@ CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
 AUTH_URI = 'https://accounts.spotify.com/authorize'
 
 
-class SpotifyAuthData(TypedDict):
-    scope: str
-    response_type: Literal['code']
-    redirect_uri: str
-    client_id: str
-
-
-class SpotifyRefreshData(TypedDict):
-    grant_type: Literal['refresh_token']
-    refresh_token: str
-    cliend_id: str
-    client_secret: str
-
-
 @router.get('/auth/url')
 async def get_auth_url(request: Request) -> dict[str, Optional[str]]:
     scopes = (
@@ -41,7 +34,7 @@ async def get_auth_url(request: Request) -> dict[str, Optional[str]]:
         'user-read-currently-playing'
     )
 
-    payload = SpotifyAuthData(
+    payload = SpotifyAuthURLParams(
         scope=' '.join(scopes),
         response_type='code',
         redirect_uri=REDIRECT_URI,
@@ -62,7 +55,7 @@ async def get_auth_status(request: Request) -> dict[str, bool]:
     if tokens:
 
         if tokens.expiry_dt <= datetime.now():
-            payload = SpotifyRefreshData(
+            payload = SpotifyRefreshRequestData(
                 grant_type='refresh_token',
                 refresh_token=tokens.refresh_token,
                 cliend_id=CLIENT_ID,
@@ -77,3 +70,21 @@ async def get_auth_status(request: Request) -> dict[str, bool]:
         return {'status': True}
 
     return {'status': False}
+
+
+@router.get('/redirect', response_class=RedirectResponse)
+async def get_redirect(request: Request, code: str) -> str:
+    payload = SpotifyCallbackRequestData(
+        grant_type='authorization_code',
+        code=code,
+        redirect_uri=REDIRECT_URI,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET
+    )
+
+    resp: requests.Response = requests.post(TOKEN_URI, data=payload)
+    resp_data: SpotifyAuthResponseData = resp.json()
+
+    update_or_create_tokens(request.session['identity'], resp_data)
+
+    return '/'
