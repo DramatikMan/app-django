@@ -5,6 +5,7 @@ from sqlalchemy.orm.query import Query
 
 from .models import SpotifyTokens
 from .config import Session
+from ..types import SpotifyAuthResponseData
 
 
 def get_tokens(identity: str) -> Optional[SpotifyTokens]:
@@ -18,7 +19,10 @@ def get_tokens(identity: str) -> Optional[SpotifyTokens]:
         return tokens
 
 
-def update_or_create_tokens(identity: str, data: Any) -> None:
+def update_or_create_tokens(
+    identity: str,
+    data: SpotifyAuthResponseData
+) -> None:
     access_token: str = data.get('access_token')
     token_type: str = data.get('token_type')
     expires_in: Any = data.get('expires_in')

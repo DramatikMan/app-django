@@ -1,29 +1,19 @@
 from datetime import datetime
-from typing import Optional, TypedDict
+from typing import Optional
 
 from fastapi import APIRouter, Request, HTTPException
 from sqlalchemy.orm.query import Query
 
 from ..db.config import Session
 from ..db.models import Room
+from ..types import (
+    GetRoomRequestData,
+    RoomResponseData,
+    JoinRoomRequestData
+)
 
 
 router = APIRouter(prefix='/api')
-
-
-class GetRoomRequestData(TypedDict):
-    guestCanPause: bool
-    votesToSkip: int
-
-
-class RoomResponseData(TypedDict):
-    guestCanPause: bool
-    votesToSkip: int
-    isHost: bool
-
-
-class JoinRoomRequestData(TypedDict):
-    roomCode: Optional[str]
 
 
 @router.get('/session')
