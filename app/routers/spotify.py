@@ -1,8 +1,12 @@
 import os
-from typing import Optional, TypedDict
+from datetime import datetime
+from typing import Literal, Optional, TypedDict
 
 import requests
 from fastapi import APIRouter, Request
+
+from ..db.models import SpotifyTokens
+from ..db.utils import get_tokens, update_or_create_tokens
 
 
 router = APIRouter(prefix='/spotify')
@@ -17,13 +21,20 @@ AUTH_URI = 'https://accounts.spotify.com/authorize'
 
 class SpotifyAuthData(TypedDict):
     scope: str
-    response_type: str
+    response_type: Literal['code']
     redirect_uri: str
     client_id: str
 
 
-@router.get('/auth-url')
-async def get(request: Request) -> dict[str, Optional[str]]:
+class SpotifyRefreshData(TypedDict):
+    grant_type: Literal['refresh_token']
+    refresh_token: str
+    cliend_id: str
+    client_secret: str
+
+
+@router.get('/auth/url')
+async def get_auth_url(request: Request) -> dict[str, Optional[str]]:
     scopes = (
         'user-read-playback-state',
         'user-modify-playback-state',
@@ -41,3 +52,28 @@ async def get(request: Request) -> dict[str, Optional[str]]:
     url: Optional[str] = req.prepare().url
 
     return {'url': url}
+
+
+@router.get('/auth/status')
+async def get_auth_status(request: Request) -> dict[str, bool]:
+    identity: str = request.session['identity']
+    tokens: Optional[SpotifyTokens] = get_tokens(identity)
+
+    if tokens:
+
+        if tokens.expiry_dt <= datetime.now():
+            payload = SpotifyRefreshData(
+                grant_type='refresh_token',
+                refresh_token=tokens.refresh_token,
+                cliend_id=CLIENT_ID,
+                client_secret=CLIENT_SECRET
+            )
+            resp: requests.Response = requests.post(
+                url=TOKEN_URI,
+                data=payload
+            )
+            update_or_create_tokens(identity, resp.json())
+
+        return {'status': True}
+
+    return {'status': False}
