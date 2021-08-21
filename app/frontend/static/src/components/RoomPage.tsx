@@ -31,7 +31,7 @@ const RoomPage: FC = (): JSX.Element => {
     (state: State): boolean => state.RoomPage.isHost
   );
   const showSettings: boolean = useSelector(
-    (state: State): boolean =>state.RoomPage.showSettings
+    (state: State): boolean => state.RoomPage.showSettings
   );
 
   useEffect(() => { getRoomData(roomCode, history, dispatch); }, []);
