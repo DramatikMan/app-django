@@ -45,7 +45,7 @@ class Room(Base):
     current_song = Column(String(length=50))
 
 
-class SpotifyToken(Base):
+class SpotifyTokens(Base):
     user = Column(String(length=50), primary_key=True)
     created_at = Column(DateTime, nullable=False)
     access_token = Column(String(length=255), nullable=False)
