@@ -61,6 +61,6 @@ class Vote(Base):
     song_id = Column(String(length=50), nullable=False)
     room_code = Column(
         String(length=8),
-        ForeignKey('room.code'),
+        ForeignKey('room.code', ondelete='CASCADE'),
         nullable=False
     )
