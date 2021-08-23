@@ -70,3 +70,15 @@ class CurrentSongResponseData(TypedDict, total=False):
     is_playing: bool
     progress_ms: int
     item: SongItem
+
+
+class CurrentSongBackendData(TypedDict):
+    title: str
+    artist: str
+    duration: int
+    progress: int
+    image_url: str
+    is_playing: bool
+    votes: int
+    votes_required: int
+    id: str
