@@ -1,4 +1,4 @@
-from typing import TypedDict, Optional, Literal
+from typing import List, TypedDict, Optional, Literal
 
 
 class GetRoomRequestData(TypedDict):
@@ -44,3 +44,29 @@ class SpotifyAuthResponseData(TypedDict):
     expires_in: int
     refresh_token: str
     scope: str
+
+
+class AlbumImage(TypedDict):
+    url: str
+
+
+class Album(TypedDict):
+    images: List[AlbumImage]
+
+
+class Artist(TypedDict):
+    name: str
+
+
+class SongItem(TypedDict):
+    name: str
+    song_id: str
+    duration_ms: int
+    album: Album
+    artists: List[Artist]
+
+
+class CurrentSongResponseData(TypedDict, total=False):
+    is_playing: bool
+    progress_ms: int
+    item: SongItem
