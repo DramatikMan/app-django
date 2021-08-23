@@ -60,7 +60,7 @@ class Artist(TypedDict):
 
 class SongItem(TypedDict):
     name: str
-    song_id: str
+    id: str
     duration_ms: int
     album: Album
     artists: List[Artist]
