@@ -3,17 +3,22 @@ from datetime import datetime
 from typing import Optional
 
 import requests
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm.query import Query
 
-from ..db.models import SpotifyTokens
+from ..db.config import Session
+from ..db.models import Room, SpotifyTokens, Vote
 from ..db.utils import get_tokens, update_or_create_tokens
 from ..types import (
+    CurrentSongBackendData,
+    CurrentSongResponseData,
     SpotifyAuthResponseData,
     SpotifyAuthURLParams,
     SpotifyCallbackRequestData,
     SpotifyRefreshRequestData
 )
+from .utils import spotify_api_request
 
 
 router = APIRouter(prefix='/spotify')
@@ -88,3 +93,54 @@ async def get_redirect(request: Request, code: str) -> str:
     update_or_create_tokens(request.session['identity'], resp_data)
 
     return '/'
+
+
+@router.get('/song')
+async def get_song(request: Request) -> CurrentSongBackendData:
+    room_code: str = request.session['room_code']
+
+    with Session() as session:
+        q: Query = session.query(Room).filter(Room.code == room_code)
+        room: Optional[Room] = q.one_or_none()
+
+        if room is None:
+            raise HTTPException(status_code=404)
+
+        host: str = room.host
+
+        data: CurrentSongResponseData = spotify_api_request(
+            identity=host,
+            endpoint='player/currently-playing'
+        )
+
+        if 'item' not in data:
+            raise HTTPException(
+                status_code=404,
+                detail='No song info available.'
+            )
+
+        item = data['item']
+        artists = ''
+
+        for i, artist in enumerate(item['artists']):
+            if i > 0:
+                artists += ', '
+
+            artists += artist['name']
+
+        q = session.query(Vote).filter(Vote.room_code == room.code)
+        votes_qty: int = len(q.all())
+
+        song = CurrentSongBackendData(
+            title=item['name'],
+            artist=artists,
+            duration=item['duration_ms'],
+            progress=data['progress_ms'],
+            image_url=item['album']['images'][0]['url'],
+            is_playing=data['is_playing'],
+            votes=votes_qty,
+            votes_required=room.votes_to_skip,
+            id=item['id']
+        )
+
+    return song
