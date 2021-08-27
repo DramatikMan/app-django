@@ -4,13 +4,22 @@ import { History } from 'history';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 
-import State from '../types/state';
+import GlobalState from '../types/state';
+import State from '../types/state/RoomPage';
 import RoomSettingsPage from './RoomSettingsPage';
+import MusicPlayer from './MusicPlayer';
 import { RoomPageActions } from '../types/actions/RoomPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 import { setShowSettings } from '../actionCreators/RoomPage';
-import { setState as setSettingsState } from '../actionCreators/RoomSettingsPage';
-import { leaveRoomPressed, getRoomData, updateCallback } from './utils';
+import {
+  setState as setSettingsState
+} from '../actionCreators/RoomSettingsPage';
+import {
+  leaveRoomPressed,
+  getRoomData,
+  updateCallback,
+  getSong
+} from './utils';
 
 
 type Actions = RoomPageActions | RoomSettingsPageActions;
@@ -20,21 +29,13 @@ const RoomPage: FC = (): JSX.Element => {
   const dispatch: Dispatch<Actions> = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
-
-  const guestCanPause: boolean = useSelector(
-    (state: State): boolean => state.RoomPage.guestCanPause
-  );
-  const votesToSkip: number = useSelector(
-    (state: State): number => state.RoomPage.votesToSkip
-  );
-  const isHost: boolean = useSelector(
-    (state: State): boolean => state.RoomPage.isHost
-  );
-  const showSettings: boolean = useSelector(
-    (state: State): boolean => state.RoomPage.showSettings
-  );
+  const state: State = useSelector((state: GlobalState) => state.RoomPage);
 
   useEffect(() => { getRoomData(roomCode, history, dispatch); }, []);
+  useEffect(() => {
+    const interval = setInterval(() => { getSong(dispatch); }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const renderSettingsButton = (): JSX.Element => {
     return (
@@ -50,10 +51,10 @@ const RoomPage: FC = (): JSX.Element => {
     );
   };
 
-  if (showSettings) {
+  if (state.showSettings) {
     dispatch(setSettingsState({
-      guestCanPause: guestCanPause,
-      votesToSkip: votesToSkip
+      guestCanPause: state.guestCanPause,
+      votesToSkip: state.votesToSkip
     }));
     return (
       <RoomSettingsPage
@@ -76,7 +77,8 @@ const RoomPage: FC = (): JSX.Element => {
           Room Code: {roomCode}
         </Typography>
       </Grid>
-      { isHost ? renderSettingsButton() : null }
+      <MusicPlayer {...state.song} />
+      { state.isHost ? renderSettingsButton() : null }
       <Grid item xs={12}>
         <Button
           variant='contained'

@@ -6,37 +6,47 @@ import {
   LinearProgress,
   Typography 
 } from '@material-ui/core';
-import { PlayArrow, SkipNext } from '@material-ui/icons';
+import { Pause, PlayArrow, SkipNext } from '@material-ui/icons';
+
+import { MusicPlayerProps } from '../types';
 
 
-const MusicPlayer: FC = (): JSX.Element => {
+const MusicPlayer: FC<MusicPlayerProps> = (
+  props: MusicPlayerProps
+): JSX.Element => {
+  const songProgress: number = props.progress / props.duration * 100;
+
   return (
     <Card>
-      <Grid container
+      <Grid container item
         alignItems='center'
       >
         <Grid item xs={4}>
-          Image
+          <img src={props.image_url} height='100%' width='100%' />
         </Grid>
-        <Grid item xs={8}>
-          <Typography variant='h5'>
-            Title
+        <Grid container item xs={8}
+          direction='column'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <Typography variant='h5' align='center'>
+            {props.title}
           </Typography>
-          <Typography color='textSecondary' variant='subtitle1'>
-            Artist
+          <Typography color='textSecondary' variant='subtitle1' align='center'>
+            {props.artist}
           </Typography>
           <div>
             <IconButton>
-              <PlayArrow />
+              { props.is_playing ? <Pause /> : <PlayArrow /> }
             </IconButton>
             <IconButton>
-              { '0 / 0' }
+              {props.votes}{ ' / ' }{props.votes_required}
               <SkipNext />
             </IconButton>
           </div>
         </Grid>
       </Grid>
-      <LinearProgress variant='determinate' value={50} />
+      <LinearProgress variant='determinate' value={songProgress} />
     </Card>
   );
 };
