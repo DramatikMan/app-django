@@ -1,8 +1,9 @@
-import { getRoomResponseData } from '../types';
+import { getRoomResponseData, MusicPlayerProps } from '../types';
 import {
   SET_PROPS,
   SET_SHOW_SETTINGS,
-  SET_SPOTIFY_AUTHENTICATED
+  SET_SPOTIFY_AUTHENTICATED,
+  SET_SONG
 } from '../types/actions/RoomPage';
 
 
@@ -27,6 +28,14 @@ export const setSpotifyAuthenticated = (
 ): SET_SPOTIFY_AUTHENTICATED => {
   return {
     type: 'SET_SPOTIFY_AUTHENTICATED',
+    payload: value
+  }
+};
+
+
+export const setSong = (value: MusicPlayerProps): SET_SONG => {
+  return {
+    type: 'SET_SONG',
     payload: value
   }
 };

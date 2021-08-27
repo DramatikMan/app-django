@@ -1,5 +1,5 @@
 import ReduxAction from '.';
-import { getRoomResponseData } from '..';
+import { getRoomResponseData, MusicPlayerProps } from '..';
 
 
 export interface SET_PROPS
@@ -20,8 +20,15 @@ extends ReduxAction<boolean> {
 };
 
 
+export interface SET_SONG
+extends ReduxAction<MusicPlayerProps> {
+  type: 'SET_SONG'
+};
+
+
 export type RoomPageActions =
   SET_PROPS
 | SET_SHOW_SETTINGS
 | SET_SPOTIFY_AUTHENTICATED
+| SET_SONG
 ;

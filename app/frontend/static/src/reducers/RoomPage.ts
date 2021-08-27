@@ -7,7 +7,18 @@ const initialState: State = {
   votesToSkip: 2,
   isHost: false,
   showSettings: false,
-  spotifyAuthenticated: false
+  spotifyAuthenticated: false,
+  song: {
+    title: '',
+    artist: '',
+    duration: NaN,
+    progress: NaN,
+    image_url: '',
+    is_playing: false,
+    votes: 0,
+    votes_required: 0,
+    id: ''
+  }
 };
 
 const reducer = (
@@ -31,6 +42,11 @@ const reducer = (
       return {
         ...state,
         spotifyAuthenticated: action.payload
+      };
+    case 'SET_SONG':
+      return {
+        ...state,
+        song: action.payload
       };
     default:
       return state;
