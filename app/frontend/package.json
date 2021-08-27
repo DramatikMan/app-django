@@ -23,6 +23,7 @@
         "react-dom": "*",
         "react-router-dom": "*",
         "react-redux": "*",
-        "@material-ui/core": "*"
+        "@material-ui/core": "*",
+        "@material-ui/icons": "*"
     }
 }
