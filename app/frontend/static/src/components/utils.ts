@@ -6,9 +6,10 @@ import {
   getRoomResponseData
 } from '../types';
 import { RoomPageActions } from '../types/actions/RoomPage';
-import { setProps, setShowSettings, setSpotifyAuthenticated } from '../actionCreators/RoomPage';
+import { setProps, setShowSettings, setSong, setSpotifyAuthenticated } from '../actionCreators/RoomPage';
 import { RoomJoinPageActions } from '../types/actions/RoomJoinPage';
 import { setHelperText } from '../actionCreators/RoomJoinPage';
+import { MusicPlayerProps } from '../types';
 
 
 export const createRoomPressed = async (
@@ -114,4 +115,15 @@ export const authenticateSpotify = async (
     window.location.href = respData.url;
   }
   else dispatch(setSpotifyAuthenticated(true));
+};
+
+
+export const getSong = async (
+  dispatch: Dispatch<RoomPageActions>
+): Promise<void> => {
+  const resp: Response = await fetch('/spotify/song');
+  if (resp.ok) {
+    const respData: MusicPlayerProps = await resp.json();
+    dispatch(setSong(respData));
+  };
 };
