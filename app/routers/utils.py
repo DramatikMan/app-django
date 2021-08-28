@@ -39,3 +39,15 @@ def spotify_api_request(
         return data
 
     raise HTTPException(status_code=404, detail='No Spotify token found.')
+
+
+def pause_song(identity: str) -> CurrentSongResponseData:
+    return spotify_api_request(identity, 'player/pause', 'PUT')
+
+
+def play_song(identity: str) -> CurrentSongResponseData:
+    return spotify_api_request(identity, 'player/play', 'PUT')
+
+
+def skip_song(identity: str) -> CurrentSongResponseData:
+    return spotify_api_request(identity, 'player/next', 'POST')
