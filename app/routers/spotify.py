@@ -100,8 +100,8 @@ async def get_song(request: Request) -> CurrentSongBackendData:
     room_code: str = request.session['room_code']
 
     with Session() as session:
-        q: Query = session.query(Room).filter(Room.code == room_code)
-        room: Optional[Room] = q.one_or_none()
+        room_query: Query = session.query(Room).filter(Room.code == room_code)
+        room: Optional[Room] = room_query.one_or_none()
 
         if room is None:
             raise HTTPException(status_code=404)
@@ -124,8 +124,8 @@ async def get_song(request: Request) -> CurrentSongBackendData:
 
             artists += artist['name']
 
-        q = session.query(Vote).filter(Vote.room_code == room.code)
-        votes_qty: int = len(q.all())
+        vote_query = session.query(Vote).filter(Vote.room_code == room.code)
+        votes_qty: int = len(vote_query.all())
 
         song = CurrentSongBackendData(
             title=item['name'],
@@ -138,6 +138,12 @@ async def get_song(request: Request) -> CurrentSongBackendData:
             votes_required=room.votes_to_skip,
             id=item['id']
         )
+
+        if room.current_song != song['id']:
+            room_query.update({'current_song': song['id']})
+            vote_query.delete()
+
+        session.commit()
 
     return song
 
