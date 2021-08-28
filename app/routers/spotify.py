@@ -18,7 +18,7 @@ from ..types import (
     SpotifyCallbackRequestData,
     SpotifyRefreshRequestData
 )
-from .utils import spotify_api_request
+from .utils import spotify_api_request, pause_song, play_song
 
 
 router = APIRouter(prefix='/spotify')
@@ -144,3 +144,23 @@ async def get_song(request: Request) -> CurrentSongBackendData:
         )
 
     return song
+
+
+@router.put('/pause', status_code=204)
+async def put_pause(request: Request) -> dict[None, None]:
+    identity: str = request.session['identity']
+    room_code: str = request.session['room_code']
+
+    with Session() as session:
+        q: Query = session.query(Room).filter(Room.code == room_code)
+        room: Optional[Room] = q.one_or_none()
+
+        if room is None:
+            raise HTTPException(status_code=404)
+
+        if identity == room.host or room.guest_can_pause:
+            pause_song(room.host)
+
+            return {}
+
+        raise HTTPException(status_code=403)
