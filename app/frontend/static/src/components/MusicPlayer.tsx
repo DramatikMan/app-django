@@ -9,7 +9,7 @@ import {
 import { Pause, PlayArrow, SkipNext } from '@material-ui/icons';
 
 import { MusicPlayerProps } from '../types';
-import { pauseSong, playSong } from './utils';
+import { pauseSong, playSong, skipSong } from './utils';
 
 
 const MusicPlayer: FC<MusicPlayerProps> = (
@@ -42,7 +42,9 @@ const MusicPlayer: FC<MusicPlayerProps> = (
             >
               { props.is_playing ? <Pause /> : <PlayArrow /> }
             </IconButton>
-            <IconButton>
+            <IconButton
+              onClick={ () => skipSong() }
+            >
               {props.votes}{ ' / ' }{props.votes_required}
               <SkipNext />
             </IconButton>
