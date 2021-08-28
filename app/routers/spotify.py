@@ -18,7 +18,7 @@ from ..types import (
     SpotifyCallbackRequestData,
     SpotifyRefreshRequestData
 )
-from .utils import spotify_api_request, pause_song, play_song
+from .utils import skip_song, spotify_api_request, pause_song, play_song
 
 
 router = APIRouter(prefix='/spotify')
@@ -186,3 +186,46 @@ async def put_play(request: Request) -> None:
             return None
 
         raise HTTPException(status_code=403)
+
+
+@router.post('/skip', status_code=204)
+async def post_skip(request: Request) -> None:
+    identity: str = request.session['identity']
+    room_code: str = request.session['room_code']
+
+    with Session() as session:
+        room_query: Query = session.query(Room).filter(Room.code == room_code)
+        room: Optional[Room] = room_query.one_or_none()
+
+        if room is None:
+            raise HTTPException(status_code=404)
+
+        votes_query: Query = session.query(Vote).filter(
+            Vote.room_code == room.code,
+            Vote.song_id == room.current_song
+        )
+        user_votes_query: Query = session.query(Vote).filter(
+            Vote.room_code == room.code,
+            Vote.song_id == room.current_song,
+            Vote.user == identity
+        )
+        votes_needed: int = room.votes_to_skip
+
+        if identity == room.host:
+            votes_query.delete()
+            skip_song(identity)
+        elif user_votes_query.one_or_none() is None:
+            if (len(votes_query.all()) + 1) >= votes_needed:
+                votes_query.delete()
+                skip_song(identity)
+            else:
+                vote = Vote(
+                    user=identity,
+                    room_code=room.code,
+                    song_id=room.current_song
+                )
+                session.add(vote)
+
+        session.commit()
+
+        return None
