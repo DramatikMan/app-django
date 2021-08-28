@@ -127,3 +127,12 @@ export const getSong = async (
     dispatch(setSong(respData));
   };
 };
+
+
+export const pauseSong = async (): Promise<void> => {
+  const requestInit = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' }
+  };
+  await fetch('/spotify/pause', requestInit);
+};
