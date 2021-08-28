@@ -13,7 +13,7 @@ API_URI = 'https://api.spotify.com/v1/me/'
 
 def spotify_api_request(
     identity: str,
-    endpoint: str = None,
+    endpoint: str = '',
     method: Union[Literal['POST'], Literal['PUT'], None] = None
 ) -> CurrentSongResponseData:
     tokens: Optional[SpotifyTokens] = get_tokens(identity)
