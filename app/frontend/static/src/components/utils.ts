@@ -136,3 +136,12 @@ export const pauseSong = async (): Promise<void> => {
   };
   await fetch('/spotify/pause', requestInit);
 };
+
+
+export const playSong = async (): Promise<void> => {
+  const requestInit = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' }
+  };
+  await fetch('/spotify/play', requestInit);
+};
