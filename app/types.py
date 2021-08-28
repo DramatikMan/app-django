@@ -1,4 +1,4 @@
-from typing import List, TypedDict, Optional, Literal
+from typing import TypedDict, Optional, Literal
 
 
 class GetRoomRequestData(TypedDict):
@@ -51,7 +51,7 @@ class AlbumImage(TypedDict):
 
 
 class Album(TypedDict):
-    images: List[AlbumImage]
+    images: list[AlbumImage]
 
 
 class Artist(TypedDict):
@@ -63,7 +63,7 @@ class SongItem(TypedDict):
     id: str
     duration_ms: int
     album: Album
-    artists: List[Artist]
+    artists: list[Artist]
 
 
 class CurrentSongResponseData(TypedDict, total=False):
