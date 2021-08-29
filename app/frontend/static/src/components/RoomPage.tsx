@@ -12,9 +12,6 @@ import { RoomPageActions } from '../types/actions/RoomPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 import { setShowSettings } from '../actionCreators/RoomPage';
 import {
-  setState as setSettingsState
-} from '../actionCreators/RoomSettingsPage';
-import {
   leaveRoomPressed,
   getRoomData,
   updateCallback,
@@ -52,12 +49,10 @@ const RoomPage: FC = (): JSX.Element => {
   };
 
   if (state.showSettings) {
-    dispatch(setSettingsState({
-      guestCanPause: state.guestCanPause,
-      votesToSkip: state.votesToSkip
-    }));
     return (
       <RoomSettingsPage
+        guestCanPause={state.guestCanPause}
+        votesToSkip={state.votesToSkip}
         isUpdate={true}
         updateCallback={updateCallback}
       />

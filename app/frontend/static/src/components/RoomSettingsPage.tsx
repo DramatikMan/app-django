@@ -15,7 +15,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { History } from 'history';
 
 import { RoomSettingsPageProps as Props } from '../types';
-import State from '../types/state';
+import GlobalState from '../types/state';
 import { RoomPageActions } from '../types/actions/RoomPage';
 import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
 import {
@@ -23,6 +23,7 @@ import {
   setVotesToSkip
 } from '../actionCreators/RoomSettingsPage';
 import { createRoomPressed, updateRoomPressed } from './utils';
+import State from '../types/state/RoomSettingsPage';
 
 
 type Actions = RoomPageActions | RoomSettingsPageActions;
@@ -30,16 +31,15 @@ type Actions = RoomPageActions | RoomSettingsPageActions;
 
 const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
   const isUpdate = props.isUpdate ? true : false;
+  const guestCanPause = props.guestCanPause ? props.guestCanPause: false;
+  const votesToSkip = props.votesToSkip ? props.votesToSkip : 2;
 
   const dispatch: Dispatch<Actions> = useDispatch();
   const history: History = useHistory();
   const { roomCode } = useParams<{ roomCode: string }>();
-  
-  const guestCanPause: boolean = useSelector(
-    (state: State): boolean => state.RoomSettingsPage.guestCanPause
-  );
-  const votesToSkip: number = useSelector(
-    (state: State): number => state.RoomSettingsPage.votesToSkip
+
+  const state: State = useSelector(
+    (state: GlobalState) => state.RoomSettingsPage
   );
 
   const renderBackButton = (): JSX.Element => {
@@ -91,7 +91,11 @@ const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
             Guest control of playback state
           </FormHelperText>
           <RadioGroup row
-            value={String(guestCanPause)}
+            value={String(
+              guestCanPause === state.guestCanPause
+              ? guestCanPause
+              : state.guestCanPause
+            )}
             onChange={ e => dispatch(setGuestCanPause(e.target.value)) }
           >
             <FormControlLabel
@@ -128,8 +132,16 @@ const RoomSettingsPage: FC<Props>= (props: Props): JSX.Element => {
           variant='contained'
           onClick={
             isUpdate
-            ? () => updateRoomPressed(guestCanPause, votesToSkip, roomCode)
-            : () => createRoomPressed(guestCanPause, votesToSkip, history)
+            ? () => updateRoomPressed(
+              state.guestCanPause,
+              state.votesToSkip,
+              roomCode
+            )
+            : () => createRoomPressed(
+              state.guestCanPause,
+              state.votesToSkip,
+              history
+            )
           }
         >
           { isUpdate ? 'Update Room' : 'Сreate a Room' }
