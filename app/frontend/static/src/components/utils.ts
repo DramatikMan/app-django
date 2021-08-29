@@ -30,7 +30,7 @@ export const createRoomPressed = async (
   if (resp.ok) {
     const respData: postRoomResponseData = await resp.json();
     history.push('/room/' + respData.code);
-  }
+  };
 };
 
 
