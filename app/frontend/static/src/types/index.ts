@@ -4,8 +4,8 @@ import { History } from 'history';
 
 
 export interface postRoomResponseData {
-    code: string;
-  };
+  code: string;
+};
   
   
 export interface getRoomResponseData {
@@ -16,6 +16,8 @@ export interface getRoomResponseData {
 
 
 export interface RoomSettingsPageProps {
+  guestCanPause: boolean;
+  votesToSkip: number;
   isUpdate: boolean;
   updateCallback(
     roomCode: string,
