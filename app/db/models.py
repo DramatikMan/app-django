@@ -1,3 +1,4 @@
+import re
 from random import choices
 from string import ascii_uppercase, digits
 from typing import Callable, ClassVar
@@ -17,7 +18,7 @@ class Base:
 
     @declared_attr  # type: ignore
     def __tablename__(cls) -> str:
-        return cls.__name__.lower()
+        return '_'.join(re.findall('[A-Z][^A-Z]*', cls.__name__)).lower()
 
 
 def unique_code() -> str:
