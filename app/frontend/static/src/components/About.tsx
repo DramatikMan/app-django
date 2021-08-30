@@ -17,10 +17,10 @@ const About: FC = (): JSX.Element => {
           This app allows you to host or join rooms to control host's Spotify playback.
         </Typography>
         <Typography variant='body1' align='center'>
-          Room host needs to start playing something from their Spotify account for this to work.
+          A Room host has to start playing something from their Spotify account for this to work.
         </Typography>
         <Typography variant='body1' align='center'>
-          Also host's Spotify account has to have Premium. Their rules, not mine ¯\_(ツ)_/¯ .
+          Also their account has to have Premium. Spotify API rules, not mine ¯\_(ツ)_/¯ .
         </Typography>
       </Grid>
       <Grid item xs={12}>
