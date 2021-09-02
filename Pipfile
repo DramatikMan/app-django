@@ -13,12 +13,11 @@ cryptography = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 alembic = "*"
-requests = "*"
+httpx = "*"
 
 [dev-packages]
 aiohttp-devtools = "*"
 mypy = "*"
-types-requests = "*"
 flake8 = "*"
 
 [scripts]

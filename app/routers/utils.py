@@ -1,7 +1,7 @@
 from typing import Literal, Union, Optional
 
+from httpx import AsyncClient, Response
 from fastapi import HTTPException
-from requests import get, post, put, Response
 
 from ..db.utils import get_tokens
 from ..db.models import SpotifyTokens
@@ -11,7 +11,7 @@ from ..types import CurrentSongResponseData
 API_URI = 'https://api.spotify.com/v1/me/'
 
 
-def spotify_api_request(
+async def spotify_api_request(
     identity: str,
     endpoint: str = '',
     method: Union[Literal['POST'], Literal['PUT'], None] = None
@@ -24,15 +24,16 @@ def spotify_api_request(
             'Authorization': 'Bearer ' + tokens.access_token
         }
 
-        if method == 'POST':
-            post(API_URI + endpoint, headers=headers)
-        if method == 'PUT':
-            put(API_URI + endpoint, headers=headers)
+        async with AsyncClient() as client:
+            if method == 'POST':
+                await client.post(API_URI + endpoint, headers=headers)
+            if method == 'PUT':
+                await client.put(API_URI + endpoint, headers=headers)
 
-        resp: Response = get(
-            url=API_URI + 'player/currently-playing',
-            headers=headers
-        )
+            resp: Response = await client.get(
+                url=API_URI + 'player/currently-playing',
+                headers=headers
+            )
 
         try:
             data: CurrentSongResponseData = resp.json()
@@ -44,13 +45,13 @@ def spotify_api_request(
     raise HTTPException(status_code=404, detail='No Spotify token found.')
 
 
-def pause_song(identity: str) -> CurrentSongResponseData:
-    return spotify_api_request(identity, 'player/pause', 'PUT')
+async def pause_song(identity: str) -> CurrentSongResponseData:
+    return await spotify_api_request(identity, 'player/pause', 'PUT')
 
 
-def play_song(identity: str) -> CurrentSongResponseData:
-    return spotify_api_request(identity, 'player/play', 'PUT')
+async def play_song(identity: str) -> CurrentSongResponseData:
+    return await spotify_api_request(identity, 'player/play', 'PUT')
 
 
-def skip_song(identity: str) -> CurrentSongResponseData:
-    return spotify_api_request(identity, 'player/next', 'POST')
+async def skip_song(identity: str) -> CurrentSongResponseData:
+    return await spotify_api_request(identity, 'player/next', 'POST')

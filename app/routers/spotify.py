@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from typing import Optional
 
-import requests
+import httpx
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm.query import Query
@@ -13,10 +13,7 @@ from ..db.utils import get_tokens, update_or_create_tokens
 from ..types import (
     CurrentSongBackendData,
     CurrentSongResponseData,
-    SpotifyAuthResponseData,
-    SpotifyAuthURLParams,
-    SpotifyCallbackRequestData,
-    SpotifyRefreshRequestData
+    SpotifyAuthResponseData
 )
 from .utils import skip_song, spotify_api_request, pause_song, play_song
 
@@ -32,24 +29,23 @@ AUTH_URI = 'https://accounts.spotify.com/authorize'
 
 
 @router.get('/auth/url')
-async def get_auth_url(request: Request) -> dict[str, Optional[str]]:
+async def get_auth_url(request: Request) -> dict[str, str]:
     scopes = (
         'user-read-playback-state',
         'user-modify-playback-state',
         'user-read-currently-playing'
     )
 
-    payload = SpotifyAuthURLParams(
+    payload = dict(
         scope=' '.join(scopes),
         response_type='code',
         redirect_uri=REDIRECT_URI,
         client_id=CLIENT_ID
     )
 
-    req = requests.Request(method='GET', url=AUTH_URI, params=payload)
-    url: Optional[str] = req.prepare().url
+    req = httpx.Request(method='GET', url=AUTH_URI, params=payload)
 
-    return {'url': url}
+    return {'url': str(req.url)}
 
 
 @router.get('/auth/status')
@@ -60,17 +56,19 @@ async def get_auth_status(request: Request) -> dict[str, bool]:
     if tokens:
 
         if tokens.expiry_dt <= datetime.now():
-            payload = SpotifyRefreshRequestData(
+            payload = dict(
                 grant_type='refresh_token',
                 refresh_token=tokens.refresh_token,
                 cliend_id=CLIENT_ID,
                 client_secret=CLIENT_SECRET
             )
-            resp: requests.Response = requests.post(
-                url=TOKEN_URI,
-                data=payload
-            )
-            update_or_create_tokens(identity, resp.json())
+
+            async with httpx.AsyncClient() as client:
+                resp: httpx.Response = await client.post(
+                    url=TOKEN_URI,
+                    data=payload
+                )
+                update_or_create_tokens(identity, resp.json())
 
         return {'status': True}
 
@@ -79,7 +77,7 @@ async def get_auth_status(request: Request) -> dict[str, bool]:
 
 @router.get('/redirect', response_class=RedirectResponse)
 async def get_redirect(request: Request, code: str) -> str:
-    payload = SpotifyCallbackRequestData(
+    payload = dict(
         grant_type='authorization_code',
         code=code,
         redirect_uri=REDIRECT_URI,
@@ -87,8 +85,9 @@ async def get_redirect(request: Request, code: str) -> str:
         client_secret=CLIENT_SECRET
     )
 
-    resp: requests.Response = requests.post(TOKEN_URI, data=payload)
-    resp_data: SpotifyAuthResponseData = resp.json()
+    async with httpx.AsyncClient() as client:
+        resp: httpx.Response = await client.post(TOKEN_URI, data=payload)
+        resp_data: SpotifyAuthResponseData = resp.json()
 
     update_or_create_tokens(request.session['identity'], resp_data)
 
@@ -107,7 +106,9 @@ async def get_song(request: Request) -> CurrentSongBackendData:
             raise HTTPException(status_code=404)
 
         host: str = room.host
-        data: CurrentSongResponseData = spotify_api_request(identity=host)
+        data: CurrentSongResponseData = await spotify_api_request(
+            identity=host
+        )
 
         if 'item' not in data:
             raise HTTPException(
@@ -161,7 +162,7 @@ async def put_pause(request: Request) -> None:
             raise HTTPException(status_code=404)
 
         if identity == room.host or room.guest_can_pause:
-            pause_song(room.host)
+            await pause_song(room.host)
 
             return None
 
@@ -181,7 +182,7 @@ async def put_play(request: Request) -> None:
             raise HTTPException(status_code=404)
 
         if identity == room.host or room.guest_can_pause:
-            play_song(room.host)
+            await play_song(room.host)
 
             return None
 
@@ -213,11 +214,11 @@ async def post_skip(request: Request) -> None:
 
         if identity == room.host:
             votes_query.delete()
-            skip_song(identity)
+            await skip_song(identity)
         elif user_votes_query.one_or_none() is None:
             if (len(votes_query.all()) + 1) >= votes_needed:
                 votes_query.delete()
-                skip_song(identity)
+                await skip_song(identity)
             else:
                 vote = Vote(
                     user=identity,
