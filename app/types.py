@@ -1,4 +1,4 @@
-from typing import TypedDict, Optional, Literal
+from typing import TypedDict, Optional
 
 
 class GetRoomRequestData(TypedDict):
@@ -14,28 +14,6 @@ class RoomResponseData(TypedDict):
 
 class JoinRoomRequestData(TypedDict):
     roomCode: Optional[str]
-
-
-class SpotifyAuthURLParams(TypedDict):
-    scope: str
-    response_type: Literal['code']
-    redirect_uri: str
-    client_id: str
-
-
-class SpotifyRefreshRequestData(TypedDict):
-    grant_type: Literal['refresh_token']
-    refresh_token: str
-    cliend_id: str
-    client_secret: str
-
-
-class SpotifyCallbackRequestData(TypedDict):
-    grant_type: Literal['authorization_code']
-    code: str
-    redirect_uri: str
-    client_id: str
-    client_secret: str
 
 
 class SpotifyAuthResponseData(TypedDict):
