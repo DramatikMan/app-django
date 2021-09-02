@@ -3,7 +3,7 @@ import RoomPageState from './RoomPage';
 import RoomJoinPageState from './RoomJoinPage';
 
 
-export default interface GlobalState {
+export default interface State {
   RoomSettingsPage: RoomSettingsPageState;
   RoomPage: RoomPageState;
   RoomJoinPage: RoomJoinPageState;
