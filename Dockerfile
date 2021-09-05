@@ -4,10 +4,9 @@ WORKDIR /project
 ENV PYTHONPATH "${PYTHONPATH}:/project"
 COPY Pipfile .
 COPY scripts scripts
-ARG build_env
+COPY app app
 
 FROM base AS development
-COPY app app
 CMD rm -rf .venv/* \
     && bash scripts/pipenv_install.sh \
     && pipenv run devserver
