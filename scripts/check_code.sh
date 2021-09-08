@@ -1,14 +1,14 @@
 clear
 
 pipenv run mypy \
-    /project/app \
+    /${PWD}/app \
     --ignore-missing-imports \
     --show-error-codes \
     --strict \
     --exclude /migrations/
 
 pipenv run flake8 \
-    /project/app \
+    /${PWD}/app \
     --count \
     --statistics \
     --show-source \
