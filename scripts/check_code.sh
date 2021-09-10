@@ -12,4 +12,4 @@ pipenv run flake8 \
     --count \
     --statistics \
     --show-source \
-    --exclude **/migrations
+    --exclude /**/migrations
