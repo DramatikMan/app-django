@@ -2,21 +2,23 @@ from typing import Literal, Union, Optional
 
 from httpx import AsyncClient, Response
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db.utils import get_tokens
-from ..db.models import SpotifyTokens
-from ..types import CurrentSongResponseData
+from .types import CurrentSongResponseData
+from ...db.utils import get_tokens
+from ...db.models import SpotifyTokens
 
 
 API_URI = 'https://api.spotify.com/v1/me/'
 
 
 async def spotify_api_request(
+    DB: AsyncSession,
     identity: str,
     endpoint: str = '',
     method: Union[Literal['POST'], Literal['PUT'], None] = None
 ) -> CurrentSongResponseData:
-    tokens: Optional[SpotifyTokens] = get_tokens(identity)
+    tokens: Optional[SpotifyTokens] = await get_tokens(DB, identity)
 
     if tokens:
         headers = {
@@ -45,13 +47,22 @@ async def spotify_api_request(
     raise HTTPException(status_code=404, detail='No Spotify token found.')
 
 
-async def pause_song(identity: str) -> CurrentSongResponseData:
-    return await spotify_api_request(identity, 'player/pause', 'PUT')
+async def pause_song(
+    DB: AsyncSession,
+    identity: str
+) -> CurrentSongResponseData:
+    return await spotify_api_request(DB, identity, 'player/pause', 'PUT')
 
 
-async def play_song(identity: str) -> CurrentSongResponseData:
-    return await spotify_api_request(identity, 'player/play', 'PUT')
+async def play_song(
+    DB: AsyncSession,
+    identity: str
+) -> CurrentSongResponseData:
+    return await spotify_api_request(DB, identity, 'player/play', 'PUT')
 
 
-async def skip_song(identity: str) -> CurrentSongResponseData:
-    return await spotify_api_request(identity, 'player/next', 'POST')
+async def skip_song(
+    DB: AsyncSession,
+    identity: str
+) -> CurrentSongResponseData:
+    return await spotify_api_request(DB, identity, 'player/next', 'POST')

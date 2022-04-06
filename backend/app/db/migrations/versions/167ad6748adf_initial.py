@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: c938470e3cad
+Revision ID: 167ad6748adf
 Revises: 
-Create Date: 2021-08-30 18:57:47.262465
+Create Date: 2022-04-06 19:03:08.567618
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c938470e3cad'
+revision = '167ad6748adf'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,23 +24,23 @@ def upgrade():
     sa.Column('guest_can_pause', sa.Boolean(), nullable=False),
     sa.Column('votes_to_skip', sa.Integer(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.Column('current_song', sa.String(length=50), nullable=True),
+    sa.Column('current_song', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('host'),
     sa.UniqueConstraint('code')
     )
     op.create_table('spotify_tokens',
     sa.Column('user', sa.String(length=50), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
-    sa.Column('access_token', sa.String(length=255), nullable=False),
-    sa.Column('token_type', sa.String(length=50), nullable=False),
+    sa.Column('access_token', sa.String(), nullable=False),
+    sa.Column('token_type', sa.String(), nullable=False),
     sa.Column('expiry_dt', sa.DateTime(), nullable=False),
-    sa.Column('refresh_token', sa.String(length=255), nullable=True),
+    sa.Column('refresh_token', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('user')
     )
     op.create_table('vote',
     sa.Column('user', sa.String(length=50), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
-    sa.Column('song_id', sa.String(length=50), nullable=False),
+    sa.Column('song_id', sa.String(), nullable=False),
     sa.Column('room_code', sa.String(length=8), nullable=False),
     sa.ForeignKeyConstraint(['room_code'], ['room.code'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('user')

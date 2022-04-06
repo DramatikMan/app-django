@@ -1,19 +1,6 @@
-from typing import TypedDict, Optional
+from typing import TypedDict
 
-
-class GetRoomRequestData(TypedDict):
-    guestCanPause: bool
-    votesToSkip: int
-
-
-class RoomResponseData(TypedDict):
-    guestCanPause: bool
-    votesToSkip: int
-    isHost: bool
-
-
-class JoinRoomRequestData(TypedDict):
-    roomCode: Optional[str]
+from pydantic import BaseModel as PydanticBaseModel
 
 
 class SpotifyAuthResponseData(TypedDict):
@@ -24,39 +11,15 @@ class SpotifyAuthResponseData(TypedDict):
     scope: str
 
 
-class AlbumImage(TypedDict):
-    url: str
+class BaseModel(PydanticBaseModel):
+    class Config:
+        @staticmethod
+        def to_camel_case(string: str) -> str:
+            return ''.join(
+                word if i == 0 else word[0].upper() + word[1:]
+                for i, word in enumerate(string.split('_'))
+            )
 
-
-class Album(TypedDict):
-    images: list[AlbumImage]
-
-
-class Artist(TypedDict):
-    name: str
-
-
-class SongItem(TypedDict):
-    name: str
-    id: str
-    duration_ms: int
-    album: Album
-    artists: list[Artist]
-
-
-class CurrentSongResponseData(TypedDict, total=False):
-    is_playing: bool
-    progress_ms: int
-    item: SongItem
-
-
-class CurrentSongBackendData(TypedDict):
-    title: str
-    artist: str
-    duration: int
-    progress: int
-    image_url: str
-    is_playing: bool
-    votes: int
-    votes_required: int
-    id: str
+        alias_generator = to_camel_case
+        allow_population_by_field_name = True
+        extra = 'forbid'

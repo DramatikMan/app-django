@@ -10,7 +10,7 @@ fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 alembic = "*"
-psycopg2-binary = "*"
+asyncpg = "*"
 cryptography = "*"
 itsdangerous = "*"
 httpx = "*"
