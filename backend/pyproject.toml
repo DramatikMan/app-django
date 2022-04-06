@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "music-app"
+version = "0.1.0"
+description = ""
+authors = ["Sergey Pavlov <self@sergeypavlov.dev>"]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+sqlalchemy = "*"
+alembic = "*"
+psycopg2-binary = "*"
+cryptography = "*"
+itsdangerous = "*"
+httpx = "*"
+
+[tool.poetry.dev-dependencies]
+mypy = "*"
+flake8 = "*"
+
+[tool.poetry-exec-plugin.commands]
+devserver = "uvicorn app.main:app --host 0.0.0.0 --reload"
+server = "uvicorn app.main:app --host 0.0.0.0"
+type_check = "mypy . --strict"
+lint = "flake8 . --count --statistics --show-source --exclude **/migrations,.venv"
+revision = "alembic -c ${PWD}/app/db/migrations/alembic.ini revision --autogenerate -m"
+upgrade = "alembic -c ${PWD}/app/db/migrations/alembic.ini upgrade head"
+
+[tool.mypy]
+exclude = ".venv|migrations"
+ignore_missing_imports = true
+show_error_codes = true

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    // Modules
+    "moduleResolution": "Node",
+    "rootDir": "src",
+    // Emit
+    "outDir": "dist",
+    "sourceMap": false,
+    // Language and Environment
+    "jsx": "react-jsx",
+    "target": "ES2016",
+    // Completeness
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}

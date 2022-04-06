@@ -1,0 +1,33 @@
+{
+  "name": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "prod": "webpack --env production",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/plugin-transform-runtime": "*",
+    "@babel/preset-react": "*",
+    "@redux-devtools/extension": "*",
+    "@types/react-dom": "*",
+    "@types/react-redux": "*",
+    "@types/react-router-dom": "*",
+    "@typescript-eslint/eslint-plugin": "*",
+    "babel-loader": "*",
+    "eslint": "*",
+    "html-webpack-plugin": "*",
+    "typescript": "*",
+    "webpack": "*",
+    "webpack-cli": "*"
+  },
+  "dependencies": {
+    "@material-ui/core": "*",
+    "@material-ui/icons": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-redux": "*",
+    "react-router-dom": "*",
+    "redux": "*"
+  }
+}

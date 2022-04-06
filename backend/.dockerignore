@@ -1,0 +1,12 @@
+### ~ private ~ ###
+*.env
+
+### ~ Python ~ ###
+**/__pycache__
+
+### ~ Docker ~ ###
+.dockerignore
+Dockerfile
+
+### ~ Git ~ ###
+.git*

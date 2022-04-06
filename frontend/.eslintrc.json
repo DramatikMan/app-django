@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": ["./tsconfig.json"] },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "eol-last": [2, "always"],
+    "max-len": [2, {"code": 80}],
+    "semi-style": [2, "last"],
+    "@typescript-eslint/indent": [2, 4],
+    "@typescript-eslint/strict-boolean-expressions": [2, {
+        "allowNumber": false,
+        "allowString": false
+    }]
+  },
+  "ignorePatterns": []
+}

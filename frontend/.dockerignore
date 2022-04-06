@@ -1,0 +1,9 @@
+nginx.conf
+dist
+
+### ~ Docker ~ ###
+.dockerignore
+Dockerfile
+
+### ~ Git ~ ###
+.git*
