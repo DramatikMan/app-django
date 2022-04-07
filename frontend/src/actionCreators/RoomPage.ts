@@ -1,4 +1,4 @@
-import { getRoomResponseData, MusicPlayerProps } from '../types';
+import { getRoomResp, MusicPlayerProps } from '../types';
 import {
     SET_PROPS,
     SET_SHOW_SETTINGS,
@@ -7,7 +7,7 @@ import {
 } from '../types/actions/RoomPage';
 
 
-export const setProps = (value: getRoomResponseData): SET_PROPS => {
+export const setProps = (value: getRoomResp): SET_PROPS => {
     return {
         type: 'SET_PROPS',
         payload: value

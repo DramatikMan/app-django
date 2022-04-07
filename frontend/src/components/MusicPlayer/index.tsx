@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { Pause, PlayArrow, SkipNext } from '@material-ui/icons';
 
-import { MusicPlayerProps } from '../types';
+import { MusicPlayerProps } from '../../types';
 import { pauseSong, playSong, skipSong } from './utils';
 
 

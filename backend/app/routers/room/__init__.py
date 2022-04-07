@@ -14,7 +14,7 @@ from ...dependencies import get_db_session, get_session
 router = APIRouter()
 
 
-@router.post('/room')
+@router.post('/')
 async def create_room(
     payload: RoomProps,
     session: dict[Any, Any] = Depends(get_session),
@@ -43,7 +43,7 @@ async def create_room(
     return RoomCode(roomCode=session['room_code'])
 
 
-@router.get('/room/leave')
+@router.get('/leave')
 async def leave_room(
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
@@ -58,7 +58,7 @@ async def leave_room(
     return Detail(detail='User not in room.')
 
 
-@router.get('/room/{room_code}')
+@router.get('/{room_code}')
 async def get_room(
     room_code: str,
     session: dict[Any, Any] = Depends(get_session),
@@ -77,7 +77,7 @@ async def get_room(
     raise HTTPException(status_code=404, detail='Room not found.')
 
 
-@router.patch('/room/{room_code}')
+@router.patch('/{room_code}')
 async def update_room(
     room_code: str,
     payload: RoomProps,
@@ -111,7 +111,7 @@ async def update_room(
     return response
 
 
-@router.post('/room/join')
+@router.post('/join')
 async def join_room(
     payload: RoomCode,
     session: dict[Any, Any] = Depends(get_session),
@@ -133,10 +133,3 @@ async def join_room(
         status_code=400,
         detail='Room code not found in request body.'
     )
-
-
-@router.get('/user-in-room')
-async def check_room_code(
-    session: dict[Any, Any] = Depends(get_session)
-) -> RoomCode:
-    return RoomCode(roomCode=session.get('room_code'))

@@ -1,8 +1,8 @@
 import ReduxAction from '.';
-import { getRoomResponseData, MusicPlayerProps } from '..';
+import { getRoomResp, MusicPlayerProps } from '..';
 
 
-export interface SET_PROPS extends ReduxAction<getRoomResponseData> {
+export interface SET_PROPS extends ReduxAction<getRoomResp> {
     type: 'SET_PROPS';
 }
 

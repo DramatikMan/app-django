@@ -1,15 +1,16 @@
-from typing import AsyncGenerator
+from typing import Any, AsyncGenerator
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
 import app.config as config
+from .dependencies import get_session
 from .db.config import Session
 from .middlewares import ensure_identity
-from .routers.main import router as api
-from .routers.spotify import router as spotify
+from .routers import room, spotify
+from .routers.room.types import RoomCode
 from .utils import lifetime
 
 
@@ -27,5 +28,12 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
 app.state.get_db_session = get_db_session
 
 
-app.include_router(api)
-app.include_router(spotify, prefix='/spotify')
+@app.get('/user-in-room')
+async def get_current_room(
+    session: dict[Any, Any] = Depends(get_session)
+) -> RoomCode:
+    return RoomCode(roomCode=session.get('room_code'))
+
+
+app.include_router(room.router, prefix='/room')
+app.include_router(spotify.router, prefix='/spotify')

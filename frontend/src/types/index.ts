@@ -4,12 +4,12 @@ import { NavigateFunction } from 'react-router-dom';
 import { RoomPageActions } from './actions/RoomPage';
 
 
-export interface postRoomResponseData {
+export interface postRoomResp {
     roomCode: string;
 }
     
     
-export interface getRoomResponseData {
+export interface getRoomResp {
     guestCanPause: boolean;
     votesToSkip: number;
     isHost: boolean;

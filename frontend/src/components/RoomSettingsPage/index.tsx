@@ -18,16 +18,16 @@ import {
     useParams
 } from 'react-router-dom';
 
-import { RoomSettingsPageProps as Props } from '../types';
-import GlobalState from '../types/state';
-import { RoomPageActions } from '../types/actions/RoomPage';
-import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
+import { createRoomPressed, updateRoomPressed } from './utils';
+import { RoomSettingsPageProps as Props } from '../../types';
+import { RoomPageActions } from '../../types/actions/RoomPage';
+import { RoomSettingsPageActions } from '../../types/actions/RoomSettingsPage';
 import {
     setGuestCanPause,
     setVotesToSkip
-} from '../actionCreators/RoomSettingsPage';
-import { createRoomPressed, updateRoomPressed } from './utils';
-import State from '../types/state/RoomSettingsPage';
+} from '../../actionCreators/RoomSettingsPage';
+import GlobalState from '../../types/state';
+import State from '../../types/state/RoomSettingsPage';
 
 
 type Actions = RoomPageActions | RoomSettingsPageActions;

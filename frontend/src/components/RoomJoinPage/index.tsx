@@ -3,9 +3,9 @@ import { FC, Dispatch } from 'react';
 import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import State from '../types/state';
-import { RoomJoinPageActions } from '../types/actions/RoomJoinPage';
-import { setRoomCode } from '../actionCreators/RoomJoinPage';
+import State from '../../types/state';
+import { RoomJoinPageActions } from '../../types/actions/RoomJoinPage';
+import { setRoomCode } from '../../actionCreators/RoomJoinPage';
 import { enterRoomPressed } from './utils';
 
 

@@ -1,14 +1,6 @@
-from pydantic import StrictBool, StrictInt, StrictStr
+from pydantic import StrictInt, StrictStr
 
 from ...types import BaseModel
-
-
-class URL(BaseModel):
-    url: StrictStr
-
-
-class Status(BaseModel):
-    status: StrictBool
 
 
 class AlbumImage(BaseModel):

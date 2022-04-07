@@ -3,19 +3,19 @@ import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 
-import GlobalState from '../types/state';
-import State from '../types/state/RoomPage';
-import RoomSettingsPage from './RoomSettingsPage';
-import MusicPlayer from './MusicPlayer';
-import { RoomPageActions } from '../types/actions/RoomPage';
-import { RoomSettingsPageActions } from '../types/actions/RoomSettingsPage';
-import { setShowSettings } from '../actionCreators/RoomPage';
 import {
-    leaveRoomPressed,
     getRoomData,
-    updateCallback,
-    getSong
+    getSong,
+    leaveRoomPressed,
+    updateCallback
 } from './utils';
+import GlobalState from '../../types/state';
+import State from '../../types/state/RoomPage';
+import RoomSettingsPage from '../RoomSettingsPage';
+import MusicPlayer from '../MusicPlayer';
+import { RoomPageActions } from '../../types/actions/RoomPage';
+import { RoomSettingsPageActions } from '../../types/actions/RoomSettingsPage';
+import { setShowSettings } from '../../actionCreators/RoomPage';
 
 
 type Actions = RoomPageActions | RoomSettingsPageActions;
