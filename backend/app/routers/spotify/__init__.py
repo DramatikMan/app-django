@@ -12,7 +12,7 @@ from .types import CurrentSong, CurrentSongResp
 from .utils import pause_song, play_song, skip_song, spotify_api_request
 from ...db.models import Room, Vote
 from ...db.utils import update_or_create_tokens
-from ...dependencies import get_db_session, get_session
+from ...dependencies import get_client, get_db_session, get_session
 from ...types import SpotifyAuthResp
 
 
@@ -23,6 +23,7 @@ router.include_router(auth.router, prefix='/auth')
 @router.get('/redirect', response_class=RedirectResponse)
 async def get_redirect(
     code: str,
+    client: httpx.AsyncClient = Depends(get_client),
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
 ) -> str:
@@ -34,13 +35,8 @@ async def get_redirect(
         client_secret=config.CLIENT_SECRET
     )
 
-    async with httpx.AsyncClient() as client:
-        resp: httpx.Response = await client.post(
-            config.TOKEN_URI,
-            data=payload
-        )
-        resp_data = SpotifyAuthResp(**resp.json())
-
+    resp: httpx.Response = await client.post(config.TOKEN_URI, data=payload)
+    resp_data = SpotifyAuthResp(**resp.json())
     await update_or_create_tokens(DB, session['identity'], resp_data)
 
     return '/'
@@ -48,6 +44,7 @@ async def get_redirect(
 
 @router.get('/song')
 async def get_song(
+    client: httpx.AsyncClient = Depends(get_client),
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
 ) -> CurrentSong:
@@ -58,9 +55,10 @@ async def get_song(
     if room is None:
         raise HTTPException(status_code=404)
 
-    data: CurrentSongResp = await spotify_api_request(DB, room.host)
-    room_code, votes_to_skip, current_song = \
-        room.code, room.votes_to_skip, room.current_song
+    room_code, host, votes_to_skip, current_song = \
+        room.code, room.host, room.votes_to_skip, room.current_song
+
+    data: CurrentSongResp = await spotify_api_request(client, DB, host)
 
     item = data.item
     artists = ''
@@ -102,6 +100,7 @@ async def get_song(
 
 @router.put('/pause', status_code=204)
 async def put_pause(
+    client: httpx.AsyncClient = Depends(get_client),
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
 ) -> None:
@@ -112,8 +111,10 @@ async def put_pause(
     if room is None:
         raise HTTPException(status_code=404)
 
-    if session['identity'] == room.host or room.guest_can_pause:
-        await pause_song(DB, room.host)
+    host, guest_can_pause = room.host, room.guest_can_pause
+
+    if session['identity'] == host or guest_can_pause:
+        await pause_song(client, DB, host)
 
         return None
 
@@ -122,6 +123,7 @@ async def put_pause(
 
 @router.put('/play', status_code=204)
 async def put_play(
+    client: httpx.AsyncClient = Depends(get_client),
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
 ) -> None:
@@ -132,8 +134,10 @@ async def put_play(
     if room is None:
         raise HTTPException(status_code=404)
 
-    if session['identity'] == room.host or room.guest_can_pause:
-        await play_song(DB, room.host)
+    host, guest_can_pause = room.host, room.guest_can_pause
+
+    if session['identity'] == host or guest_can_pause:
+        await play_song(client, DB, host)
 
         return None
 
@@ -142,6 +146,7 @@ async def put_play(
 
 @router.post('/skip', status_code=204)
 async def post_skip(
+    client: httpx.AsyncClient = Depends(get_client),
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
 ) -> None:
@@ -152,38 +157,40 @@ async def post_skip(
     if room is None:
         raise HTTPException(status_code=404)
 
-    votes_needed: int = room.votes_to_skip
-    result = await DB.execute(select(Vote).where(
-        Vote.room_code == room.code and
-        Vote.song_id == room.current_song
-    ))
-    all_votes: list[Vote] = result.scalars().all()
+    votes_needed, room_code, host, current_song = \
+        room.votes_to_skip, room.code, room.host, room.current_song
 
     result = await DB.execute(select(Vote).where(
-        Vote.room_code == room.code and
-        Vote.song_id == room.current_song and
+        Vote.room_code == room_code and
+        Vote.song_id == current_song
+    ))
+    total_votes = len(result.scalars().all())
+
+    result = await DB.execute(select(Vote).where(
+        Vote.room_code == room_code and
+        Vote.song_id == current_song and
         Vote.user == session['identity']
     ))
-    user_votes: list[Vote] = result.scalars().all()
+    user_votes = len(result.scalars().all())
 
-    if session['identity'] == room.host:
+    if session['identity'] == host:
         await DB.execute(delete(Vote).where(
-            Vote.room_code == room.code and
-            Vote.song_id == room.current_song
+            Vote.room_code == room_code and
+            Vote.song_id == current_song
         ))
-        await skip_song(DB, session['identity'])
-    elif len(user_votes) == 0:
-        if (len(all_votes) + 1) >= votes_needed:
+        await skip_song(client, DB, session['identity'])
+    elif user_votes == 0:
+        if (total_votes + 1) >= votes_needed:
             await DB.execute(delete(Vote).where(
-                Vote.room_code == room.code and
-                Vote.song_id == room.current_song
+                Vote.room_code == room_code and
+                Vote.song_id == current_song
             ))
-            await skip_song(DB, room.host)
+            await skip_song(client, DB, host)
         else:
             DB.add(Vote(
                 user=session['identity'],
-                room_code=room.code,
-                song_id=room.current_song
+                room_code=room_code,
+                song_id=current_song
             ))
 
     await DB.commit()

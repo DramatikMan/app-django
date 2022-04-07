@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from httpx import AsyncClient, Response
+import httpx
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,6 +13,7 @@ API_URI = 'https://api.spotify.com/v1/me/'
 
 
 async def spotify_api_request(
+    client: httpx.AsyncClient,
     DB: AsyncSession,
     identity: str,
     endpoint: str = '',
@@ -26,16 +27,15 @@ async def spotify_api_request(
             'Authorization': 'Bearer ' + tokens.access_token
         }
 
-        async with AsyncClient() as client:
-            if method == 'POST':
-                await client.post(API_URI + endpoint, headers=headers)
-            if method == 'PUT':
-                await client.put(API_URI + endpoint, headers=headers)
+        if method == 'POST':
+            await client.post(API_URI + endpoint, headers=headers)
+        if method == 'PUT':
+            await client.put(API_URI + endpoint, headers=headers)
 
-            resp: Response = await client.get(
-                url=API_URI + 'player/currently-playing',
-                headers=headers
-            )
+        resp: httpx.Response = await client.get(
+            url=API_URI + 'player/currently-playing',
+            headers=headers
+        )
 
         try:
             data = CurrentSongResp(**resp.json())
@@ -47,13 +47,31 @@ async def spotify_api_request(
     raise HTTPException(status_code=404, detail='No Spotify token found.')
 
 
-async def pause_song(DB: AsyncSession, identity: str) -> CurrentSongResp:
-    return await spotify_api_request(DB, identity, 'player/pause', 'PUT')
+async def pause_song(
+    client: httpx.AsyncClient,
+    DB: AsyncSession,
+    identity: str
+) -> CurrentSongResp:
+    return await spotify_api_request(
+        client, DB, identity, 'player/pause', 'PUT'
+    )
 
 
-async def play_song(DB: AsyncSession, identity: str) -> CurrentSongResp:
-    return await spotify_api_request(DB, identity, 'player/play', 'PUT')
+async def play_song(
+    client: httpx.AsyncClient,
+    DB: AsyncSession,
+    identity: str
+) -> CurrentSongResp:
+    return await spotify_api_request(
+        client, DB, identity, 'player/play', 'PUT'
+    )
 
 
-async def skip_song(DB: AsyncSession, identity: str) -> CurrentSongResp:
-    return await spotify_api_request(DB, identity, 'player/next', 'POST')
+async def skip_song(
+    client: httpx.AsyncClient,
+    DB: AsyncSession,
+    identity: str
+) -> CurrentSongResp:
+    return await spotify_api_request(
+        client, DB, identity, 'player/next', 'POST'
+    )

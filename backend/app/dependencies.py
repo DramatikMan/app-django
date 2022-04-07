@@ -1,10 +1,13 @@
 from typing import Any
 
 from fastapi import Request
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def get_db_session(request: Request) -> AsyncSession:
+async def get_client(request: Request) -> Any:
+    return request.app.state.get_client()
+
+
+async def get_db_session(request: Request) -> Any:
     return request.app.state.get_db_session()
 
 

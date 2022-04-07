@@ -9,7 +9,7 @@ import app.routers.spotify.config as config
 from .types import Status, URL
 from ....db.models import SpotifyTokens
 from ....db.utils import get_tokens, update_or_create_tokens
-from ....dependencies import get_db_session, get_session
+from ....dependencies import get_client, get_db_session, get_session
 
 
 router = APIRouter()
@@ -37,6 +37,7 @@ async def get_auth_url() -> URL:
 
 @router.get('/status')
 async def get_auth_status(
+    client: httpx.AsyncClient = Depends(get_client),
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
 ) -> Status:
@@ -51,16 +52,11 @@ async def get_auth_status(
                 client_secret=config.CLIENT_SECRET
             )
 
-            async with httpx.AsyncClient() as client:
-                resp: httpx.Response = await client.post(
-                    url=config.TOKEN_URI,
-                    data=payload
-                )
-                await update_or_create_tokens(
-                    DB,
-                    session['identity'],
-                    resp.json()
-                )
+            resp: httpx.Response = await client.post(
+                url=config.TOKEN_URI,
+                data=payload
+            )
+            await update_or_create_tokens(DB, session['identity'], resp.json())
 
         return Status(status=True)
 

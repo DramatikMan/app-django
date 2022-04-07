@@ -1,6 +1,7 @@
 from typing import Any, AsyncGenerator
 
 from fastapi import Depends, FastAPI
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -20,11 +21,18 @@ app.add_middleware(SessionMiddleware, secret_key=config.SECRET_KEY)
 
 
 @lifetime(app)
+async def get_client() -> AsyncGenerator[AsyncClient, None]:
+    async with AsyncClient() as client:
+        yield client
+
+
+@lifetime(app)
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     async with Session() as session:
         yield session
 
 
+app.state.get_client = get_client
 app.state.get_db_session = get_db_session
 
 
