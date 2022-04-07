@@ -13,7 +13,7 @@ const App: FC = (): JSX.Element => {
         <Router>
             <Routes>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/about' element={<About/>} />
+                <Route path='/about' element={<About />} />
                 <Route
                     path='/create'
                     element={<RoomSettingsPage
@@ -23,7 +23,7 @@ const App: FC = (): JSX.Element => {
                         updateCallback={() => 0}
                     />}
                 />
-                <Route path='/room/:roomCode' element={<RoomPage/>} />
+                <Route path='/room/:roomCode' element={<RoomPage />} />
                 <Route path='/join' element={<RoomJoinPage />} />
             </Routes>
         </Router>

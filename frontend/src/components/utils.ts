@@ -45,6 +45,20 @@ export const leaveRoomPressed = async (
 }
 
 
+const authenticateSpotify = async (
+    dispatch: Dispatch<RoomPageActions>
+): Promise<void> => {
+    const resp: Response = await fetch(API_PREFIX + '/spotify/auth/status');
+    const respData: { status: boolean } = await resp.json();
+
+    if (respData.status === false) {
+        const resp: Response = await fetch(API_PREFIX + '/spotify/auth/url');
+        const respData: { url: string } = await resp.json();
+        window.location.href = respData.url;
+    } else dispatch(setSpotifyAuthenticated(true));
+}
+
+
 export const getRoomData = async (
     roomCode: string,
     navigate: NavigateFunction,
@@ -107,21 +121,6 @@ export const checkUserInRoom = async (
     const resp: Response = await fetch(API_PREFIX + '/user-in-room');
     const respData: { room_code: string | null } = await resp.json();
     if (!(respData.room_code === null)) navigate('/room/' + respData.room_code);
-}
-
-
-export const authenticateSpotify = async (
-    dispatch: Dispatch<RoomPageActions>
-): Promise<void> => {
-    const resp: Response = await fetch(API_PREFIX + '/spotify/auth/status');
-    const respData: { status: boolean } = await resp.json();
-
-    if (respData.status === false) {
-        const resp: Response = await fetch(API_PREFIX + '/spotify/auth/url');
-        const respData: { url: string } = await resp.json();
-        window.location.href = respData.url;
-    }
-    else dispatch(setSpotifyAuthenticated(true));
 }
 
 
