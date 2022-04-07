@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import Room, SpotifyTokens
-from ..types import SpotifyAuthResponseData
+from ..types import SpotifyAuthResp
 
 
 async def generate_unique_room_code(session: AsyncSession) -> str:
@@ -35,7 +35,7 @@ async def get_tokens(
 async def update_or_create_tokens(
     session: AsyncSession,
     identity: str,
-    data: SpotifyAuthResponseData
+    data: SpotifyAuthResp
 ) -> None:
     stmt = select(SpotifyTokens).where(SpotifyTokens.user == identity)
     result = await session.execute(stmt)
@@ -44,16 +44,16 @@ async def update_or_create_tokens(
     if tokens is None:
         session.add(SpotifyTokens(
             user=identity,
-            access_token=data['access_token'],
-            token_type=data['token_type'],
-            refresh_token=data['refresh_token'],
-            expiry_dt=datetime.now() + timedelta(seconds=data['expires_in'])
+            access_token=data.access_token,
+            token_type=data.token_type,
+            refresh_token=data.token_type,
+            expiry_dt=datetime.now() + timedelta(seconds=data.expires_in)
         ))
     else:
-        tokens.access_token = data['access_token']
-        tokens.token_type = data['token_type']
-        tokens.refresh_token = data['refresh_token'],
+        tokens.access_token = data.access_token
+        tokens.token_type = data.token_type
+        tokens.refresh_token = data.refresh_token,
         tokens.expiry_dt = datetime.now() \
-            + timedelta(seconds=data['expires_in'])
+            + timedelta(seconds=data.expires_in)
 
     await session.commit()

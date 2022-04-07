@@ -5,7 +5,7 @@ import { RoomPageActions } from './actions/RoomPage';
 
 
 export interface postRoomResponseData {
-    code: string;
+    roomCode: string;
 }
     
     

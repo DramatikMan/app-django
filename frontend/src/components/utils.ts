@@ -32,7 +32,7 @@ export const createRoomPressed = async (
 
     if (resp.ok) {
         const respData: postRoomResponseData = await resp.json();
-        navigate('/room/' + respData.code);
+        navigate('/room/' + respData.roomCode);
     }
 }
 
@@ -119,8 +119,8 @@ export const checkUserInRoom = async (
     navigate: NavigateFunction
 ): Promise<void> => {
     const resp: Response = await fetch(API_PREFIX + '/user-in-room');
-    const respData: { room_code: string | null } = await resp.json();
-    if (!(respData.room_code === null)) navigate('/room/' + respData.room_code);
+    const respData: { roomCode: string | null } = await resp.json();
+    if (!(respData.roomCode === null)) navigate('/room/' + respData.roomCode);
 }
 
 

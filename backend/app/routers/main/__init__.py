@@ -1,15 +1,11 @@
 from datetime import datetime
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .types import (
-    GetRoomRequestData,
-    RoomResponseData,
-    JoinRoomRequestData
-)
+from .types import Detail, RoomCode, RoomProps, RoomResponse
 from ...db.models import Room
 from ...db.utils import generate_unique_room_code
 from ...dependencies import get_db_session, get_session
@@ -20,18 +16,10 @@ router = APIRouter()
 
 @router.post('/room')
 async def create_room(
-    request: Request,
+    payload: RoomProps,
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
-) -> dict[str, str]:
-    data: GetRoomRequestData = await request.json()
-
-    try:
-        guest_can_pause: bool = data['guestCanPause']
-        votes_to_skip: int = data['votesToSkip']
-    except KeyError:
-        raise HTTPException(status_code=400, detail='Invalid data.')
-
+) -> RoomCode:
     stmt = select(Room).where(Room.host == session['identity'])
     result = await DB.execute(stmt)
     room: Optional[Room] = result.scalar_one_or_none()
@@ -41,33 +29,33 @@ async def create_room(
         room = Room(
             host=session['identity'],
             code=unique_code,
-            guest_can_pause=guest_can_pause,
-            votes_to_skip=votes_to_skip
+            guest_can_pause=payload.guest_can_pause,
+            votes_to_skip=payload.votes_to_skip
         )
         DB.add(room)
     else:
-        room.guest_can_pause = guest_can_pause
-        room.votes_to_skip = votes_to_skip
+        room.guest_can_pause = payload.guest_can_pause
+        room.votes_to_skip = payload.votes_to_skip
 
     session['room_code'] = room.code
     await DB.commit()
 
-    return {'code': session['room_code']}
+    return RoomCode(roomCode=session['room_code'])
 
 
 @router.get('/room/leave')
 async def leave_room(
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
-) -> dict[str, str]:
+) -> Detail:
     if 'room_code' in session:
         session.pop('room_code')
         await DB.execute(delete(Room).where(Room.host == session['identity']))
         await DB.commit()
 
-        return {'detail': 'Left successfully.'}
+        return Detail(detail='Left successfully.')
 
-    return {'detail': 'User not in room.'}
+    return Detail(detail='User not in room.')
 
 
 @router.get('/room/{room_code}')
@@ -75,12 +63,12 @@ async def get_room(
     room_code: str,
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
-) -> RoomResponseData:
+) -> RoomResponse:
     result = await DB.execute(select(Room).where(Room.code == room_code))
     room: Optional[Room] = result.scalar_one_or_none()
 
     if room is not None:
-        return RoomResponseData(
+        return RoomResponse(
             guestCanPause=room.guest_can_pause,
             votesToSkip=room.votes_to_skip,
             isHost=(room.host == session['identity'])
@@ -91,19 +79,11 @@ async def get_room(
 
 @router.patch('/room/{room_code}')
 async def update_room(
-    request: Request,
     room_code: str,
+    payload: RoomProps,
     session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
-) -> RoomResponseData:
-    data: GetRoomRequestData = await request.json()
-
-    try:
-        guest_can_pause: bool = data['guestCanPause']
-        votes_to_skip: int = data['votesToSkip']
-    except KeyError:
-        raise HTTPException(status_code=400, detail='Invalid data.')
-
+) -> RoomResponse:
     result = await DB.execute(select(Room).where(Room.code == room_code))
     room: Optional[Room] = result.scalar_one_or_none()
 
@@ -111,13 +91,16 @@ async def update_room(
         raise HTTPException(status_code=404, detail='Room not found.')
 
     if room.host != session['identity']:
-        raise HTTPException(status_code=403, detail='You are not the host.')
+        raise HTTPException(
+            status_code=403,
+            detail='A room can only be updated by its host.'
+        )
 
-    room.guest_can_pause = guest_can_pause
-    room.votes_to_skip = votes_to_skip
+    room.guest_can_pause = payload.guest_can_pause
+    room.votes_to_skip = payload.votes_to_skip
     room.updated_at = datetime.now()
 
-    response = RoomResponseData(
+    response = RoomResponse(
         guestCanPause=room.guest_can_pause,
         votesToSkip=room.votes_to_skip,
         isHost=(room.host == session['identity'])
@@ -130,21 +113,19 @@ async def update_room(
 
 @router.post('/room/join')
 async def join_room(
-    request: Request,
+    payload: RoomCode,
+    session: dict[Any, Any] = Depends(get_session),
     DB: AsyncSession = Depends(get_db_session)
-) -> dict[str, str]:
-    data: JoinRoomRequestData = await request.json()
-    room_code: Optional[str] = data.get('roomCode')
-
-    if room_code:
-        stmt = select(Room).where(Room.code == room_code)
+) -> Detail:
+    if payload.room_code is not None:
+        stmt = select(Room).where(Room.code == payload.room_code)
         result = await DB.execute(stmt)
         room: Optional[Room] = result.scalar_one_or_none()
 
         if room is not None:
-            request.session['room_code'] = room_code
+            session['room_code'] = payload.room_code
 
-            return {'detail': 'Room joined.'}
+            return Detail(detail='Room joined.')
 
         raise HTTPException(status_code=404, detail='Room not found.')
 
@@ -155,6 +136,7 @@ async def join_room(
 
 
 @router.get('/user-in-room')
-async def check_room_code(request: Request) -> dict[str, Optional[str]]:
-    room_code: Optional[str] = request.session.get('room_code')
-    return {'room_code': room_code}
+async def check_room_code(
+    session: dict[Any, Any] = Depends(get_session)
+) -> RoomCode:
+    return RoomCode(roomCode=session.get('room_code'))
