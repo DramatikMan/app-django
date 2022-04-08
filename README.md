@@ -3,8 +3,8 @@
 Allows you to host or join rooms to control host's Spotify playback.
 Prerequisites for this to work:
 
-- a room's host has to start playing something from their Spotify account
-- their account has to be Premium (Spotify API rules, not mine ¯\\\_(ツ)_/¯ )
+- a room host has to start playing something from their Spotify account
+- their account has to have Premium (Spotify API rules, not mine ¯\\\_(ツ)_/¯ )
 
 ## Startup
 
