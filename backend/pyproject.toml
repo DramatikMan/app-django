@@ -6,18 +6,18 @@ authors = ["Sergey Pavlov <self@sergeypavlov.dev>"]
 
 [tool.poetry.dependencies]
 python = "~3.10"
-fastapi = "*"
-uvicorn = {extras = ["standard"], version = "*"}
-sqlalchemy = "*"
-alembic = "*"
-asyncpg = "*"
-cryptography = "*"
-itsdangerous = "*"
-httpx = "*"
+fastapi = "0.75.1"
+uvicorn = {extras = ["standard"], version = "0.17.6"}
+SQLAlchemy = "1.4.35"
+alembic = "1.7.7"
+asyncpg = "0.25.0"
+cryptography = "36.0.2"
+itsdangerous = "2.1.2"
+httpx = "0.22.0"
 
 [tool.poetry.dev-dependencies]
-mypy = "*"
-flake8 = "*"
+mypy = "0.942"
+flake8 = "4.0.1"
 
 [tool.poetry-exec-plugin.commands]
 devserver = "uvicorn app.main:app --host 0.0.0.0 --reload"
