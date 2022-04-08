@@ -12,5 +12,5 @@ FROM base AS development
 CMD sleep infinity
 
 FROM base AS production
-RUN rm -r scripts
+RUN rm $(find scripts/* -maxdepth 1 ! -name "*postgres*")
 CMD poetry exec server

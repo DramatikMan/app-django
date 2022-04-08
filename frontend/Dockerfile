@@ -1,7 +1,13 @@
 FROM node:slim AS base
 SHELL ["/bin/bash", "-c"]
 WORKDIR /project
-COPY . .
+COPY src src
+COPY .eslintrc.json \
+    babel.config.json \
+    package*.json \
+    tsconfig.json \
+    webpack.config.cjs \
+    ./
 RUN npm install --no-package-lock
 
 FROM base AS development
