@@ -1,11 +1,12 @@
 # Music App
 
-Allows you to host or join rooms to control the host's Spotify playback.
-A Room host has to start playing something from their Spotify account AND
-their account has to have Premium for this to work.
-Spotify API rules, not mine ¯\\\_(ツ)_/¯ .
+Allows you to host or join rooms to control host's Spotify playback.
+Prerequisites for this to work:
 
-## Local startup w/ `docker compose`
+- a room's host has to start playing something from their Spotify account
+- their account has to be Premium (Spotify API rules, not mine ¯\\\_(ツ)_/¯ )
+
+## Startup
 
 ### Step 1
 
@@ -14,6 +15,8 @@ Spotify API rules, not mine ¯\\\_(ツ)_/¯ .
 - set redirect URI
 
 ### Step 2
+
+Requires `docker` and `docker compose`.
 
 ```bash
 $ git clone https://github.com/DramatikMan/music-app.git
