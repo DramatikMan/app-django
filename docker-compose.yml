@@ -4,18 +4,20 @@ services:
     
     image: postgres:alpine
     env_file:
-      - ./backend/secrets.env
+      - ./secrets.env
 
   backend:
 
     build:
+      args:
+        build_env: production
       context: ./backend
       target: production
     command: ["scripts/wait_for_postgres.sh", "postgres"]
     depends_on:
       - postgres
     env_file:
-      - ./backend/secrets.env
+      - ./secrets.env
     ports:
       - "8000:8000"
 
