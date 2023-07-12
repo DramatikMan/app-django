@@ -1,0 +1,12 @@
+### ~ private ~ ###
+*.env
+
+### ~ Docker ~ ###
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+### ~ git ~ ###
+.git*
+LICENSE
+README.md

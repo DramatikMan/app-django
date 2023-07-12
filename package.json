@@ -1,0 +1,26 @@
+{
+    "name": "music-app",
+    "version": "3.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "tsc --noEmit && prettier --write --log-level=warn src && eslint \"src/**/*.ts*\""
+    },
+    "dependencies": {
+        "next": "^13.4.8",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.4.0",
+        "@types/react": "^18.2.14",
+        "@types/react-dom": "^18.2.6",
+        "@typescript-eslint/eslint-plugin": "^5.61.0",
+        "eslint": "^8.44.0",
+        "eslint-config-next": "^13.4.8",
+        "prettier": "^3.0.0",
+        "typescript": "^5.1.6"
+    }
+}

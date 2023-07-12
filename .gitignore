@@ -1,6 +1,9 @@
 ### ~ private ~ ###
-*.env
+*.env*
 
 ### ~ Docker ~ ###
-/*.yml
-!/docker-compose.yml
+/*.y*ml
+
+### ~ development ~ ###
+/scripts
+/.vscode
