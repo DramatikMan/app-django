@@ -1,18 +1,19 @@
 FROM node:alpine AS base
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm install -g pnpm@8.6.7
 
 ##################
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
-COPY .npmrc package.json package-lock.json* ./
-RUN npm ci
+COPY .npmrc package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 ##################
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 ##################
 FROM base AS server

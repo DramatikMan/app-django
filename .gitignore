@@ -2,7 +2,7 @@
 *.env*
 
 ### ~ Docker ~ ###
-/*.y*ml
+/docker-compose.yml
 
 ### ~ development ~ ###
 /scripts

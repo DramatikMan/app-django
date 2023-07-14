@@ -10,11 +10,7 @@ export default function Home() {
                     <code className={styles["code"]}>src/app/page.tsx</code>
                 </p>
                 <div>
-                    <a
-                        href="https://localhost"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                    <a href="https://localhost" target="_blank" rel="noopener noreferrer">
                         By{" "}
                         <Image
                             src="/vercel.svg"
