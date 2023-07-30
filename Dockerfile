@@ -1,7 +1,7 @@
 FROM node:alpine AS base
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm install -g pnpm@8.6.7
+RUN npm install -g pnpm@8.6.10
 
 ##################
 FROM base AS deps
