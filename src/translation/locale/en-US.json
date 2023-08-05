@@ -1,0 +1,8 @@
+{
+    "about": "This app allows you to host or join rooms to control the host's Spotify playback. A room host has to start playing something from their Spotify account AND their account has to have Premium for this to work.",
+    "home": {
+        "join": "Join a room",
+        "about": "About",
+        "create": "Create a room"
+    }
+}
