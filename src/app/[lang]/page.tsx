@@ -23,23 +23,15 @@ export default async function Home(props: Props) {
             </Grid>
             <Grid container xs={12} justifyContent={"center"}>
                 <ButtonGroup variant="text" disableElevation>
-                    <Grid container columnSpacing={{xs: 1, sm: 2, md: 3}}>
-                        <Grid>
-                            <Link href={"/join"}>
-                                <Button>{t.home.join}</Button>
-                            </Link>
-                        </Grid>
-                        <Grid>
-                            <Link href={"/about"}>
-                                <Button color="info">{t.home.about}</Button>
-                            </Link>
-                        </Grid>
-                        <Grid>
-                            <Link href={"/create"}>
-                                <Button color="secondary">{t.home.create}</Button>
-                            </Link>
-                        </Grid>
-                    </Grid>
+                    <Link href={"/join"}>
+                        <Button>{t.home.join}</Button>
+                    </Link>
+                    <Link href={"/about"}>
+                        <Button color="info">{t.home.about}</Button>
+                    </Link>
+                    <Link href={"/create"}>
+                        <Button color="secondary">{t.home.create}</Button>
+                    </Link>
                 </ButtonGroup>
             </Grid>
         </Grid>

@@ -17,7 +17,7 @@ export default async function About(props: Props) {
             alignContent={"center"}
             justifyContent={"center"}
         >
-            <Grid container xs={4} rowGap={{xs: 1, sm: 2, md: 3}}>
+            <Grid container xs={8} sm={6} md={4} rowGap={{xs: 1, sm: 2, md: 3}}>
                 <Grid container xs={12} justifyContent={"center"}>
                     <Typography variant="body1" align="center">
                         {t.about}
